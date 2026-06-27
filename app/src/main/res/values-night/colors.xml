@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Pre-Compose window background (dark). Matches token bg #0E0E0D. -->
+    <color name="dwell_window_background">#0E0E0D</color>
+</resources>

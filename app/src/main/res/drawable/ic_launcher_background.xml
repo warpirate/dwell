@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Calm warm-dark backplate so the green mark is the only color, matching the
+     "wallpaper is the only color" brand rule. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#1A1A18"
+        android:pathData="M0,0h108v108h-108z" />
+</vector>

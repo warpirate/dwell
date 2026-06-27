@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bare platform theme: no action bar, transparent system bars for
+         edge-to-edge. All real styling is the Compose DwellTheme. Using a
+         platform parent avoids pulling in the AppCompat/Material XML libraries.
+         A values-night/ copy supplies the dark window background. -->
+    <style name="Theme.Dwell" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/dwell_window_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

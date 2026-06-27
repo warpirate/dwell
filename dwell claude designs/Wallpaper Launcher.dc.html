@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,100..700,0..1,0&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Hanken Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  .ms { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-smoothing: antialiased; font-feature-settings: 'liga'; display: inline-block; }
+  .fr { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+</style>
+</helmet>
+
+<div style="position:absolute; left:4px; top:34px; width:760px;">
+  <div class="fr" style="font-size:34px; font-weight:400; color:#1A1916; letter-spacing:-0.02em;">Minimal wallpaper &amp; launcher</div>
+  <div style="font-size:14.5px; color:#86837A; margin-top:7px; letter-spacing:0.01em;">Android home, app drawer, widgets, wallpapers — quiet chrome, imagery carries the color.</div>
+</div>
+
+<div style="position:absolute; left:4px; top:150px; font-size:12px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#A9A69C;">01 — Launcher home · three directions</div>
+
+<!-- ============ HOME A — EDITORIAL — LIGHT ============ -->
+<div style="position:absolute; left:0; top:196px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Editorial · light</div>
+  <div data-screen-label="Home A · Editorial · Light" style="width:374px; height:794px; border-radius:46px; background:#0E0E0D; padding:7px; box-shadow:0 30px 70px -24px rgba(28,24,16,0.34), 0 10px 24px -12px rgba(28,24,16,0.22); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#FAFAF8;">
+      <div style="position:absolute; inset:0; background:radial-gradient(132% 116% at 24% 9%, #F7F1E6 0%, #EFE1CD 32%, #E0C8AB 66%, #CBA988 100%);"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(40,32,20,0.10) 0%, rgba(40,32,20,0) 16%, rgba(40,32,20,0) 84%, rgba(40,32,20,0.07) 100%);"></div>
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#0E0E0D; opacity:0.82; z-index:6;"></div>
+
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <!-- status bar -->
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#2B2820;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <!-- hero clock + widgets -->
+        <div style="padding:18px 28px 0; display:flex; flex-direction:column;">
+          <div class="fr" style="font-style:italic; font-weight:400; font-size:16px; color:#6B5B45; letter-spacing:0.01em;">Good morning</div>
+          <div class="fr" style="font-weight:300; font-size:88px; line-height:0.96; color:#241F18; letter-spacing:-0.035em; margin-top:4px;">9:41</div>
+          <div style="font-size:13.5px; font-weight:500; color:#7A6F5C; margin-top:6px; letter-spacing:0.01em;">Saturday, June 27</div>
+
+          <!-- widgets: battery + next event -->
+          <div style="margin-top:30px; display:flex; flex-direction:column;">
+            <div style="display:flex; flex-direction:column; gap:10px; padding-bottom:15px;">
+              <div style="display:flex; align-items:center; gap:9px;">
+                <span class="ms" style="font-size:18px; color:#3B362B; font-variation-settings:'wght' 300;">battery_horiz_075</span>
+                <span style="font-size:13.5px; font-weight:500; color:#6E6557;">Battery</span>
+                <span style="flex:1;"></span>
+                <span style="font-size:13.5px; font-weight:600; color:#322D24;">82%</span>
+              </div>
+              <div style="height:3px; border-radius:2px; background:rgba(50,45,36,0.14); overflow:hidden;"><div style="width:82%; height:100%; background:rgba(50,45,36,0.55);"></div></div>
+            </div>
+            <div style="height:1px; background:rgba(50,45,36,0.12);"></div>
+            <div style="display:flex; align-items:center; gap:12px; padding-top:15px;">
+              <span class="ms" style="font-size:20px; color:#3B362B; font-variation-settings:'wght' 300;">event</span>
+              <div style="display:flex; flex-direction:column; gap:1px;">
+                <span style="font-size:12px; font-weight:500; color:#8A8071; letter-spacing:0.01em;">Next event</span>
+                <span style="font-size:15px; font-weight:600; color:#2C2820;">Design review</span>
+              </div>
+              <span style="flex:1;"></span>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:1px;">
+                <span style="font-size:13.5px; font-weight:600; color:#2C2820;">2:30 PM</span>
+                <span style="font-size:12px; color:#8A8071;">in 25 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1;"></div>
+
+        <!-- app grid -->
+        <div style="padding:0 26px; display:grid; grid-template-columns:repeat(4,1fr); row-gap:21px; column-gap:6px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">call</span><span style="font-size:10.5px; color:#7C7263;">Phone</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">chat_bubble</span><span style="font-size:10.5px; color:#7C7263;">Messages</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">photo_camera</span><span style="font-size:10.5px; color:#7C7263;">Camera</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">image</span><span style="font-size:10.5px; color:#7C7263;">Photos</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">language</span><span style="font-size:10.5px; color:#7C7263;">Browser</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">map</span><span style="font-size:10.5px; color:#7C7263;">Maps</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">calendar_month</span><span style="font-size:10.5px; color:#7C7263;">Calendar</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">schedule</span><span style="font-size:10.5px; color:#7C7263;">Clock</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">mail</span><span style="font-size:10.5px; color:#7C7263;">Mail</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">music_note</span><span style="font-size:10.5px; color:#7C7263;">Music</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">description</span><span style="font-size:10.5px; color:#7C7263;">Notes</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#2A2620; font-variation-settings:'wght' 300;">settings</span><span style="font-size:10.5px; color:#7C7263;">Settings</span></div>
+        </div>
+
+        <!-- dock -->
+        <div style="padding:26px 34px 0; display:flex; align-items:center; justify-content:space-between;">
+          <span class="ms" style="font-size:28px; color:#221E18; font-variation-settings:'wght' 300;">call</span>
+          <span class="ms" style="font-size:28px; color:#221E18; font-variation-settings:'wght' 300;">chat_bubble</span>
+          <span class="ms" style="font-size:28px; color:#221E18; font-variation-settings:'wght' 300;">photo_camera</span>
+          <span class="ms" style="font-size:28px; color:#221E18; font-variation-settings:'wght' 300;">language</span>
+        </div>
+
+        <div style="height:26px;"></div>
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(40,34,22,0.32);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HOME A — EDITORIAL — DARK ============ -->
+<div style="position:absolute; left:454px; top:196px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Editorial · dark</div>
+  <div data-screen-label="Home A · Editorial · Dark" style="width:374px; height:794px; border-radius:46px; background:#000; padding:7px; box-shadow:0 30px 70px -24px rgba(0,0,0,0.5), 0 10px 24px -12px rgba(0,0,0,0.4); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#0E0E0D;">
+      <div style="position:absolute; inset:0; background:radial-gradient(132% 120% at 28% 8%, #32302A 0%, #1E1C18 46%, #100E0C 100%);"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0) 18%, rgba(0,0,0,0) 82%, rgba(0,0,0,0.22) 100%);"></div>
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#000; z-index:6;"></div>
+
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#E9E6DF;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:18px 28px 0; display:flex; flex-direction:column;">
+          <div class="fr" style="font-style:italic; font-weight:400; font-size:16px; color:#B6A98E; letter-spacing:0.01em;">Good morning</div>
+          <div class="fr" style="font-weight:300; font-size:88px; line-height:0.96; color:#F3EFE7; letter-spacing:-0.035em; margin-top:4px;">9:41</div>
+          <div style="font-size:13.5px; font-weight:500; color:#A39A88; margin-top:6px; letter-spacing:0.01em;">Saturday, June 27</div>
+
+          <div style="margin-top:30px; display:flex; flex-direction:column;">
+            <div style="display:flex; flex-direction:column; gap:10px; padding-bottom:15px;">
+              <div style="display:flex; align-items:center; gap:9px;">
+                <span class="ms" style="font-size:18px; color:#C7BDA9; font-variation-settings:'wght' 300;">battery_horiz_075</span>
+                <span style="font-size:13.5px; font-weight:500; color:#A39A88;">Battery</span>
+                <span style="flex:1;"></span>
+                <span style="font-size:13.5px; font-weight:600; color:#E7E2D8;">82%</span>
+              </div>
+              <div style="height:3px; border-radius:2px; background:rgba(231,226,216,0.16); overflow:hidden;"><div style="width:82%; height:100%; background:rgba(231,226,216,0.6);"></div></div>
+            </div>
+            <div style="height:1px; background:rgba(231,226,216,0.13);"></div>
+            <div style="display:flex; align-items:center; gap:12px; padding-top:15px;">
+              <span class="ms" style="font-size:20px; color:#C7BDA9; font-variation-settings:'wght' 300;">event</span>
+              <div style="display:flex; flex-direction:column; gap:1px;">
+                <span style="font-size:12px; font-weight:500; color:#8F8676; letter-spacing:0.01em;">Next event</span>
+                <span style="font-size:15px; font-weight:600; color:#EDE8DE;">Design review</span>
+              </div>
+              <span style="flex:1;"></span>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:1px;">
+                <span style="font-size:13.5px; font-weight:600; color:#EDE8DE;">2:30 PM</span>
+                <span style="font-size:12px; color:#8F8676;">in 25 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1;"></div>
+
+        <div style="padding:0 26px; display:grid; grid-template-columns:repeat(4,1fr); row-gap:21px; column-gap:6px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">call</span><span style="font-size:10.5px; color:#928979;">Phone</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">chat_bubble</span><span style="font-size:10.5px; color:#928979;">Messages</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">photo_camera</span><span style="font-size:10.5px; color:#928979;">Camera</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">image</span><span style="font-size:10.5px; color:#928979;">Photos</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">language</span><span style="font-size:10.5px; color:#928979;">Browser</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">map</span><span style="font-size:10.5px; color:#928979;">Maps</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">calendar_month</span><span style="font-size:10.5px; color:#928979;">Calendar</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">schedule</span><span style="font-size:10.5px; color:#928979;">Clock</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">mail</span><span style="font-size:10.5px; color:#928979;">Mail</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">music_note</span><span style="font-size:10.5px; color:#928979;">Music</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">description</span><span style="font-size:10.5px; color:#928979;">Notes</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#DAD4C8; font-variation-settings:'wght' 300;">settings</span><span style="font-size:10.5px; color:#928979;">Settings</span></div>
+        </div>
+
+        <div style="padding:26px 34px 0; display:flex; align-items:center; justify-content:space-between;">
+          <span class="ms" style="font-size:28px; color:#E6E0D4; font-variation-settings:'wght' 300;">call</span>
+          <span class="ms" style="font-size:28px; color:#E6E0D4; font-variation-settings:'wght' 300;">chat_bubble</span>
+          <span class="ms" style="font-size:28px; color:#E6E0D4; font-variation-settings:'wght' 300;">photo_camera</span>
+          <span class="ms" style="font-size:28px; color:#E6E0D4; font-variation-settings:'wght' 300;">language</span>
+        </div>
+
+        <div style="height:26px;"></div>
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(237,232,222,0.4);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HOME B — ZEN — LIGHT ============ -->
+<div style="position:absolute; left:908px; top:196px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Zen · light</div>
+  <div data-screen-label="Home B · Zen · Light" style="width:374px; height:794px; border-radius:46px; background:#0E0E0D; padding:7px; box-shadow:0 30px 70px -24px rgba(28,24,16,0.34), 0 10px 24px -12px rgba(28,24,16,0.22); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#FAFAF8;">
+      <div style="position:absolute; inset:0; background:radial-gradient(128% 116% at 70% 12%, #EEF0E8 0%, #D8DDCC 44%, #BAC3A9 78%, #A3AF91 100%);"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(30,36,24,0.08) 0%, rgba(30,36,24,0) 18%, rgba(30,36,24,0) 84%, rgba(30,36,24,0.06) 100%);"></div>
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#0E0E0D; opacity:0.8; z-index:6;"></div>
+
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;">
+        <div style="width:100%; height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#262A20;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="margin-top:58px; display:flex; flex-direction:column; align-items:center; width:100%; white-space:nowrap;">
+          <div class="fr" style="font-weight:300; font-size:84px; line-height:1; color:#20231C; letter-spacing:-0.035em;">9:41</div>
+          <div style="font-size:13.5px; font-weight:500; color:#6E7466; margin-top:10px; letter-spacing:0.02em;">Saturday, June 27</div>
+          <div style="display:flex; align-items:center; gap:12px; margin-top:20px; color:#5C634F;">
+            <span style="display:flex; align-items:center; gap:6px;"><span class="ms" style="font-size:16px; font-variation-settings:'wght' 300;">battery_horiz_075</span><span style="font-size:12.5px; font-weight:500;">82%</span></span>
+            <span style="width:3px; height:3px; border-radius:50%; background:#8A917C;"></span>
+            <span style="display:flex; align-items:center; gap:6px;"><span class="ms" style="font-size:16px; font-variation-settings:'wght' 300;">event</span><span style="font-size:12.5px; font-weight:500;">Design review · 2:30</span></span>
+          </div>
+        </div>
+
+        <div style="flex:1;"></div>
+
+        <div style="width:100%; padding:0 30px; display:grid; grid-template-columns:repeat(4,1fr); row-gap:28px; column-gap:6px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#272B22; font-variation-settings:'wght' 300;">call</span><span style="font-size:10.5px; color:#6E7466;">Phone</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#272B22; font-variation-settings:'wght' 300;">chat_bubble</span><span style="font-size:10.5px; color:#6E7466;">Messages</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#272B22; font-variation-settings:'wght' 300;">photo_camera</span><span style="font-size:10.5px; color:#6E7466;">Camera</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#272B22; font-variation-settings:'wght' 300;">language</span><span style="font-size:10.5px; color:#6E7466;">Browser</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#272B22; font-variation-settings:'wght' 300;">image</span><span style="font-size:10.5px; color:#6E7466;">Photos</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#272B22; font-variation-settings:'wght' 300;">map</span><span style="font-size:10.5px; color:#6E7466;">Maps</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#272B22; font-variation-settings:'wght' 300;">calendar_month</span><span style="font-size:10.5px; color:#6E7466;">Calendar</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#272B22; font-variation-settings:'wght' 300;">settings</span><span style="font-size:10.5px; color:#6E7466;">Settings</span></div>
+        </div>
+
+        <div style="width:100%; padding:30px 36px 0; display:flex; align-items:center; justify-content:space-between;">
+          <span class="ms" style="font-size:28px; color:#1F231A; font-variation-settings:'wght' 300;">call</span>
+          <span class="ms" style="font-size:28px; color:#1F231A; font-variation-settings:'wght' 300;">chat_bubble</span>
+          <span class="ms" style="font-size:28px; color:#1F231A; font-variation-settings:'wght' 300;">photo_camera</span>
+          <span class="ms" style="font-size:28px; color:#1F231A; font-variation-settings:'wght' 300;">language</span>
+        </div>
+        <div style="height:26px;"></div>
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(32,35,28,0.30);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HOME B — ZEN — DARK ============ -->
+<div style="position:absolute; left:1362px; top:196px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Zen · dark</div>
+  <div data-screen-label="Home B · Zen · Dark" style="width:374px; height:794px; border-radius:46px; background:#000; padding:7px; box-shadow:0 30px 70px -24px rgba(0,0,0,0.5), 0 10px 24px -12px rgba(0,0,0,0.4); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#0C0F0C;">
+      <div style="position:absolute; inset:0; background:radial-gradient(126% 120% at 50% 6%, #26352B 0%, #18231C 48%, #0C110D 100%);"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 18%, rgba(0,0,0,0) 82%, rgba(0,0,0,0.22) 100%);"></div>
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#000; z-index:6;"></div>
+
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;">
+        <div style="width:100%; height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#E7EADF;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="margin-top:58px; display:flex; flex-direction:column; align-items:center; width:100%; white-space:nowrap;">
+          <div class="fr" style="font-weight:300; font-size:84px; line-height:1; color:#EEF1E9; letter-spacing:-0.035em;">9:41</div>
+          <div style="font-size:13.5px; font-weight:500; color:#99A38F; margin-top:10px; letter-spacing:0.02em;">Saturday, June 27</div>
+          <div style="display:flex; align-items:center; gap:12px; margin-top:20px; color:#AFB7A2;">
+            <span style="display:flex; align-items:center; gap:6px;"><span class="ms" style="font-size:16px; font-variation-settings:'wght' 300;">battery_horiz_075</span><span style="font-size:12.5px; font-weight:500;">82%</span></span>
+            <span style="width:3px; height:3px; border-radius:50%; background:#6E7763;"></span>
+            <span style="display:flex; align-items:center; gap:6px;"><span class="ms" style="font-size:16px; font-variation-settings:'wght' 300;">event</span><span style="font-size:12.5px; font-weight:500;">Design review · 2:30</span></span>
+          </div>
+        </div>
+
+        <div style="flex:1;"></div>
+
+        <div style="width:100%; padding:0 30px; display:grid; grid-template-columns:repeat(4,1fr); row-gap:28px; column-gap:6px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#D6DBCB; font-variation-settings:'wght' 300;">call</span><span style="font-size:10.5px; color:#8B927E;">Phone</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#D6DBCB; font-variation-settings:'wght' 300;">chat_bubble</span><span style="font-size:10.5px; color:#8B927E;">Messages</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#D6DBCB; font-variation-settings:'wght' 300;">photo_camera</span><span style="font-size:10.5px; color:#8B927E;">Camera</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#D6DBCB; font-variation-settings:'wght' 300;">language</span><span style="font-size:10.5px; color:#8B927E;">Browser</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#D6DBCB; font-variation-settings:'wght' 300;">image</span><span style="font-size:10.5px; color:#8B927E;">Photos</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#D6DBCB; font-variation-settings:'wght' 300;">map</span><span style="font-size:10.5px; color:#8B927E;">Maps</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#D6DBCB; font-variation-settings:'wght' 300;">calendar_month</span><span style="font-size:10.5px; color:#8B927E;">Calendar</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><span class="ms" style="font-size:27px; color:#D6DBCB; font-variation-settings:'wght' 300;">settings</span><span style="font-size:10.5px; color:#8B927E;">Settings</span></div>
+        </div>
+
+        <div style="width:100%; padding:30px 36px 0; display:flex; align-items:center; justify-content:space-between;">
+          <span class="ms" style="font-size:28px; color:#E4E8D8; font-variation-settings:'wght' 300;">call</span>
+          <span class="ms" style="font-size:28px; color:#E4E8D8; font-variation-settings:'wght' 300;">chat_bubble</span>
+          <span class="ms" style="font-size:28px; color:#E4E8D8; font-variation-settings:'wght' 300;">photo_camera</span>
+          <span class="ms" style="font-size:28px; color:#E4E8D8; font-variation-settings:'wght' 300;">language</span>
+        </div>
+        <div style="height:26px;"></div>
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(238,241,233,0.4);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HOME C — STRUCTURED — LIGHT ============ -->
+<div style="position:absolute; left:1816px; top:196px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Structured · light</div>
+  <div data-screen-label="Home C · Structured · Light" style="width:374px; height:794px; border-radius:46px; background:#0E0E0D; padding:7px; box-shadow:0 30px 70px -24px rgba(28,24,16,0.34), 0 10px 24px -12px rgba(28,24,16,0.22); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#FAFAF8;">
+      <div style="position:absolute; inset:0; background:radial-gradient(130% 118% at 30% 14%, #F0DAC7 0%, #E4C0A4 46%, #CF9F7F 82%, #BA896B 100%);"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(46,30,18,0.10) 0%, rgba(46,30,18,0) 18%, rgba(46,30,18,0) 84%, rgba(46,30,18,0.07) 100%);"></div>
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#0E0E0D; opacity:0.82; z-index:6;"></div>
+
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#2E241B;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:14px 24px 0;">
+          <div class="fr" style="font-weight:300; font-size:74px; line-height:1; color:#2C211A; letter-spacing:-0.035em;">9:41</div>
+          <div style="height:1px; background:rgba(44,33,26,0.16); margin:14px 0 12px;"></div>
+          <div style="font-size:13px; font-weight:500; color:#7B6655; letter-spacing:0.01em;">Saturday, June 27</div>
+
+          <div style="display:flex; gap:10px; margin-top:16px;">
+            <div style="flex:1; background:rgba(252,247,240,0.56); border:1px solid rgba(44,33,26,0.10); border-radius:8px; padding:13px; display:flex; align-items:center; gap:11px;">
+              <div style="position:relative; width:40px; height:40px; flex-shrink:0;">
+                <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="rgba(44,33,26,0.16)" stroke-width="3.5"/><circle cx="20" cy="20" r="16" fill="none" stroke="#322820" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="100.5" stroke-dashoffset="18.1" transform="rotate(-90 20 20)"/></svg>
+                <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#322820;">82</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:1px;"><span style="font-size:12.5px; font-weight:600; color:#2C211A;">Battery</span><span style="font-size:11.5px; color:#836B58; white-space:nowrap;">5h 20m left</span></div>
+            </div>
+            <div style="flex:1; background:rgba(252,247,240,0.56); border:1px solid rgba(44,33,26,0.10); border-radius:8px; padding:13px; display:flex; flex-direction:column; justify-content:center; gap:3px;">
+              <span style="font-size:11px; font-weight:600; color:#836B58; letter-spacing:0.04em; text-transform:uppercase;">Next</span>
+              <span style="font-size:13.5px; font-weight:600; color:#2C211A; line-height:1.15;">Design review</span>
+              <span style="font-size:11.5px; color:#836B58;">2:30 PM · in 25 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1;"></div>
+
+        <div style="margin:0 18px; background:rgba(252,247,240,0.40); border:1px solid rgba(44,33,26,0.08); border-radius:18px; padding:18px 12px; display:grid; grid-template-columns:repeat(4,1fr); row-gap:18px; column-gap:4px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">call</span><span style="font-size:10px; color:#836B58;">Phone</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">chat_bubble</span><span style="font-size:10px; color:#836B58;">Messages</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">photo_camera</span><span style="font-size:10px; color:#836B58;">Camera</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">image</span><span style="font-size:10px; color:#836B58;">Photos</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">language</span><span style="font-size:10px; color:#836B58;">Browser</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">map</span><span style="font-size:10px; color:#836B58;">Maps</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">calendar_month</span><span style="font-size:10px; color:#836B58;">Calendar</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">schedule</span><span style="font-size:10px; color:#836B58;">Clock</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">mail</span><span style="font-size:10px; color:#836B58;">Mail</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">music_note</span><span style="font-size:10px; color:#836B58;">Music</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">description</span><span style="font-size:10px; color:#836B58;">Notes</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#2A211A; font-variation-settings:'wght' 300;">settings</span><span style="font-size:10px; color:#836B58;">Settings</span></div>
+        </div>
+
+        <div style="margin:14px 18px 0; background:rgba(46,33,24,0.10); border:1px solid rgba(44,33,26,0.08); border-radius:18px; padding:13px 28px; display:flex; align-items:center; justify-content:space-between;">
+          <span class="ms" style="font-size:27px; color:#241C15; font-variation-settings:'wght' 300;">call</span>
+          <span class="ms" style="font-size:27px; color:#241C15; font-variation-settings:'wght' 300;">chat_bubble</span>
+          <span class="ms" style="font-size:27px; color:#241C15; font-variation-settings:'wght' 300;">photo_camera</span>
+          <span class="ms" style="font-size:27px; color:#241C15; font-variation-settings:'wght' 300;">language</span>
+        </div>
+        <div style="height:24px;"></div>
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(44,33,26,0.30);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HOME C — STRUCTURED — DARK ============ -->
+<div style="position:absolute; left:2270px; top:196px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Structured · dark</div>
+  <div data-screen-label="Home C · Structured · Dark" style="width:374px; height:794px; border-radius:46px; background:#000; padding:7px; box-shadow:0 30px 70px -24px rgba(0,0,0,0.5), 0 10px 24px -12px rgba(0,0,0,0.4); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#0E0C0A;">
+      <div style="position:absolute; inset:0; background:radial-gradient(130% 120% at 32% 12%, #302B24 0%, #1D1A15 50%, #0E0C0A 100%);"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 18%, rgba(0,0,0,0) 82%, rgba(0,0,0,0.22) 100%);"></div>
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#000; z-index:6;"></div>
+
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#ECE7DD;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:14px 24px 0;">
+          <div class="fr" style="font-weight:300; font-size:74px; line-height:1; color:#F1ECE2; letter-spacing:-0.035em;">9:41</div>
+          <div style="height:1px; background:rgba(241,236,226,0.16); margin:14px 0 12px;"></div>
+          <div style="font-size:13px; font-weight:500; color:#A99E8C; letter-spacing:0.01em;">Saturday, June 27</div>
+
+          <div style="display:flex; gap:10px; margin-top:16px;">
+            <div style="flex:1; background:rgba(245,240,232,0.06); border:1px solid rgba(241,236,226,0.10); border-radius:8px; padding:13px; display:flex; align-items:center; gap:11px;">
+              <div style="position:relative; width:40px; height:40px; flex-shrink:0;">
+                <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="rgba(241,236,226,0.18)" stroke-width="3.5"/><circle cx="20" cy="20" r="16" fill="none" stroke="#D8D2C4" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="100.5" stroke-dashoffset="18.1" transform="rotate(-90 20 20)"/></svg>
+                <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#ECE7DD;">82</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:1px;"><span style="font-size:12.5px; font-weight:600; color:#ECE7DD;">Battery</span><span style="font-size:11.5px; color:#978D7C; white-space:nowrap;">5h 20m left</span></div>
+            </div>
+            <div style="flex:1; background:rgba(245,240,232,0.06); border:1px solid rgba(241,236,226,0.10); border-radius:8px; padding:13px; display:flex; flex-direction:column; justify-content:center; gap:3px;">
+              <span style="font-size:11px; font-weight:600; color:#978D7C; letter-spacing:0.04em; text-transform:uppercase;">Next</span>
+              <span style="font-size:13.5px; font-weight:600; color:#ECE7DD; line-height:1.15;">Design review</span>
+              <span style="font-size:11.5px; color:#978D7C;">2:30 PM · in 25 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1;"></div>
+
+        <div style="margin:0 18px; background:rgba(245,240,232,0.04); border:1px solid rgba(241,236,226,0.08); border-radius:18px; padding:18px 12px; display:grid; grid-template-columns:repeat(4,1fr); row-gap:18px; column-gap:4px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">call</span><span style="font-size:10px; color:#978D7C;">Phone</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">chat_bubble</span><span style="font-size:10px; color:#978D7C;">Messages</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">photo_camera</span><span style="font-size:10px; color:#978D7C;">Camera</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">image</span><span style="font-size:10px; color:#978D7C;">Photos</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">language</span><span style="font-size:10px; color:#978D7C;">Browser</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">map</span><span style="font-size:10px; color:#978D7C;">Maps</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">calendar_month</span><span style="font-size:10px; color:#978D7C;">Calendar</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">schedule</span><span style="font-size:10px; color:#978D7C;">Clock</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">mail</span><span style="font-size:10px; color:#978D7C;">Mail</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">music_note</span><span style="font-size:10px; color:#978D7C;">Music</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">description</span><span style="font-size:10px; color:#978D7C;">Notes</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><span class="ms" style="font-size:26px; color:#E0D9CB; font-variation-settings:'wght' 300;">settings</span><span style="font-size:10px; color:#978D7C;">Settings</span></div>
+        </div>
+
+        <div style="margin:14px 18px 0; background:rgba(245,240,232,0.06); border:1px solid rgba(241,236,226,0.08); border-radius:18px; padding:13px 28px; display:flex; align-items:center; justify-content:space-between;">
+          <span class="ms" style="font-size:27px; color:#E6E0D3; font-variation-settings:'wght' 300;">call</span>
+          <span class="ms" style="font-size:27px; color:#E6E0D3; font-variation-settings:'wght' 300;">chat_bubble</span>
+          <span class="ms" style="font-size:27px; color:#E6E0D3; font-variation-settings:'wght' 300;">photo_camera</span>
+          <span class="ms" style="font-size:27px; color:#E6E0D3; font-variation-settings:'wght' 300;">language</span>
+        </div>
+        <div style="height:24px;"></div>
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(241,236,226,0.4);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="position:absolute; left:4px; top:1066px; font-size:12px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#A9A69C;">02 — App drawer · widgets · customization</div>
+
+<!-- ============ APP DRAWER — LIGHT ============ -->
+<div style="position:absolute; left:0; top:1112px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">App drawer · light</div>
+  <div data-screen-label="App drawer · Light" style="width:374px; height:794px; border-radius:46px; background:#0E0E0D; padding:7px; box-shadow:0 30px 70px -24px rgba(28,24,16,0.34), 0 10px 24px -12px rgba(28,24,16,0.22); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#FAFAF8;">
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#0E0E0D; opacity:0.82; z-index:6;"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#2B2820;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:18px 24px 12px;">
+          <div class="fr" style="font-weight:400; font-size:27px; color:#221F1A; letter-spacing:-0.01em;">Apps</div>
+          <div style="margin-top:14px; height:46px; border-radius:8px; background:#EFEDE6; border:1px solid rgba(26,25,22,0.07); display:flex; align-items:center; gap:11px; padding:0 14px;">
+            <span class="ms" style="font-size:21px; color:#9A9384; font-variation-settings:'wght' 300;">search</span>
+            <span style="font-size:14.5px; color:#9A9384; flex:1;">Search apps</span>
+            <span class="ms" style="font-size:20px; color:#9A9384; font-variation-settings:'wght' 300;">keyboard_voice</span>
+          </div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:0 24px; position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500; letter-spacing:0.12em; color:#AEA697; margin:8px 0 2px;">C</div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">calculate</span><span style="font-size:15.5px; color:#221F1A;">Calculator</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">calendar_month</span><span style="font-size:15.5px; color:#221F1A;">Calendar</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">photo_camera</span><span style="font-size:15.5px; color:#221F1A;">Camera</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">schedule</span><span style="font-size:15.5px; color:#221F1A;">Clock</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">person</span><span style="font-size:15.5px; color:#221F1A;">Contacts</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500; letter-spacing:0.12em; color:#AEA697; margin:8px 0 2px;">F</div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">folder</span><span style="font-size:15.5px; color:#221F1A;">Files</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500; letter-spacing:0.12em; color:#AEA697; margin:8px 0 2px;">G</div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">image</span><span style="font-size:15.5px; color:#221F1A;">Gallery</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500; letter-spacing:0.12em; color:#AEA697; margin:8px 0 2px;">M</div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">mail</span><span style="font-size:15.5px; color:#221F1A;">Mail</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">map</span><span style="font-size:15.5px; color:#221F1A;">Maps</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">chat_bubble</span><span style="font-size:15.5px; color:#221F1A;">Messages</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#2A2620; font-variation-settings:'wght' 300;">music_note</span><span style="font-size:15.5px; color:#221F1A;">Music</span></div>
+
+          <div style="position:absolute; right:7px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; align-items:center; gap:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; font-weight:600; line-height:1.5; letter-spacing:0.04em;">
+            <span style="color:#1F8A5B; display:none;"></span><span style="color:#C7C0B1;">A</span><span style="color:#C7C0B1;">B</span><span style="color:#3E3A31;">C</span><span style="color:#C7C0B1;">D</span><span style="color:#C7C0B1;">E</span><span style="color:#3E3A31;">F</span><span style="color:#3E3A31;">G</span><span style="color:#C7C0B1;">H</span><span style="color:#C7C0B1;">I</span><span style="color:#C7C0B1;">J</span><span style="color:#C7C0B1;">K</span><span style="color:#C7C0B1;">L</span><span style="color:#3E3A31;">M</span><span style="color:#3E3A31;">N</span><span style="color:#C7C0B1;">O</span><span style="color:#3E3A31;">P</span><span style="color:#C7C0B1;">Q</span><span style="color:#C7C0B1;">R</span><span style="color:#3E3A31;">S</span><span style="color:#C7C0B1;">T</span><span style="color:#C7C0B1;">U</span><span style="color:#C7C0B1;">V</span><span style="color:#3E3A31;">W</span><span style="color:#C7C0B1;">X</span><span style="color:#C7C0B1;">Y</span><span style="color:#C7C0B1;">Z</span>
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(40,34,22,0.30);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP DRAWER — DARK ============ -->
+<div style="position:absolute; left:454px; top:1112px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">App drawer · dark</div>
+  <div data-screen-label="App drawer · Dark" style="width:374px; height:794px; border-radius:46px; background:#000; padding:7px; box-shadow:0 30px 70px -24px rgba(0,0,0,0.5), 0 10px 24px -12px rgba(0,0,0,0.4); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#121210;">
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#000; z-index:6;"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#E9E6DF;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:18px 24px 12px;">
+          <div class="fr" style="font-weight:400; font-size:27px; color:#ECE7DD; letter-spacing:-0.01em;">Apps</div>
+          <div style="margin-top:14px; height:46px; border-radius:8px; background:rgba(245,240,232,0.06); border:1px solid rgba(240,236,228,0.09); display:flex; align-items:center; gap:11px; padding:0 14px;">
+            <span class="ms" style="font-size:21px; color:#857C6D; font-variation-settings:'wght' 300;">search</span>
+            <span style="font-size:14.5px; color:#857C6D; flex:1;">Search apps</span>
+            <span class="ms" style="font-size:20px; color:#857C6D; font-variation-settings:'wght' 300;">keyboard_voice</span>
+          </div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:0 24px; position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500; letter-spacing:0.12em; color:#6E6657; margin:8px 0 2px;">C</div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">calculate</span><span style="font-size:15.5px; color:#ECE7DD;">Calculator</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">calendar_month</span><span style="font-size:15.5px; color:#ECE7DD;">Calendar</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">photo_camera</span><span style="font-size:15.5px; color:#ECE7DD;">Camera</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">schedule</span><span style="font-size:15.5px; color:#ECE7DD;">Clock</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">person</span><span style="font-size:15.5px; color:#ECE7DD;">Contacts</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500; letter-spacing:0.12em; color:#6E6657; margin:8px 0 2px;">F</div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">folder</span><span style="font-size:15.5px; color:#ECE7DD;">Files</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500; letter-spacing:0.12em; color:#6E6657; margin:8px 0 2px;">G</div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">image</span><span style="font-size:15.5px; color:#ECE7DD;">Gallery</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500; letter-spacing:0.12em; color:#6E6657; margin:8px 0 2px;">M</div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">mail</span><span style="font-size:15.5px; color:#ECE7DD;">Mail</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">map</span><span style="font-size:15.5px; color:#ECE7DD;">Maps</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">chat_bubble</span><span style="font-size:15.5px; color:#ECE7DD;">Messages</span></div>
+          <div style="display:flex; align-items:center; gap:16px; height:46px;"><span class="ms" style="font-size:22px; color:#D9D3C7; font-variation-settings:'wght' 300;">music_note</span><span style="font-size:15.5px; color:#ECE7DD;">Music</span></div>
+
+          <div style="position:absolute; right:7px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; align-items:center; gap:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; font-weight:600; line-height:1.5; letter-spacing:0.04em;">
+            <span style="color:#4A463D;">A</span><span style="color:#4A463D;">B</span><span style="color:#CFC8BA;">C</span><span style="color:#4A463D;">D</span><span style="color:#4A463D;">E</span><span style="color:#CFC8BA;">F</span><span style="color:#CFC8BA;">G</span><span style="color:#4A463D;">H</span><span style="color:#4A463D;">I</span><span style="color:#4A463D;">J</span><span style="color:#4A463D;">K</span><span style="color:#4A463D;">L</span><span style="color:#CFC8BA;">M</span><span style="color:#CFC8BA;">N</span><span style="color:#4A463D;">O</span><span style="color:#CFC8BA;">P</span><span style="color:#4A463D;">Q</span><span style="color:#4A463D;">R</span><span style="color:#CFC8BA;">S</span><span style="color:#4A463D;">T</span><span style="color:#4A463D;">U</span><span style="color:#4A463D;">V</span><span style="color:#CFC8BA;">W</span><span style="color:#4A463D;">X</span><span style="color:#4A463D;">Y</span><span style="color:#4A463D;">Z</span>
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(237,232,222,0.4);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WIDGETS GALLERY — LIGHT ============ -->
+<div style="position:absolute; left:908px; top:1112px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Widgets gallery · light</div>
+  <div data-screen-label="Widgets gallery · Light" style="width:374px; height:794px; border-radius:46px; background:#0E0E0D; padding:7px; box-shadow:0 30px 70px -24px rgba(28,24,16,0.34), 0 10px 24px -12px rgba(28,24,16,0.22); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#FAFAF8;">
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#0E0E0D; opacity:0.82; z-index:6;"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#2B2820;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:18px 22px 10px;">
+          <div class="fr" style="font-weight:400; font-size:27px; color:#221F1A; letter-spacing:-0.01em;">Widgets</div>
+          <div style="font-size:13px; color:#86806F; margin-top:3px;">Press and hold to place on home</div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:0 22px; display:flex; flex-direction:column; gap:13px;">
+          <!-- clock widget -->
+          <div style="background:#F2F0EA; border:1px solid rgba(26,25,22,0.08); border-radius:8px; padding:18px 20px; display:flex; align-items:flex-end; justify-content:space-between;">
+            <div>
+              <div class="fr" style="font-weight:300; font-size:50px; line-height:0.9; color:#241F18; letter-spacing:-0.03em;">9:41</div>
+              <div style="font-size:12.5px; color:#86806F; margin-top:8px; letter-spacing:0.02em;">Saturday, June 27</div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; font-weight:500; letter-spacing:0.1em; color:#AEA697; text-transform:uppercase;">Clock</div>
+          </div>
+
+          <!-- calendar widget -->
+          <div style="background:#F2F0EA; border:1px solid rgba(26,25,22,0.08); border-radius:8px; padding:18px 20px; display:flex; gap:18px;">
+            <div style="text-align:center; flex-shrink:0;">
+              <div class="fr" style="font-weight:300; font-size:42px; line-height:0.9; color:#241F18;">27</div>
+              <div style="font-size:12px; font-weight:600; color:#2C281F; margin-top:5px;">Saturday</div>
+              <div style="font-size:11px; color:#86806F;">June 2026</div>
+            </div>
+            <div style="width:1px; background:rgba(26,25,22,0.10);"></div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:10px; justify-content:center;">
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#86806F; width:38px;">09:00</span><span style="width:5px; height:5px; border-radius:50%; background:#B7AF9E;"></span><span style="font-size:12.5px; color:#2C281F;">Standup</span></div>
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#86806F; width:38px;">14:30</span><span style="width:5px; height:5px; border-radius:50%; background:#8A8270;"></span><span style="font-size:12.5px; color:#2C281F;">Design review</span></div>
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#86806F; width:38px;">17:00</span><span style="width:5px; height:5px; border-radius:50%; background:#B7AF9E;"></span><span style="font-size:12.5px; color:#2C281F;">Gym</span></div>
+            </div>
+          </div>
+
+          <!-- notes + battery row -->
+          <div style="display:flex; gap:13px;">
+            <div style="flex:1.35; background:#F2F0EA; border:1px solid rgba(26,25,22,0.08); border-radius:8px; padding:16px 18px;">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:500; letter-spacing:0.1em; color:#AEA697; text-transform:uppercase; margin-bottom:11px;">Notes</div>
+              <div style="display:flex; flex-direction:column; gap:9px;">
+                <div style="display:flex; align-items:center; gap:9px;"><span style="width:15px; height:15px; border-radius:3px; border:1.5px solid #B3AB9A;"></span><span style="font-size:13px; color:#2C281F;">Call dentist</span></div>
+                <div style="display:flex; align-items:center; gap:9px;"><span style="width:15px; height:15px; border-radius:3px; background:#322820; display:flex; align-items:center; justify-content:center;"><span class="ms" style="font-size:12px; color:#F2F0EA; font-variation-settings:'wght' 500;">check</span></span><span style="font-size:13px; color:#9A9282; text-decoration:line-through;">Send invoice</span></div>
+                <div style="display:flex; align-items:center; gap:9px;"><span style="width:15px; height:15px; border-radius:3px; border:1.5px solid #B3AB9A;"></span><span style="font-size:13px; color:#2C281F;">Buy coffee beans</span></div>
+              </div>
+            </div>
+            <div style="flex:1; background:#F2F0EA; border:1px solid rgba(26,25,22,0.08); border-radius:8px; padding:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px;">
+              <div style="position:relative; width:64px; height:64px;">
+                <svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(34,31,26,0.13)" stroke-width="5"/><circle cx="32" cy="32" r="26" fill="none" stroke="#322820" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="29.4" transform="rotate(-90 32 32)"/></svg>
+                <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;"><span class="fr" style="font-size:19px; font-weight:400; color:#241F18; line-height:1;">82</span><span style="font-size:8px; color:#86806F;">%</span></div>
+              </div>
+              <div style="text-align:center;"><div style="font-size:12px; font-weight:600; color:#2C281F;">Battery</div><div style="font-size:10.5px; color:#86806F;">5h 20m left</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(40,34,22,0.30);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WIDGETS GALLERY — DARK ============ -->
+<div style="position:absolute; left:1362px; top:1112px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Widgets gallery · dark</div>
+  <div data-screen-label="Widgets gallery · Dark" style="width:374px; height:794px; border-radius:46px; background:#000; padding:7px; box-shadow:0 30px 70px -24px rgba(0,0,0,0.5), 0 10px 24px -12px rgba(0,0,0,0.4); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#121210;">
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#000; z-index:6;"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#E9E6DF;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:18px 22px 10px;">
+          <div class="fr" style="font-weight:400; font-size:27px; color:#ECE7DD; letter-spacing:-0.01em;">Widgets</div>
+          <div style="font-size:13px; color:#8E8574; margin-top:3px;">Press and hold to place on home</div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:0 22px; display:flex; flex-direction:column; gap:13px;">
+          <div style="background:rgba(245,240,232,0.05); border:1px solid rgba(240,236,228,0.09); border-radius:8px; padding:18px 20px; display:flex; align-items:flex-end; justify-content:space-between;">
+            <div>
+              <div class="fr" style="font-weight:300; font-size:50px; line-height:0.9; color:#F3EFE7; letter-spacing:-0.03em;">9:41</div>
+              <div style="font-size:12.5px; color:#948B7C; margin-top:8px; letter-spacing:0.02em;">Saturday, June 27</div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; font-weight:500; letter-spacing:0.1em; color:#6E6657; text-transform:uppercase;">Clock</div>
+          </div>
+
+          <div style="background:rgba(245,240,232,0.05); border:1px solid rgba(240,236,228,0.09); border-radius:8px; padding:18px 20px; display:flex; gap:18px;">
+            <div style="text-align:center; flex-shrink:0;">
+              <div class="fr" style="font-weight:300; font-size:42px; line-height:0.9; color:#F3EFE7;">27</div>
+              <div style="font-size:12px; font-weight:600; color:#E4DFD4; margin-top:5px;">Saturday</div>
+              <div style="font-size:11px; color:#948B7C;">June 2026</div>
+            </div>
+            <div style="width:1px; background:rgba(240,236,228,0.10);"></div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:10px; justify-content:center;">
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#948B7C; width:38px;">09:00</span><span style="width:5px; height:5px; border-radius:50%; background:#5E5849;"></span><span style="font-size:12.5px; color:#E4DFD4;">Standup</span></div>
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#948B7C; width:38px;">14:30</span><span style="width:5px; height:5px; border-radius:50%; background:#857C6A;"></span><span style="font-size:12.5px; color:#E4DFD4;">Design review</span></div>
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#948B7C; width:38px;">17:00</span><span style="width:5px; height:5px; border-radius:50%; background:#5E5849;"></span><span style="font-size:12.5px; color:#E4DFD4;">Gym</span></div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:13px;">
+            <div style="flex:1.35; background:rgba(245,240,232,0.05); border:1px solid rgba(240,236,228,0.09); border-radius:8px; padding:16px 18px;">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:500; letter-spacing:0.1em; color:#6E6657; text-transform:uppercase; margin-bottom:11px;">Notes</div>
+              <div style="display:flex; flex-direction:column; gap:9px;">
+                <div style="display:flex; align-items:center; gap:9px;"><span style="width:15px; height:15px; border-radius:3px; border:1.5px solid #5A5446;"></span><span style="font-size:13px; color:#E4DFD4;">Call dentist</span></div>
+                <div style="display:flex; align-items:center; gap:9px;"><span style="width:15px; height:15px; border-radius:3px; background:#D8D2C4; display:flex; align-items:center; justify-content:center;"><span class="ms" style="font-size:12px; color:#1A1813; font-variation-settings:'wght' 500;">check</span></span><span style="font-size:13px; color:#7E7666; text-decoration:line-through;">Send invoice</span></div>
+                <div style="display:flex; align-items:center; gap:9px;"><span style="width:15px; height:15px; border-radius:3px; border:1.5px solid #5A5446;"></span><span style="font-size:13px; color:#E4DFD4;">Buy coffee beans</span></div>
+              </div>
+            </div>
+            <div style="flex:1; background:rgba(245,240,232,0.05); border:1px solid rgba(240,236,228,0.09); border-radius:8px; padding:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px;">
+              <div style="position:relative; width:64px; height:64px;">
+                <svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(240,236,228,0.15)" stroke-width="5"/><circle cx="32" cy="32" r="26" fill="none" stroke="#D8D2C4" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="29.4" transform="rotate(-90 32 32)"/></svg>
+                <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;"><span class="fr" style="font-size:19px; font-weight:400; color:#F3EFE7; line-height:1;">82</span><span style="font-size:8px; color:#948B7C;">%</span></div>
+              </div>
+              <div style="text-align:center;"><div style="font-size:12px; font-weight:600; color:#E4DFD4;">Battery</div><div style="font-size:10.5px; color:#948B7C;">5h 20m left</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(237,232,222,0.4);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WIDGET CUSTOMIZATION — LIGHT (LIVE) ============ -->
+<div style="position:absolute; left:1816px; top:1112px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Customize widget · light · <span style="color:#3A5A40; font-weight:600;">live</span></div>
+  <div data-screen-label="Customize · Light" style="width:374px; height:794px; border-radius:46px; background:#0E0E0D; padding:7px; box-shadow:0 30px 70px -24px rgba(28,24,16,0.34), 0 10px 24px -12px rgba(28,24,16,0.22); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#FAFAF8;">
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#0E0E0D; opacity:0.82; z-index:6;"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#2B2820;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:14px 24px 8px; display:flex; align-items:baseline; justify-content:space-between;">
+          <div class="fr" style="font-weight:400; font-size:25px; color:#221F1A; letter-spacing:-0.01em;">Customize</div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:#A39B8B;">Clock</div>
+        </div>
+
+        <!-- live preview -->
+        <div style="height:236px; margin:0 18px; border-radius:14px; overflow:hidden; position:relative; background:radial-gradient(120% 110% at 30% 20%, #EFE2CE 0%, #DBC1A2 60%, #C9A788 100%); display:flex; align-items:center; justify-content:center;">
+          <div style="position:absolute; top:12px; left:14px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(46,34,20,0.5);">Live preview</div>
+          <div style="background:{{ prevBg }}; font-family:{{ prevFont }}; border-radius:8px; padding:{{ padPx }}px; box-shadow:0 18px 44px -18px rgba(36,26,12,0.5); min-width:188px;">
+            <div style="font-size:{{ timePx }}px; line-height:0.92; color:{{ prevFg }}; letter-spacing:-0.02em; font-weight:400;">9:41</div>
+            <div style="font-size:{{ datePx }}px; color:{{ prevSub }}; margin-top:7px;">Saturday, June 27</div>
+          </div>
+        </div>
+
+        <!-- controls -->
+        <div style="padding:18px 24px 0; flex:1;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#A39B8B; margin-bottom:12px;">Background</div>
+          <div style="display:flex; gap:13px;">
+            <div onClick="{{ selectPaper }}" style="width:30px; height:30px; border-radius:50%; background:#F4F1EA; border:1px solid rgba(26,25,22,0.16); cursor:pointer; {{ ringPaper }}"></div>
+            <div onClick="{{ selectSand }}" style="width:30px; height:30px; border-radius:50%; background:#E7D6BC; border:1px solid rgba(26,25,22,0.10); cursor:pointer; {{ ringSand }}"></div>
+            <div onClick="{{ selectClay }}" style="width:30px; height:30px; border-radius:50%; background:#D8B59C; border:1px solid rgba(26,25,22,0.10); cursor:pointer; {{ ringClay }}"></div>
+            <div onClick="{{ selectSage }}" style="width:30px; height:30px; border-radius:50%; background:#C5CDB6; border:1px solid rgba(26,25,22,0.10); cursor:pointer; {{ ringSage }}"></div>
+            <div onClick="{{ selectSlate }}" style="width:30px; height:30px; border-radius:50%; background:#B9C0C6; border:1px solid rgba(26,25,22,0.10); cursor:pointer; {{ ringSlate }}"></div>
+            <div onClick="{{ selectCharcoal }}" style="width:30px; height:30px; border-radius:50%; background:#2A2824; border:1px solid rgba(26,25,22,0.10); cursor:pointer; {{ ringCharcoal }}"></div>
+          </div>
+
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#A39B8B; margin:22px 0 10px;">Typeface</div>
+          <div style="display:flex; gap:5px; background:rgba(26,25,22,0.05); border-radius:9px; padding:4px;">
+            <div onClick="{{ fontSans }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-family:'Hanken Grotesk',sans-serif; font-size:13px; font-weight:600; color:#5A554C; cursor:pointer; {{ selSans }}">Sans</div>
+            <div onClick="{{ fontSerif }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-family:'Fraunces',serif; font-size:14px; font-weight:500; color:#5A554C; cursor:pointer; {{ selSerif }}">Serif</div>
+            <div onClick="{{ fontMono }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:500; color:#5A554C; cursor:pointer; {{ selMono }}">Mono</div>
+          </div>
+
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#A39B8B; margin:18px 0 10px;">Size</div>
+          <div style="display:flex; gap:5px; background:rgba(26,25,22,0.05); border-radius:9px; padding:4px;">
+            <div onClick="{{ sizeSm }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-size:13px; font-weight:600; color:#5A554C; cursor:pointer; {{ selSm }}">Small</div>
+            <div onClick="{{ sizeMd }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-size:13px; font-weight:600; color:#5A554C; cursor:pointer; {{ selMd }}">Medium</div>
+            <div onClick="{{ sizeLg }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-size:13px; font-weight:600; color:#5A554C; cursor:pointer; {{ selLg }}">Large</div>
+          </div>
+
+          <div style="margin-top:20px; height:50px; border-radius:8px; background:#3A5A40; color:#FAFAF8; display:flex; align-items:center; justify-content:center; gap:8px; font-size:14.5px; font-weight:600; cursor:pointer;">
+            <span class="ms" style="font-size:19px; font-variation-settings:'wght' 400;">add</span>Add to home
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(40,34,22,0.30);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WIDGET CUSTOMIZATION — DARK (LIVE) ============ -->
+<div style="position:absolute; left:2270px; top:1112px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Customize widget · dark · <span style="color:#3A5A40; font-weight:600;">live</span></div>
+  <div data-screen-label="Customize · Dark" style="width:374px; height:794px; border-radius:46px; background:#000; padding:7px; box-shadow:0 30px 70px -24px rgba(0,0,0,0.5), 0 10px 24px -12px rgba(0,0,0,0.4); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#121210;">
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#000; z-index:6;"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#E9E6DF;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:14px 24px 8px; display:flex; align-items:baseline; justify-content:space-between;">
+          <div class="fr" style="font-weight:400; font-size:25px; color:#ECE7DD; letter-spacing:-0.01em;">Customize</div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:#6E6657;">Clock</div>
+        </div>
+
+        <div style="height:236px; margin:0 18px; border-radius:14px; overflow:hidden; position:relative; background:radial-gradient(120% 110% at 30% 20%, #2C2820 0%, #1A1712 60%, #100E0B 100%); display:flex; align-items:center; justify-content:center;">
+          <div style="position:absolute; top:12px; left:14px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(236,231,221,0.42);">Live preview</div>
+          <div style="background:{{ prevBg }}; font-family:{{ prevFont }}; border-radius:8px; padding:{{ padPx }}px; box-shadow:0 18px 44px -18px rgba(0,0,0,0.6); min-width:188px;">
+            <div style="font-size:{{ timePx }}px; line-height:0.92; color:{{ prevFg }}; letter-spacing:-0.02em; font-weight:400;">9:41</div>
+            <div style="font-size:{{ datePx }}px; color:{{ prevSub }}; margin-top:7px;">Saturday, June 27</div>
+          </div>
+        </div>
+
+        <div style="padding:18px 24px 0; flex:1;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#6E6657; margin-bottom:12px;">Background</div>
+          <div style="display:flex; gap:13px;">
+            <div onClick="{{ selectPaper }}" style="width:30px; height:30px; border-radius:50%; background:#F4F1EA; border:1px solid rgba(240,236,228,0.12); cursor:pointer; {{ ringPaper }}"></div>
+            <div onClick="{{ selectSand }}" style="width:30px; height:30px; border-radius:50%; background:#E7D6BC; border:1px solid rgba(240,236,228,0.12); cursor:pointer; {{ ringSand }}"></div>
+            <div onClick="{{ selectClay }}" style="width:30px; height:30px; border-radius:50%; background:#D8B59C; border:1px solid rgba(240,236,228,0.12); cursor:pointer; {{ ringClay }}"></div>
+            <div onClick="{{ selectSage }}" style="width:30px; height:30px; border-radius:50%; background:#C5CDB6; border:1px solid rgba(240,236,228,0.12); cursor:pointer; {{ ringSage }}"></div>
+            <div onClick="{{ selectSlate }}" style="width:30px; height:30px; border-radius:50%; background:#B9C0C6; border:1px solid rgba(240,236,228,0.12); cursor:pointer; {{ ringSlate }}"></div>
+            <div onClick="{{ selectCharcoal }}" style="width:30px; height:30px; border-radius:50%; background:#2A2824; border:1px solid rgba(240,236,228,0.18); cursor:pointer; {{ ringCharcoal }}"></div>
+          </div>
+
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#6E6657; margin:22px 0 10px;">Typeface</div>
+          <div style="display:flex; gap:5px; background:rgba(245,240,232,0.06); border-radius:9px; padding:4px;">
+            <div onClick="{{ fontSans }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-family:'Hanken Grotesk',sans-serif; font-size:13px; font-weight:600; color:#C8C2B6; cursor:pointer; {{ selSans }}">Sans</div>
+            <div onClick="{{ fontSerif }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-family:'Fraunces',serif; font-size:14px; font-weight:500; color:#C8C2B6; cursor:pointer; {{ selSerif }}">Serif</div>
+            <div onClick="{{ fontMono }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:500; color:#C8C2B6; cursor:pointer; {{ selMono }}">Mono</div>
+          </div>
+
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#6E6657; margin:18px 0 10px;">Size</div>
+          <div style="display:flex; gap:5px; background:rgba(245,240,232,0.06); border-radius:9px; padding:4px;">
+            <div onClick="{{ sizeSm }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-size:13px; font-weight:600; color:#C8C2B6; cursor:pointer; {{ selSm }}">Small</div>
+            <div onClick="{{ sizeMd }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-size:13px; font-weight:600; color:#C8C2B6; cursor:pointer; {{ selMd }}">Medium</div>
+            <div onClick="{{ sizeLg }}" style="flex:1; text-align:center; padding:9px 0; border-radius:6px; font-size:13px; font-weight:600; color:#C8C2B6; cursor:pointer; {{ selLg }}">Large</div>
+          </div>
+
+          <div style="margin-top:20px; height:50px; border-radius:8px; background:#3A5A40; color:#FAFAF8; display:flex; align-items:center; justify-content:center; gap:8px; font-size:14.5px; font-weight:600; cursor:pointer;">
+            <span class="ms" style="font-size:19px; font-variation-settings:'wght' 400;">add</span>Add to home
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(237,232,222,0.4);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="position:absolute; left:4px; top:1982px; font-size:12px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#A9A69C;">03 — Wallpapers · apply</div>
+
+<!-- ============ WALLPAPER GRID — LIGHT ============ -->
+<div style="position:absolute; left:0; top:2028px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Wallpaper grid · light</div>
+  <div data-screen-label="Wallpapers · Light" style="width:374px; height:794px; border-radius:46px; background:#0E0E0D; padding:7px; box-shadow:0 30px 70px -24px rgba(28,24,16,0.34), 0 10px 24px -12px rgba(28,24,16,0.22); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#FAFAF8;">
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#0E0E0D; opacity:0.82; z-index:6;"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#2B2820;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:16px 22px 12px; display:flex; align-items:baseline; justify-content:space-between;">
+          <div class="fr" style="font-weight:400; font-size:27px; color:#221F1A; letter-spacing:-0.01em;">Wallpapers</div>
+          <span class="ms" style="font-size:22px; color:#8C8576; font-variation-settings:'wght' 300;">search</span>
+        </div>
+
+        <!-- category chips -->
+        <div style="display:flex; gap:8px; padding:0 22px 14px; overflow:hidden;">
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:#3A5A40; color:#FAFAF8; font-size:12.5px; font-weight:600;">All</div>
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:#F0EEE7; border:1px solid rgba(26,25,22,0.07); color:#6E6757; font-size:12.5px; font-weight:500;">Earth</div>
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:#F0EEE7; border:1px solid rgba(26,25,22,0.07); color:#6E6757; font-size:12.5px; font-weight:500;">Sage</div>
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:#F0EEE7; border:1px solid rgba(26,25,22,0.07); color:#6E6757; font-size:12.5px; font-weight:500;">Mono</div>
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:#F0EEE7; border:1px solid rgba(26,25,22,0.07); color:#6E6757; font-size:12.5px; font-weight:500;">Dark</div>
+        </div>
+
+        <!-- staggered grid -->
+        <div style="flex:1; overflow:hidden; padding:0 22px; display:flex; gap:12px;">
+          <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+            <div style="height:208px; border-radius:8px; position:relative; overflow:hidden; background:radial-gradient(130% 120% at 28% 18%, #F4E7D3 0%, #E6C9A6 42%, #D2A87F 74%, #BC8B61 100%);">
+              <div style="position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.88); display:flex; align-items:center; justify-content:center;"><span class="ms" style="font-size:17px; color:#3A5A40; font-variation-settings:'FILL' 1,'wght' 400;">favorite</span></div>
+            </div>
+            <div style="height:150px; border-radius:8px; overflow:hidden; background:radial-gradient(120% 120% at 35% 22%, #3E3B35 0%, #201E19 60%, #100F0C 100%);"></div>
+            <div style="height:196px; border-radius:8px; overflow:hidden; background:linear-gradient(158deg, #E3E8D7 0%, #C0C9AA 58%, #9EAB86 100%);"></div>
+            <div style="height:170px; border-radius:8px; overflow:hidden; background:linear-gradient(155deg, #E8D7DD 0%, #C4A4B2 55%, #916F82 100%);"></div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+            <div style="height:164px; border-radius:8px; position:relative; overflow:hidden; background:radial-gradient(120% 120% at 60% 16%, #2B3B30 0%, #17211B 56%, #0C110D 100%);">
+              <div style="position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center;"><span class="ms" style="font-size:17px; color:#FFFFFF; font-variation-settings:'FILL' 0,'wght' 300;">favorite</span></div>
+            </div>
+            <div style="height:226px; border-radius:8px; overflow:hidden; background:radial-gradient(120% 120% at 32% 20%, #EDCCB3 0%, #CA8F6D 68%, #A66B4A 100%);"></div>
+            <div style="height:158px; border-radius:8px; overflow:hidden; background:linear-gradient(160deg, #DDE2E6 0%, #AFBAC3 55%, #84909C 100%);"></div>
+            <div style="height:184px; border-radius:8px; overflow:hidden; background:radial-gradient(120% 120% at 35% 24%, #41342B 0%, #231A14 60%, #120D0A 100%);"></div>
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(40,34,22,0.30);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WALLPAPER GRID — DARK ============ -->
+<div style="position:absolute; left:454px; top:2028px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Wallpaper grid · dark</div>
+  <div data-screen-label="Wallpapers · Dark" style="width:374px; height:794px; border-radius:46px; background:#000; padding:7px; box-shadow:0 30px 70px -24px rgba(0,0,0,0.5), 0 10px 24px -12px rgba(0,0,0,0.4); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#121210;">
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#000; z-index:6;"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#E9E6DF;">
+          <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+            <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+            <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+          </div>
+        </div>
+
+        <div style="padding:16px 22px 12px; display:flex; align-items:baseline; justify-content:space-between;">
+          <div class="fr" style="font-weight:400; font-size:27px; color:#ECE7DD; letter-spacing:-0.01em;">Wallpapers</div>
+          <span class="ms" style="font-size:22px; color:#857C6D; font-variation-settings:'wght' 300;">search</span>
+        </div>
+
+        <div style="display:flex; gap:8px; padding:0 22px 14px; overflow:hidden;">
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:#3A5A40; color:#FAFAF8; font-size:12.5px; font-weight:600;">All</div>
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:rgba(245,240,232,0.06); border:1px solid rgba(240,236,228,0.08); color:#ADA597; font-size:12.5px; font-weight:500;">Earth</div>
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:rgba(245,240,232,0.06); border:1px solid rgba(240,236,228,0.08); color:#ADA597; font-size:12.5px; font-weight:500;">Sage</div>
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:rgba(245,240,232,0.06); border:1px solid rgba(240,236,228,0.08); color:#ADA597; font-size:12.5px; font-weight:500;">Mono</div>
+          <div style="flex-shrink:0; padding:7px 15px; border-radius:8px; background:rgba(245,240,232,0.06); border:1px solid rgba(240,236,228,0.08); color:#ADA597; font-size:12.5px; font-weight:500;">Dark</div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:0 22px; display:flex; gap:12px;">
+          <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+            <div style="height:208px; border-radius:8px; position:relative; overflow:hidden; background:radial-gradient(130% 120% at 28% 18%, #F4E7D3 0%, #E6C9A6 42%, #D2A87F 74%, #BC8B61 100%);">
+              <div style="position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.88); display:flex; align-items:center; justify-content:center;"><span class="ms" style="font-size:17px; color:#3A5A40; font-variation-settings:'FILL' 1,'wght' 400;">favorite</span></div>
+            </div>
+            <div style="height:150px; border-radius:8px; overflow:hidden; background:radial-gradient(120% 120% at 35% 22%, #3E3B35 0%, #201E19 60%, #100F0C 100%);"></div>
+            <div style="height:196px; border-radius:8px; overflow:hidden; background:linear-gradient(158deg, #E3E8D7 0%, #C0C9AA 58%, #9EAB86 100%);"></div>
+            <div style="height:170px; border-radius:8px; overflow:hidden; background:linear-gradient(155deg, #E8D7DD 0%, #C4A4B2 55%, #916F82 100%);"></div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+            <div style="height:164px; border-radius:8px; position:relative; overflow:hidden; background:radial-gradient(120% 120% at 60% 16%, #2B3B30 0%, #17211B 56%, #0C110D 100%);">
+              <div style="position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center;"><span class="ms" style="font-size:17px; color:#FFFFFF; font-variation-settings:'FILL' 0,'wght' 300;">favorite</span></div>
+            </div>
+            <div style="height:226px; border-radius:8px; overflow:hidden; background:radial-gradient(120% 120% at 32% 20%, #EDCCB3 0%, #CA8F6D 68%, #A66B4A 100%);"></div>
+            <div style="height:158px; border-radius:8px; overflow:hidden; background:linear-gradient(160deg, #DDE2E6 0%, #AFBAC3 55%, #84909C 100%);"></div>
+            <div style="height:184px; border-radius:8px; overflow:hidden; background:radial-gradient(120% 120% at 35% 24%, #41342B 0%, #231A14 60%, #120D0A 100%);"></div>
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(237,232,222,0.4);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APPLY SHEET — LIGHT WALLPAPER ============ -->
+<div style="position:absolute; left:908px; top:2028px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Apply sheet · light wallpaper</div>
+  <div data-screen-label="Apply · Light" style="width:374px; height:794px; border-radius:46px; background:#0E0E0D; padding:7px; box-shadow:0 30px 70px -24px rgba(28,24,16,0.34), 0 10px 24px -12px rgba(28,24,16,0.22); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#FAFAF8;">
+      <div style="position:absolute; inset:0; background:radial-gradient(132% 122% at 30% 16%, #F5E8D4 0%, #E8CCA9 38%, #D4AB82 70%, #BD8C62 100%);"></div>
+      <div style="position:absolute; top:0; left:0; right:0; height:120px; background:linear-gradient(180deg, rgba(60,44,26,0.12), rgba(60,44,26,0));"></div>
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#0E0E0D; opacity:0.82; z-index:6;"></div>
+
+      <div style="position:absolute; top:0; left:0; right:0; height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#2B2820; z-index:5;">
+        <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+        <div style="display:flex; align-items:center; gap:7px;">
+          <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+          <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+          <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+        </div>
+      </div>
+
+      <!-- bottom sheet -->
+      <div style="position:absolute; left:0; right:0; bottom:0; background:#FAFAF8; border-radius:24px 24px 0 0; box-shadow:0 -18px 50px -20px rgba(30,22,12,0.32); padding-bottom:26px;">
+        <div style="width:36px; height:5px; border-radius:3px; background:rgba(40,34,22,0.18); margin:12px auto 0;"></div>
+        <div style="padding:16px 22px 0; display:flex; align-items:flex-start; justify-content:space-between;">
+          <div>
+            <div class="fr" style="font-weight:400; font-size:22px; color:#221F1A; letter-spacing:-0.01em;">Dune</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:#8C8576; margin-top:3px;">Warm tones · Designed</div>
+          </div>
+          <div style="width:38px; height:38px; border-radius:8px; border:1px solid rgba(26,25,22,0.12); display:flex; align-items:center; justify-content:center;"><span class="ms" style="font-size:19px; color:#6E6757; font-variation-settings:'wght' 300;">favorite</span></div>
+        </div>
+
+        <div style="margin:18px 22px 0; display:flex; gap:5px; background:#F0EEE7; border:1px solid rgba(26,25,22,0.06); border-radius:9px; padding:4px;">
+          <div style="flex:1; text-align:center; padding:11px 0; border-radius:6px; font-size:13.5px; font-weight:600; color:#6E6757;">Home</div>
+          <div style="flex:1; text-align:center; padding:11px 0; border-radius:6px; font-size:13.5px; font-weight:600; color:#6E6757;">Lock</div>
+          <div style="flex:1; text-align:center; padding:11px 0; border-radius:6px; font-size:13.5px; font-weight:600; background:#3A5A40; color:#FAFAF8;">Both</div>
+        </div>
+
+        <div style="margin:13px 22px 0; height:52px; border-radius:8px; background:#3A5A40; color:#FAFAF8; display:flex; align-items:center; justify-content:center; gap:8px; font-size:15px; font-weight:600;">
+          <span class="ms" style="font-size:20px; font-variation-settings:'wght' 400;">check</span>Apply
+        </div>
+      </div>
+
+      <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(40,34,22,0.26); z-index:7;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APPLY SHEET — DARK WALLPAPER ============ -->
+<div style="position:absolute; left:1362px; top:2028px; width:374px;">
+  <div data-drags-parent="1" style="font-size:13px; color:#6E6C63; margin:0 0 12px 4px;">Apply sheet · dark wallpaper</div>
+  <div data-screen-label="Apply · Dark" style="width:374px; height:794px; border-radius:46px; background:#000; padding:7px; box-shadow:0 30px 70px -24px rgba(0,0,0,0.5), 0 10px 24px -12px rgba(0,0,0,0.4); position:relative;">
+    <div style="position:relative; width:360px; height:780px; border-radius:39px; overflow:hidden; background:#0E0C0A;">
+      <div style="position:absolute; inset:0; background:radial-gradient(132% 122% at 34% 15%, #3A302A 0%, #241B14 50%, #120D09 100%);"></div>
+      <div style="position:absolute; top:0; left:0; right:0; height:120px; background:linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0));"></div>
+      <div style="position:absolute; top:13px; left:50%; transform:translateX(-50%); width:9px; height:9px; border-radius:50%; background:#000; z-index:6;"></div>
+
+      <div style="position:absolute; top:0; left:0; right:0; height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#EDE9E1; z-index:5;">
+        <span style="font-size:13.5px; font-weight:600; letter-spacing:0.02em;">9:41</span>
+        <div style="display:flex; align-items:center; gap:7px;">
+          <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">signal_cellular_alt</span>
+          <span class="ms" style="font-size:17px; font-variation-settings:'wght' 400;">wifi</span>
+          <span class="ms" style="font-size:18px; font-variation-settings:'wght' 400;">battery_full</span>
+        </div>
+      </div>
+
+      <div style="position:absolute; left:0; right:0; bottom:0; background:#1A1712; border-radius:24px 24px 0 0; box-shadow:0 -18px 50px -20px rgba(0,0,0,0.5); padding-bottom:26px;">
+        <div style="width:36px; height:5px; border-radius:3px; background:rgba(237,232,222,0.22); margin:12px auto 0;"></div>
+        <div style="padding:16px 22px 0; display:flex; align-items:flex-start; justify-content:space-between;">
+          <div>
+            <div class="fr" style="font-weight:400; font-size:22px; color:#ECE7DD; letter-spacing:-0.01em;">Ember</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:#948B7C; margin-top:3px;">Warm dark · Designed</div>
+          </div>
+          <div style="width:38px; height:38px; border-radius:8px; border:1px solid rgba(240,236,228,0.14); display:flex; align-items:center; justify-content:center;"><span class="ms" style="font-size:19px; color:#ADA597; font-variation-settings:'wght' 300;">favorite</span></div>
+        </div>
+
+        <div style="margin:18px 22px 0; display:flex; gap:5px; background:rgba(245,240,232,0.06); border:1px solid rgba(240,236,228,0.07); border-radius:9px; padding:4px;">
+          <div style="flex:1; text-align:center; padding:11px 0; border-radius:6px; font-size:13.5px; font-weight:600; color:#ADA597;">Home</div>
+          <div style="flex:1; text-align:center; padding:11px 0; border-radius:6px; font-size:13.5px; font-weight:600; color:#ADA597;">Lock</div>
+          <div style="flex:1; text-align:center; padding:11px 0; border-radius:6px; font-size:13.5px; font-weight:600; background:#3A5A40; color:#FAFAF8;">Both</div>
+        </div>
+
+        <div style="margin:13px 22px 0; height:52px; border-radius:8px; background:#3A5A40; color:#FAFAF8; display:flex; align-items:center; justify-content:center; gap:8px; font-size:15px; font-weight:600;">
+          <span class="ms" style="font-size:20px; font-variation-settings:'wght' 400;">check</span>Apply
+        </div>
+      </div>
+
+      <div style="position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:rgba(237,232,222,0.34); z-index:7;"></div>
+    </div>
+  </div>
+</div>
+
+<!--FRAMES-END-->
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { custColor: 'sand', custFont: 'serif', custSize: 'md' };
+  renderVals() {
+    const COLORS = { paper: '#F4F1EA', sand: '#E7D6BC', clay: '#D8B59C', sage: '#C5CDB6', slate: '#B9C0C6', charcoal: '#2A2824' };
+    const FONTS = { sans: "'Hanken Grotesk', system-ui, sans-serif", serif: "'Fraunces', Georgia, serif", mono: "'IBM Plex Mono', monospace" };
+    const SCALE = { sm: 0.82, md: 1, lg: 1.18 };
+    const c = this.state.custColor, f = this.state.custFont, s = this.state.custSize;
+    const dark = c === 'charcoal';
+    const fg = dark ? '#F3EFE7' : '#241F18';
+    const sub = dark ? 'rgba(243,239,231,0.6)' : 'rgba(36,31,24,0.52)';
+    const k = SCALE[s];
+    const sel = 'background:#3A5A40; color:#FAFAF8;';
+    const ring = (on) => on ? 'outline:2px solid #3A5A40; outline-offset:2px;' : '';
+    const setColor = (v) => this.setState({ custColor: v });
+    const setFont = (v) => this.setState({ custFont: v });
+    const setSize = (v) => this.setState({ custSize: v });
+    return {
+      prevBg: COLORS[c], prevFg: fg, prevSub: sub, prevFont: FONTS[f],
+      timePx: Math.round(58 * k), datePx: Math.round(13.5 * k), padPx: Math.round(26 * k),
+      selSans: f === 'sans' ? sel : '', selSerif: f === 'serif' ? sel : '', selMono: f === 'mono' ? sel : '',
+      selSm: s === 'sm' ? sel : '', selMd: s === 'md' ? sel : '', selLg: s === 'lg' ? sel : '',
+      ringPaper: ring(c === 'paper'), ringSand: ring(c === 'sand'), ringClay: ring(c === 'clay'),
+      ringSage: ring(c === 'sage'), ringSlate: ring(c === 'slate'), ringCharcoal: ring(c === 'charcoal'),
+      selectPaper: () => setColor('paper'), selectSand: () => setColor('sand'), selectClay: () => setColor('clay'),
+      selectSage: () => setColor('sage'), selectSlate: () => setColor('slate'), selectCharcoal: () => setColor('charcoal'),
+      fontSans: () => setFont('sans'), fontSerif: () => setFont('serif'), fontMono: () => setFont('mono'),
+      sizeSm: () => setSize('sm'), sizeMd: () => setSize('md'), sizeLg: () => setSize('lg'),
+    };
+  }
+}
+</script>
+</body>
+</html>

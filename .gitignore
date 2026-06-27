@@ -1,0 +1,37 @@
+# Built files
+*.apk
+*.aar
+*.aab
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+build/
+app/build/
+release/
+
+# Gradle
+.gradle/
+local.properties
+
+# Firebase config (per-developer; never commit secrets)
+# Remove this line if your team chooses to commit a shared config.
+google-services.json
+
+# IDE / Android Studio
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystore / signing
+*.jks
+*.keystore
+
+# Seed service-account key (secret; never commit)
+seed/serviceAccountKey.json
+seed/node_modules/

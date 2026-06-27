@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dwell</string>
+
+    <!-- Bottom navigation labels (sentence case, per UI/UX doc section 3) -->
+    <string name="nav_wallpapers">Wallpapers</string>
+    <string name="nav_widgets">Widgets</string>
+    <string name="nav_more">More</string>
+
+    <!-- Placeholder screen copy (replaced as each screen is built) -->
+    <string name="placeholder_subtitle">Coming soon</string>
+
+    <!-- Wallpapers grid -->
+    <string name="category_all">All</string>
+    <string name="cd_wallpaper">Wallpaper</string>
+    <string name="offline_banner">You\'re offline, showing saved wallpapers</string>
+    <string name="wallpapers_loading">Loading wallpapers</string>
+    <string name="wallpapers_empty">No wallpapers yet. Pull down to refresh.</string>
+    <string name="wallpapers_error_title">Couldn\'t load wallpapers</string>
+    <string name="wallpapers_error_body">Check your connection and try again.</string>
+    <string name="action_try_again">Try again</string>
+</resources>

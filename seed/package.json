@@ -1,0 +1,12 @@
+{
+  "name": "dwell-seed",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Seeds Firestore with placeholder Dwell wallpapers + categories for development.",
+  "scripts": {
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}
