@@ -2,6 +2,12 @@ package com.dwell.app.di
 
 import com.dwell.app.data.auth.AuthRepository
 import com.dwell.app.data.auth.AuthRepositoryImpl
+import com.dwell.app.data.billing.BillingRepository
+import com.dwell.app.data.billing.BillingRepositoryImpl
+import com.dwell.app.data.billing.EntitlementRemoteSource
+import com.dwell.app.data.billing.EntitlementRemoteSourceImpl
+import com.dwell.app.data.billing.EntitlementRepository
+import com.dwell.app.data.billing.EntitlementRepositoryImpl
 import com.dwell.app.data.favorites.FavoritesRemoteSource
 import com.dwell.app.data.favorites.FavoritesRemoteSourceImpl
 import com.dwell.app.data.favorites.FavoritesRepository
@@ -39,4 +45,16 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindFavoritesRepository(impl: FavoritesRepositoryImpl): FavoritesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindEntitlementRemoteSource(impl: EntitlementRemoteSourceImpl): EntitlementRemoteSource
+
+    @Binds
+    @Singleton
+    abstract fun bindEntitlementRepository(impl: EntitlementRepositoryImpl): EntitlementRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBillingRepository(impl: BillingRepositoryImpl): BillingRepository
 }
