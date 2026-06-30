@@ -1,6 +1,7 @@
 package com.dwell.app.ui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,6 +38,9 @@ private const val ROUTE_PREVIEW = "preview"
  */
 @Composable
 fun DwellApp() {
+    val bootstrap: AppBootstrapViewModel = hiltViewModel()
+    LaunchedEffect(Unit) { bootstrap.start() }
+
     val navController = rememberNavController()
     NavHost(
         navController = navController,
