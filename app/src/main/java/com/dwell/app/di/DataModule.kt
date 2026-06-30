@@ -1,6 +1,10 @@
 package com.dwell.app.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.dwell.app.data.local.CategoryDao
 import com.dwell.app.data.local.DwellDatabase
@@ -63,6 +67,11 @@ object DataModule {
     @Provides
     @Singleton
     fun provideFirebaseFunctions(): FirebaseFunctions = FirebaseFunctions.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideWidgetDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create { context.preferencesDataStoreFile("widget_styles") }
 
     /** Application-scoped coroutine scope for fire-and-forget work (e.g. purchase verification). */
     @Provides

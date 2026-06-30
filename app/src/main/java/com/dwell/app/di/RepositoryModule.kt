@@ -10,6 +10,8 @@ import com.dwell.app.data.billing.EntitlementRepository
 import com.dwell.app.data.billing.EntitlementRepositoryImpl
 import com.dwell.app.data.favorites.FavoritesRemoteSource
 import com.dwell.app.data.favorites.FavoritesRemoteSourceImpl
+import com.dwell.app.data.widget.DataStoreWidgetStyleStore
+import com.dwell.app.data.widget.WidgetStyleStore
 import com.dwell.app.data.favorites.FavoritesRepository
 import com.dwell.app.data.favorites.FavoritesRepositoryImpl
 import com.dwell.app.data.repository.WallpaperRepository
@@ -57,4 +59,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindBillingRepository(impl: BillingRepositoryImpl): BillingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindWidgetStyleStore(impl: DataStoreWidgetStyleStore): WidgetStyleStore
 }

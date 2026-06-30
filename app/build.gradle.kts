@@ -81,6 +81,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    // DataStore (per-widget style config)
+    implementation(libs.androidx.datastore.preferences)
+
     // Firebase (BOM keeps versions aligned)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
