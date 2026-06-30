@@ -17,4 +17,6 @@ data class WallpapersUiState(
     val isOffline: Boolean = false,
     val isFavoritesMode: Boolean = false,
     val favorites: List<Wallpaper> = emptyList(),
+    // Ids of saved wallpapers, for the heart fill on every grid card.
+    val favoriteIds: Set<String> = emptySet(),
 )

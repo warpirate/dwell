@@ -48,9 +48,13 @@ class WallpapersViewModelFavoritesTest {
 
     private class FakeFavoritesRepo(val favs: List<Wallpaper>) : FavoritesRepository {
         val ids = MutableStateFlow(favs.map { it.id }.toSet())
+        val toggled = mutableListOf<String>()
         override fun observeFavoriteIds(): Flow<Set<String>> = ids
         override fun observeFavoriteWallpapers(): Flow<List<Wallpaper>> = MutableStateFlow(favs)
-        override suspend fun toggle(wallpaper: Wallpaper) {}
+        override suspend fun toggle(wallpaper: Wallpaper) {
+            toggled.add(wallpaper.id)
+            ids.value = if (wallpaper.id in ids.value) ids.value - wallpaper.id else ids.value + wallpaper.id
+        }
         override suspend fun reconcile() {}
         override suspend fun snapshotLocalFavorites() = emptyList<com.dwell.app.data.favorites.FavoriteRemote>()
         override suspend fun mergeInto(uid: String, favorites: List<com.dwell.app.data.favorites.FavoriteRemote>) {}
@@ -71,6 +75,33 @@ class WallpapersViewModelFavoritesTest {
             val state = awaitItem()
             assertTrue(state.isFavoritesMode)
             assertEquals(listOf("nature-1"), state.favorites.map { it.id })
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun exposesFavoriteIds_fromRepo() = runTest {
+        val vm = WallpapersViewModel(
+            FakeWallpaperRepo(emptyPage),
+            FakeFavoritesRepo(listOf(wallpaper("nature-1"))),
+        )
+
+        vm.uiState.test {
+            assertEquals(setOf("nature-1"), awaitItem().favoriteIds)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun toggleFavorite_togglesThroughRepo_andUpdatesIds() = runTest {
+        val repo = FakeFavoritesRepo(emptyList())
+        val vm = WallpapersViewModel(FakeWallpaperRepo(emptyPage), repo)
+
+        vm.toggleFavorite(wallpaper("nature-2"))
+
+        assertEquals(listOf("nature-2"), repo.toggled)
+        vm.uiState.test {
+            assertTrue(awaitItem().favoriteIds.contains("nature-2"))
             cancelAndIgnoreRemainingEvents()
         }
     }

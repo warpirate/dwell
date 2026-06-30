@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dwell.app.data.favorites.FavoritesRepository
 import com.dwell.app.data.model.Category
+import com.dwell.app.data.model.Wallpaper
 import com.dwell.app.data.repository.PageCursor
 import com.dwell.app.data.repository.WallpaperRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,6 +40,17 @@ class WallpapersViewModel @Inject constructor(
                 _uiState.update { it.copy(favorites = favs) }
             }
         }
+        viewModelScope.launch {
+            favoritesRepository.observeFavoriteIds().collectLatest { ids ->
+                _uiState.update { it.copy(favoriteIds = ids) }
+            }
+        }
+    }
+
+    /** Toggle a wallpaper's saved state straight from the grid. Optimistic: the
+     *  repo writes Room first, so [WallpapersUiState.favoriteIds] flips at once. */
+    fun toggleFavorite(wallpaper: Wallpaper) {
+        viewModelScope.launch { favoritesRepository.toggle(wallpaper) }
     }
 
     fun selectCategory(categoryId: String) {

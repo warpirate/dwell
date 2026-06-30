@@ -56,6 +56,7 @@ fun WallpapersScreen(
         onRetry = viewModel::retry,
         onLoadMore = viewModel::loadMore,
         onWallpaperClick = { wallpaper -> onWallpaperClick(wallpaper.id) },
+        onToggleFavorite = viewModel::toggleFavorite,
         modifier = modifier,
     )
 }
@@ -69,6 +70,7 @@ private fun WallpapersContent(
     onRetry: () -> Unit,
     onLoadMore: () -> Unit,
     onWallpaperClick: (Wallpaper) -> Unit,
+    onToggleFavorite: (Wallpaper) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     DwellScaffold(modifier = modifier) {
@@ -92,7 +94,12 @@ private fun WallpapersContent(
                 if (state.favorites.isEmpty()) {
                     FavoritesEmptyState()
                 } else {
-                    FavoritesGrid(favorites = state.favorites, onWallpaperClick = onWallpaperClick)
+                    FavoritesGrid(
+                        favorites = state.favorites,
+                        favoriteIds = state.favoriteIds,
+                        onWallpaperClick = onWallpaperClick,
+                        onToggleFavorite = onToggleFavorite,
+                    )
                 }
             } else {
                 when (state.contentState) {
@@ -111,6 +118,7 @@ private fun WallpapersContent(
                         WallpaperGrid(
                             state = state,
                             onWallpaperClick = onWallpaperClick,
+                            onToggleFavorite = onToggleFavorite,
                             onLoadMore = onLoadMore,
                         )
                     }
@@ -125,6 +133,7 @@ private fun WallpapersContent(
 private fun WallpaperGrid(
     state: WallpapersUiState,
     onWallpaperClick: (Wallpaper) -> Unit,
+    onToggleFavorite: (Wallpaper) -> Unit,
     onLoadMore: () -> Unit,
 ) {
     val gridState = rememberLazyStaggeredGridState()
@@ -152,6 +161,8 @@ private fun WallpaperGrid(
             WallpaperCard(
                 wallpaper = wallpaper,
                 onClick = { onWallpaperClick(wallpaper) },
+                favorite = wallpaper.id in state.favoriteIds,
+                onToggleFavorite = { onToggleFavorite(wallpaper) },
             )
         }
         if (state.isLoadingMore) {
@@ -175,7 +186,9 @@ private fun WallpaperGrid(
 @Composable
 private fun FavoritesGrid(
     favorites: List<Wallpaper>,
+    favoriteIds: Set<String>,
     onWallpaperClick: (Wallpaper) -> Unit,
+    onToggleFavorite: (Wallpaper) -> Unit,
 ) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(2),
@@ -185,7 +198,12 @@ private fun FavoritesGrid(
         modifier = Modifier.fillMaxSize(),
     ) {
         items(items = favorites, key = { it.id }) { wallpaper ->
-            WallpaperCard(wallpaper = wallpaper, onClick = { onWallpaperClick(wallpaper) })
+            WallpaperCard(
+                wallpaper = wallpaper,
+                onClick = { onWallpaperClick(wallpaper) },
+                favorite = wallpaper.id in favoriteIds,
+                onToggleFavorite = { onToggleFavorite(wallpaper) },
+            )
         }
     }
 }
