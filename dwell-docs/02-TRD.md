@@ -88,7 +88,7 @@ Four widgets: clock, calendar, notes, battery.
 
 - **Glance** for clock, notes, battery (state-driven, Glance handles these well).
 - **RemoteViews** fallback if a widget needs layout Glance can't express cleanly.
-- Each widget has a **configuration Activity** launched on placement, where the user picks color and font. Config is persisted per widget instance (by `appWidgetId`) in DataStore.
+- Each widget has a **configuration Activity** launched on placement. Widgets work free in a default style; the **style engine (color, size, opacity; later font/radius/presets/wallpaper-match) is gated by the `premium` unlock**. Config is persisted per widget instance (by `appWidgetId`) in DataStore.
 - Battery widget reads `BatteryManager`. Calendar widget reads the calendar provider (needs `READ_CALENDAR`, requested only when that widget is added). Notes widget stores text locally.
 - Widget styling is a shared theming layer so adding new widget types later doesn't duplicate the color/font system. (Supports the P2 "more widgets" path.)
 

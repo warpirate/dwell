@@ -127,7 +127,7 @@ _Acceptance:_
 - Given any user, when they visit the public account-deletion web page, then they can request deletion without needing to open the app.
 
 **Monetization**
-- Free tier (with ads): all wallpapers, all widgets, the launcher with the Zen home style.
+- Free tier (with ads): all wallpapers, all widgets (in a default style), the launcher with the Zen home style. Widget customization (the style engine) is part of the premium unlock; widgets themselves are free.
 - One-time "unlock" IAP via Google Play Billing: removes ads **and** unlocks the coordinated layer — wallpaper-matched widget presets, plus extra launcher home styles as they ship.
 - Premium state stored as a `premium` flag on the user record and respected across devices.
 
