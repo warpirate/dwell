@@ -14,9 +14,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,7 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.dwell.app.ui.auth.AccountViewModel
-import com.dwell.app.ui.auth.SignInSheet
+import com.dwell.app.ui.auth.SignInScreen
 import com.dwell.app.ui.favorites.FavoritesScreen
 import com.dwell.app.ui.navigation.DwellDestination
 import com.dwell.app.ui.preview.PreviewScreen
@@ -43,6 +40,7 @@ import com.dwell.app.ui.wallpapers.WallpapersScreen
 private const val ROUTE_MAIN = "main"
 private const val ROUTE_PREVIEW = "preview"
 private const val ROUTE_FAVORITES = "favorites"
+private const val ROUTE_SIGNIN = "signin"
 
 /**
  * Top-level navigation. The tabbed shell lives at [ROUTE_MAIN]; the full-bleed
@@ -71,6 +69,13 @@ fun DwellApp() {
             MainShell(
                 onWallpaperClick = { id -> navController.navigate("$ROUTE_PREVIEW/$id") },
                 onOpenFavorites = { navController.navigate(ROUTE_FAVORITES) },
+                onOpenSignIn = { navController.navigate(ROUTE_SIGNIN) },
+            )
+        }
+        composable(ROUTE_SIGNIN) {
+            SignInScreen(
+                onSignedIn = { navController.popBackStack() },
+                onBack = { navController.popBackStack() },
             )
         }
         composable(ROUTE_FAVORITES) {
@@ -98,6 +103,7 @@ fun DwellApp() {
 private fun MainShell(
     onWallpaperClick: (String) -> Unit,
     onOpenFavorites: () -> Unit,
+    onOpenSignIn: () -> Unit,
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -105,14 +111,6 @@ private fun MainShell(
 
     val accountVm: AccountViewModel = hiltViewModel()
     val account by accountVm.state.collectAsStateWithLifecycle()
-    var showSignIn by remember { mutableStateOf(false) }
-
-    if (showSignIn) {
-        SignInSheet(
-            onSignedIn = { showSignIn = false },
-            onDismiss = { showSignIn = false },
-        )
-    }
 
     Scaffold(
         bottomBar = {
@@ -146,7 +144,7 @@ private fun MainShell(
                 MoreScreen(
                     isSignedIn = account.isSignedIn,
                     email = account.email,
-                    onSignIn = { showSignIn = true },
+                    onSignIn = onOpenSignIn,
                     onSignOut = accountVm::signOut,
                     onOpenFavorites = onOpenFavorites,
                 )

@@ -123,11 +123,19 @@ The launcher, if shipped, is not a tab. It's an opt-in toggle under More. It is 
 - Optional launcher: a toggle with a one-line explanation of what changes.
 - Privacy policy link, support, version.
 
-### 4.5 Sign-in (sheet, not a wall)
+### 4.5 Sign-in (full screen, not a wall)
 
-- Appears only on demand (favorite, purchase, sync). Never on launch.
-- Email/password and "Continue with Google."
-- Copy frames the value: "Sign in to save your favorites across devices." Not "You must log in."
+- A dedicated full screen, reached on demand (the More account row, and later
+  favorite/purchase/sync). Never on launch, never a forced wall.
+- Full-bleed calm layout: back arrow, the Dwell wordmark, a large Fraunces title
+  ("Welcome back" / "Create your account"), a value-framing subtitle, a
+  Sign in / Create account toggle, email + password fields, the accent primary
+  action, an "or" divider, and "Continue with Google."
+- Copy frames the value: "Save your favorites and sync them across devices." A
+  footer reminds that browsing and applying work without an account.
+- Implemented as its own nav route (not a bottom sheet), so the form gets the
+  whole screen for breathing room and clean IME behavior. (Updated from the
+  earlier sheet proposal.)
 
 ---
 
