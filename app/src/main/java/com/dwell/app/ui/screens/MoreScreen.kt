@@ -38,7 +38,7 @@ fun MoreScreen(
                 SettingsRow(
                     title = stringResource(R.string.account_sign_in),
                     onClick = onSignIn,
-                    leadingIcon = painterResource(R.drawable.ic_heart_outline),
+                    leadingIcon = painterResource(R.drawable.ic_account),
                 )
             }
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
