@@ -24,10 +24,24 @@ import com.dwell.app.R
 
 @Composable
 fun MoreScreen(
+    isSignedIn: Boolean,
+    email: String?,
+    onSignIn: () -> Unit,
+    onSignOut: () -> Unit,
     onOpenFavorites: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
+        if (isSignedIn) {
+            AccountRow(email = email.orEmpty(), onSignOut = onSignOut)
+        } else {
+            MoreRow(
+                iconRes = R.drawable.ic_heart_outline,
+                label = stringResource(R.string.account_sign_in),
+                onClick = onSignIn,
+            )
+        }
+        HorizontalDivider(color = MaterialTheme.colorScheme.outline)
         MoreRow(
             iconRes = R.drawable.ic_heart_outline,
             label = stringResource(R.string.favorites_title),
@@ -38,11 +52,34 @@ fun MoreScreen(
 }
 
 @Composable
-private fun MoreRow(
-    iconRes: Int,
-    label: String,
-    onClick: () -> Unit,
-) {
+private fun AccountRow(email: String, onSignOut: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .padding(horizontal = 20.dp, vertical = 14.dp),
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = email,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+        Text(
+            text = stringResource(R.string.account_sign_out),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .clickable(onClick = onSignOut)
+                .padding(8.dp),
+        )
+    }
+}
+
+@Composable
+private fun MoreRow(iconRes: Int, label: String, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -58,11 +95,7 @@ private fun MoreRow(
             modifier = Modifier.size(22.dp),
         )
         Spacer(Modifier.width(16.dp))
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
+        Text(text = label, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.weight(1f))
         Icon(
             painter = painterResource(R.drawable.ic_chevron_right),
