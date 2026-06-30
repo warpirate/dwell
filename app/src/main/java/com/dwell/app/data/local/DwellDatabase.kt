@@ -8,13 +8,14 @@ import androidx.room.RoomDatabase
  * and real migrations are needed, turn it on and add a schema dir + migrations.
  */
 @Database(
-    entities = [WallpaperEntity::class, CategoryEntity::class],
-    version = 1,
+    entities = [WallpaperEntity::class, CategoryEntity::class, FavoriteEntity::class],
+    version = 2,
     exportSchema = false,
 )
 abstract class DwellDatabase : RoomDatabase() {
     abstract fun wallpaperDao(): WallpaperDao
     abstract fun categoryDao(): CategoryDao
+    abstract fun favoriteDao(): FavoriteDao
 
     companion object {
         const val NAME = "dwell.db"

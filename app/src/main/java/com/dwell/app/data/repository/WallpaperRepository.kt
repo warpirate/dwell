@@ -38,6 +38,13 @@ interface WallpaperRepository {
         pageSize: Int = PAGE_SIZE,
     ): Result<WallpaperPage>
 
+    /**
+     * A single wallpaper by id, read from the local cache. Any wallpaper the
+     * preview can open was already loaded into the grid, so it is cached. This
+     * keeps the preview working offline and surviving process death.
+     */
+    suspend fun getWallpaper(id: String): Wallpaper?
+
     companion object {
         const val PAGE_SIZE = 20
     }

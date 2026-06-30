@@ -6,6 +6,8 @@
          are requested contextually in later phases, never declared early. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Applying a wallpaper. Normal install-time permission, no runtime prompt. -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
         android:name=".DwellApplication"

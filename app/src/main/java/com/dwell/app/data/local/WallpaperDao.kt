@@ -21,4 +21,8 @@ interface WallpaperDao {
 
     @Query("SELECT * FROM wallpaper_cache WHERE id = :id LIMIT 1")
     suspend fun getById(id: String): WallpaperEntity?
+
+    /** Cached wallpapers for a set of ids, any order. Used to render favorites. */
+    @Query("SELECT * FROM wallpaper_cache WHERE id IN (:ids)")
+    suspend fun getByIds(ids: List<String>): List<WallpaperEntity>
 }

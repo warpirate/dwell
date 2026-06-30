@@ -15,4 +15,6 @@ data class WallpapersUiState(
     val isLoadingMore: Boolean = false,
     val endReached: Boolean = false,
     val isOffline: Boolean = false,
+    val isFavoritesMode: Boolean = false,
+    val favorites: List<Wallpaper> = emptyList(),
 )

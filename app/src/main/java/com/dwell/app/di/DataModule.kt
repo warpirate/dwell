@@ -4,7 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import com.dwell.app.data.local.CategoryDao
 import com.dwell.app.data.local.DwellDatabase
+import com.dwell.app.data.local.FavoriteDao
 import com.dwell.app.data.local.WallpaperDao
+import com.dwell.app.data.util.NowProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.PersistentCacheSettings
@@ -45,4 +48,15 @@ object DataModule {
 
     @Provides
     fun provideCategoryDao(database: DwellDatabase): CategoryDao = database.categoryDao()
+
+    @Provides
+    fun provideFavoriteDao(database: DwellDatabase): FavoriteDao = database.favoriteDao()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideNowProvider(): NowProvider = NowProvider { System.currentTimeMillis() }
 }

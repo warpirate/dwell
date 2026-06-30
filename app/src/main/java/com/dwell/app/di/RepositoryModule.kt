@@ -1,7 +1,15 @@
 package com.dwell.app.di
 
+import com.dwell.app.data.auth.AuthRepository
+import com.dwell.app.data.auth.AuthRepositoryImpl
+import com.dwell.app.data.favorites.FavoritesRemoteSource
+import com.dwell.app.data.favorites.FavoritesRemoteSourceImpl
+import com.dwell.app.data.favorites.FavoritesRepository
+import com.dwell.app.data.favorites.FavoritesRepositoryImpl
 import com.dwell.app.data.repository.WallpaperRepository
 import com.dwell.app.data.repository.WallpaperRepositoryImpl
+import com.dwell.app.data.wallpaper.WallpaperApplier
+import com.dwell.app.data.wallpaper.WallpaperApplierImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,4 +23,20 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindWallpaperRepository(impl: WallpaperRepositoryImpl): WallpaperRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindWallpaperApplier(impl: WallpaperApplierImpl): WallpaperApplier
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFavoritesRemoteSource(impl: FavoritesRemoteSourceImpl): FavoritesRemoteSource
+
+    @Binds
+    @Singleton
+    abstract fun bindFavoritesRepository(impl: FavoritesRepositoryImpl): FavoritesRepository
 }

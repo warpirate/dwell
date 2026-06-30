@@ -21,5 +21,14 @@ data class Category(
 
         fun all(name: String = "All"): Category =
             Category(id = ALL_ID, name = name, order = -1)
+
+        /**
+         * Synthetic "Saved" chip. Selecting it shows the user's favorites
+         * instead of a catalog query. Not a Firestore doc.
+         */
+        const val FAVORITES_ID = "__favorites__"
+
+        fun favorites(name: String = "Saved"): Category =
+            Category(id = FAVORITES_ID, name = name, order = -2)
     }
 }
