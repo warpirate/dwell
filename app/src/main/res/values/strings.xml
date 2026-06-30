@@ -37,4 +37,21 @@
     <!-- Favorites -->
     <string name="favorites_title">Favorites</string>
     <string name="favorites_empty">No favorites yet. Tap the heart on any wallpaper.</string>
+
+    <!-- Auth -->
+    <string name="account_sign_in">Sign in</string>
+    <string name="account_create">Create account</string>
+    <string name="account_sign_out">Sign out</string>
+    <string name="account_email_hint">Email</string>
+    <string name="account_password_hint">Password</string>
+    <string name="account_continue_google">Continue with Google</string>
+    <string name="account_or">or</string>
+    <string name="account_merged_toast">Signed in to your existing account. Kept your saved wallpapers.</string>
+    <string name="account_err_invalid">Email and password don\'t match. Check them and try again.</string>
+    <string name="account_err_email_in_use">That email already has an account. Sign in instead.</string>
+    <string name="account_err_weak_password">Use at least 6 characters for your password.</string>
+    <string name="account_err_invalid_email">That email address isn\'t valid.</string>
+    <string name="account_err_network">Check your connection and try again.</string>
+    <string name="account_err_unknown">Couldn\'t sign you in. Try again.</string>
+    <string name="cd_toggle_password">Show or hide password</string>
 </resources>
