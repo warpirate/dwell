@@ -24,7 +24,10 @@ class AppBootstrapViewModel @Inject constructor(
         if (started) return
         started = true
         viewModelScope.launch {
-            auth.ensureSignedIn()
+            // Sign-in can fail (offline, or the Anonymous provider not enabled
+            // yet). That must not crash the app: favorites still work locally
+            // from Room, and reconcile is a no-op without a uid.
+            runCatching { auth.ensureSignedIn() }
             favorites.reconcile()
         }
     }
