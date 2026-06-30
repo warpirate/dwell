@@ -33,4 +33,8 @@
     <string name="preview_meta_designed">Designed</string>
     <string name="preview_untitled">Untitled</string>
     <string name="preview_not_found">This wallpaper isn\'t available.</string>
+
+    <!-- Favorites -->
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_empty">No favorites yet. Tap the heart on any wallpaper.</string>
 </resources>

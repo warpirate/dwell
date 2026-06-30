@@ -90,24 +90,32 @@ private fun WallpapersContent(
                 .fillMaxWidth()
                 .weight(1f),
         ) {
-            when (state.contentState) {
-                ContentState.Loading -> LoadingState()
-                ContentState.Error -> ErrorState(onRetry = onRetry)
-                ContentState.Empty -> PullToRefreshBox(
-                    isRefreshing = state.isRefreshing,
-                    onRefresh = onRefresh,
-                ) {
-                    EmptyState()
+            if (state.isFavoritesMode) {
+                if (state.favorites.isEmpty()) {
+                    FavoritesEmptyState()
+                } else {
+                    FavoritesGrid(favorites = state.favorites, onWallpaperClick = onWallpaperClick)
                 }
-                ContentState.Content -> PullToRefreshBox(
-                    isRefreshing = state.isRefreshing,
-                    onRefresh = onRefresh,
-                ) {
-                    WallpaperGrid(
-                        state = state,
-                        onWallpaperClick = onWallpaperClick,
-                        onLoadMore = onLoadMore,
-                    )
+            } else {
+                when (state.contentState) {
+                    ContentState.Loading -> LoadingState()
+                    ContentState.Error -> ErrorState(onRetry = onRetry)
+                    ContentState.Empty -> PullToRefreshBox(
+                        isRefreshing = state.isRefreshing,
+                        onRefresh = onRefresh,
+                    ) {
+                        EmptyState()
+                    }
+                    ContentState.Content -> PullToRefreshBox(
+                        isRefreshing = state.isRefreshing,
+                        onRefresh = onRefresh,
+                    ) {
+                        WallpaperGrid(
+                            state = state,
+                            onWallpaperClick = onWallpaperClick,
+                            onLoadMore = onLoadMore,
+                        )
+                    }
                 }
             }
         }
@@ -162,6 +170,42 @@ private fun WallpaperGrid(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun FavoritesGrid(
+    favorites: List<Wallpaper>,
+    onWallpaperClick: (Wallpaper) -> Unit,
+) {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
+        contentPadding = PaddingValues(16.dp),
+        verticalItemSpacing = 12.dp,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        items(items = favorites, key = { it.id }) { wallpaper ->
+            WallpaperCard(wallpaper = wallpaper, onClick = { onWallpaperClick(wallpaper) })
+        }
+    }
+}
+
+@Composable
+private fun FavoritesEmptyState() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.favorites_empty),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(32.dp),
+        )
     }
 }
 

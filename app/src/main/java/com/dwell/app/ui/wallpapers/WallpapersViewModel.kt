@@ -2,6 +2,7 @@ package com.dwell.app.ui.wallpapers
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dwell.app.data.favorites.FavoritesRepository
 import com.dwell.app.data.model.Category
 import com.dwell.app.data.repository.PageCursor
 import com.dwell.app.data.repository.WallpaperRepository
@@ -10,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WallpapersViewModel @Inject constructor(
     private val repository: WallpaperRepository,
+    private val favoritesRepository: FavoritesRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(WallpapersUiState())
@@ -31,12 +34,22 @@ class WallpapersViewModel @Inject constructor(
     init {
         loadCategories()
         loadFirstPage(showLoading = true)
+        viewModelScope.launch {
+            favoritesRepository.observeFavoriteWallpapers().collectLatest { favs ->
+                _uiState.update { it.copy(favorites = favs) }
+            }
+        }
     }
 
     fun selectCategory(categoryId: String) {
         if (categoryId == _uiState.value.selectedCategoryId) return
-        _uiState.update { it.copy(selectedCategoryId = categoryId) }
-        loadFirstPage(showLoading = true)
+        val favoritesMode = categoryId == Category.FAVORITES_ID
+        _uiState.update {
+            it.copy(selectedCategoryId = categoryId, isFavoritesMode = favoritesMode)
+        }
+        if (!favoritesMode) {
+            loadFirstPage(showLoading = true)
+        }
     }
 
     fun refresh() {
@@ -82,7 +95,9 @@ class WallpapersViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getCategories().onSuccess { categories ->
                 _uiState.update {
-                    it.copy(categories = listOf(Category.all()) + categories)
+                    it.copy(
+                        categories = listOf(Category.all(), Category.favorites()) + categories,
+                    )
                 }
             }
             // On failure keep whatever chips we have; the grid can still load.
