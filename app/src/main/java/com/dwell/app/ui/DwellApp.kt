@@ -22,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
+import com.dwell.app.ui.favorites.FavoritesScreen
 import com.dwell.app.ui.navigation.DwellDestination
 import com.dwell.app.ui.preview.PreviewScreen
 import com.dwell.app.ui.preview.PreviewViewModel
@@ -31,6 +32,7 @@ import com.dwell.app.ui.wallpapers.WallpapersScreen
 
 private const val ROUTE_MAIN = "main"
 private const val ROUTE_PREVIEW = "preview"
+private const val ROUTE_FAVORITES = "favorites"
 
 /**
  * Top-level navigation. The tabbed shell lives at [ROUTE_MAIN]; the full-bleed
@@ -48,6 +50,13 @@ fun DwellApp() {
     ) {
         composable(ROUTE_MAIN) {
             MainShell(
+                onWallpaperClick = { id -> navController.navigate("$ROUTE_PREVIEW/$id") },
+                onOpenFavorites = { navController.navigate(ROUTE_FAVORITES) },
+            )
+        }
+        composable(ROUTE_FAVORITES) {
+            FavoritesScreen(
+                onBack = { navController.popBackStack() },
                 onWallpaperClick = { id -> navController.navigate("$ROUTE_PREVIEW/$id") },
             )
         }
@@ -69,6 +78,7 @@ fun DwellApp() {
 @Composable
 private fun MainShell(
     onWallpaperClick: (String) -> Unit,
+    onOpenFavorites: () -> Unit,
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -102,7 +112,7 @@ private fun MainShell(
                 WallpapersScreen(onWallpaperClick = onWallpaperClick)
             }
             composable(DwellDestination.WIDGETS.route) { WidgetsScreen() }
-            composable(DwellDestination.MORE.route) { MoreScreen() }
+            composable(DwellDestination.MORE.route) { MoreScreen(onOpenFavorites = onOpenFavorites) }
         }
     }
 }
