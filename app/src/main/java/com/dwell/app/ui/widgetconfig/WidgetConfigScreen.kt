@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -39,7 +38,6 @@ import com.dwell.app.data.widget.WidgetSize
 import com.dwell.app.data.widget.WidgetStyle
 import com.dwell.app.ui.components.DwellPrimaryButton
 import com.dwell.app.ui.components.DwellScaffold
-import com.dwell.app.ui.components.DwellSecondaryButton
 import com.dwell.app.ui.theme.DisplayFontFamily
 import com.dwell.app.ui.theme.DwellSpacing
 
@@ -54,6 +52,14 @@ private fun textColorOf(c: WidgetColor): Color = when (c) {
     WidgetColor.SAND -> Sand
 }
 
+/** The free defaults — everything else is part of the premium style engine. */
+private fun WidgetColor.isFree() = this == WidgetColor.CREAM
+private fun WidgetSize.isFree() = this == WidgetSize.MEDIUM
+
+/** Does the currently-chosen style need the unlock (a premium option, and not yet bought)? */
+private fun needsUnlock(style: WidgetStyle, isPremium: Boolean): Boolean =
+    !isPremium && (!style.color.isFree() || !style.size.isFree())
+
 @Composable
 fun WidgetConfigScreen(
     style: WidgetStyle,
@@ -64,6 +70,7 @@ fun WidgetConfigScreen(
     onSave: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val locked = needsUnlock(style, isPremium)
     DwellScaffold(modifier = modifier, applyStatusBarPadding = true, applyNavBarPadding = true) {
         Column(
             modifier = Modifier
@@ -78,13 +85,9 @@ fun WidgetConfigScreen(
             )
             Spacer(Modifier.height(DwellSpacing.lg))
 
+            // Live preview — updates as you tap any option (the tease).
             PreviewCard(style)
             Spacer(Modifier.height(DwellSpacing.xl))
-
-            if (!isPremium) {
-                LockedNotice()
-                Spacer(Modifier.height(DwellSpacing.lg))
-            }
 
             SectionLabel("Color")
             Spacer(Modifier.height(DwellSpacing.sm))
@@ -93,7 +96,7 @@ fun WidgetConfigScreen(
                     ColorSwatch(
                         color = textColorOf(c),
                         selected = c == style.color,
-                        enabled = isPremium,
+                        locked = !isPremium && !c.isFree(),
                         onClick = { onColor(c) },
                     )
                 }
@@ -111,19 +114,23 @@ fun WidgetConfigScreen(
                             WidgetSize.LARGE -> "L"
                         },
                         selected = s == style.size,
-                        enabled = isPremium,
+                        locked = !isPremium && !s.isFree(),
                         onClick = { onSize(s) },
                     )
                 }
             }
 
             Spacer(Modifier.height(DwellSpacing.section))
-            if (isPremium) {
-                DwellPrimaryButton(text = "Save", onClick = onSave)
-            } else {
-                DwellPrimaryButton(text = "Unlock Dwell", onClick = onUnlock)
+            if (locked) {
+                Text(
+                    text = "This style is part of the premium unlock.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 Spacer(Modifier.height(DwellSpacing.sm))
-                DwellSecondaryButton(text = "Save with default", onClick = onSave)
+                DwellPrimaryButton(text = "Unlock Dwell", onClick = onUnlock)
+            } else {
+                DwellPrimaryButton(text = "Add widget", onClick = onSave)
             }
         }
     }
@@ -141,8 +148,8 @@ private fun PreviewCard(style: WidgetStyle) {
         modifier = Modifier
             .fillMaxWidth()
             .height(150.dp)
-            .clip(RoundedCornerShape(28.dp))
-            .background(Brush.verticalGradient(listOf(Color(0xFF2A2620), Color(0xFF17140F))))
+            .clip(RoundedCornerShape(26.dp))
+            .background(Brush.verticalGradient(listOf(Color(0xFF322D26), Color(0xFF15110C))))
             .padding(22.dp),
         contentAlignment = Alignment.CenterStart,
     ) {
@@ -155,7 +162,9 @@ private fun PreviewCard(style: WidgetStyle) {
                 fontSize = timeSp,
                 letterSpacing = (-0.01).em,
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(10.dp))
+            Box(Modifier.size(width = 46.dp, height = 1.dp).background(Color(0x26ECE7DD)))
+            Spacer(Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(7.dp).clip(CircleShape).background(Green))
                 Spacer(Modifier.size(9.dp))
@@ -163,7 +172,7 @@ private fun PreviewCard(style: WidgetStyle) {
                     text = "TUE, JUN 30",
                     color = DateMuted,
                     fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp,
+                    fontSize = 11.5.sp,
                     letterSpacing = 2.sp,
                 )
             }
@@ -182,25 +191,7 @@ private fun SectionLabel(text: String) {
 }
 
 @Composable
-private fun LockedNotice() {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            painter = painterResource(R.drawable.ic_lock),
-            contentDescription = null,
-            modifier = Modifier.size(16.dp),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Spacer(Modifier.size(8.dp))
-        Text(
-            text = "Customization is a premium feature. Unlock to make it yours.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
-private fun ColorSwatch(color: Color, selected: Boolean, enabled: Boolean, onClick: () -> Unit) {
+private fun ColorSwatch(color: Color, selected: Boolean, locked: Boolean, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(46.dp)
@@ -210,14 +201,13 @@ private fun ColorSwatch(color: Color, selected: Boolean, enabled: Boolean, onCli
                 if (selected) Modifier.border(2.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
                 else Modifier,
             )
-            .alpha(if (enabled) 1f else 0.4f)
-            .clickable(enabled = enabled, onClick = onClick),
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        if (!enabled) {
+        if (locked) {
             Icon(
                 painter = painterResource(R.drawable.ic_lock),
-                contentDescription = "Locked",
+                contentDescription = "Premium",
                 modifier = Modifier.size(18.dp),
                 tint = Color(0xFF17140F),
             )
@@ -226,7 +216,7 @@ private fun ColorSwatch(color: Color, selected: Boolean, enabled: Boolean, onCli
 }
 
 @Composable
-private fun SizeChip(label: String, selected: Boolean, enabled: Boolean, onClick: () -> Unit) {
+private fun SizeChip(label: String, selected: Boolean, locked: Boolean, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(46.dp)
@@ -236,23 +226,22 @@ private fun SizeChip(label: String, selected: Boolean, enabled: Boolean, onClick
                 if (selected) Modifier.border(2.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(12.dp))
                 else Modifier,
             )
-            .alpha(if (enabled) 1f else 0.4f)
-            .clickable(enabled = enabled, onClick = onClick),
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        if (enabled) {
+        if (locked) {
+            Icon(
+                painter = painterResource(R.drawable.ic_lock),
+                contentDescription = "Premium",
+                modifier = Modifier.size(16.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
-            )
-        } else {
-            Icon(
-                painter = painterResource(R.drawable.ic_lock),
-                contentDescription = "Locked",
-                modifier = Modifier.size(18.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
