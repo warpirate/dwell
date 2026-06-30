@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dwell.app.R
 import com.dwell.app.data.model.Wallpaper
+import com.dwell.app.ui.components.DwellScaffold
 import com.dwell.app.ui.wallpapers.components.CategoryChipRow
 import com.dwell.app.ui.wallpapers.components.WallpaperCard
 
@@ -70,11 +71,8 @@ private fun WallpapersContent(
     onWallpaperClick: (Wallpaper) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-    ) {
+    DwellScaffold(modifier = modifier) {
+        Column(modifier = Modifier.fillMaxSize()) {
         if (state.categories.isNotEmpty()) {
             CategoryChipRow(
                 categories = state.categories,
@@ -118,6 +116,7 @@ private fun WallpapersContent(
                     }
                 }
             }
+        }
         }
     }
 }
