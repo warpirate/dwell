@@ -27,6 +27,9 @@ class FakeFavoriteDao : FavoriteDao {
         state.value = state.value.filterNot { it.wallpaperId == id }
     }
 
+    override suspend fun getAll(): List<FavoriteEntity> =
+        state.value.sortedByDescending { it.addedAtMillis }
+
     override suspend fun clear() { state.value = emptyList() }
 
     override suspend fun insertAll(favorites: List<FavoriteEntity>) {
@@ -68,6 +71,12 @@ class FakeRemoteSource : FavoritesRemoteSource {
     override suspend fun remove(uid: String, wallpaperId: String) {
         if (failWrites) error("offline")
         remote[uid]?.remove(wallpaperId)
+    }
+
+    override suspend fun putAll(uid: String, favorites: List<FavoriteRemote>) {
+        if (failWrites) error("offline")
+        val m = remote.getOrPut(uid) { mutableMapOf() }
+        favorites.forEach { m[it.wallpaperId] = it.addedAtMillis }
     }
 }
 

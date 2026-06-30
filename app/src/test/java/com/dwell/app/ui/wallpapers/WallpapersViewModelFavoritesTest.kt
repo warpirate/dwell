@@ -51,6 +51,9 @@ class WallpapersViewModelFavoritesTest {
         override fun observeFavoriteWallpapers(): Flow<List<Wallpaper>> = MutableStateFlow(favs)
         override suspend fun toggle(wallpaper: Wallpaper) {}
         override suspend fun reconcile() {}
+        override suspend fun snapshotLocalFavorites() = emptyList<com.dwell.app.data.favorites.FavoriteRemote>()
+        override suspend fun mergeInto(uid: String, favorites: List<com.dwell.app.data.favorites.FavoriteRemote>) {}
+        override suspend fun clearLocal() {}
     }
 
     @Test

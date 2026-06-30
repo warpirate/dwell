@@ -14,6 +14,10 @@ interface FavoriteDao {
     @Query("SELECT * FROM favorites_cache ORDER BY addedAtMillis DESC")
     fun observeAll(): Flow<List<FavoriteEntity>>
 
+    /** One-shot snapshot of all favorites. Used to capture before an account switch. */
+    @Query("SELECT * FROM favorites_cache ORDER BY addedAtMillis DESC")
+    suspend fun getAll(): List<FavoriteEntity>
+
     @Query("SELECT EXISTS(SELECT 1 FROM favorites_cache WHERE wallpaperId = :id)")
     suspend fun exists(id: String): Boolean
 

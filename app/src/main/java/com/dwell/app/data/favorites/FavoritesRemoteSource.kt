@@ -6,4 +6,7 @@ interface FavoritesRemoteSource {
     suspend fun fetchAll(uid: String): List<FavoriteRemote>
     suspend fun put(uid: String, wallpaperId: String, addedAtMillis: Long)
     suspend fun remove(uid: String, wallpaperId: String)
+
+    /** Non-destructive batched upload (set + merge). Used to merge favorites into an account. */
+    suspend fun putAll(uid: String, favorites: List<FavoriteRemote>)
 }
