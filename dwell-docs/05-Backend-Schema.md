@@ -1,6 +1,6 @@
 # Backend Schema
 
-**Product:** Dwell — minimalist wallpapers + widgets + optional launcher
+**Product:** Dwell — a calm home screen: wallpapers, widgets, and a minimalist launcher
 **Version:** v1.0
 **Status:** Draft
 **Backend:** Firebase (Firestore + Storage + Cloud Functions)
@@ -56,7 +56,7 @@ Read/write by that user only. Created on first sign-in (anonymous upgrade).
   uid: string,
   email: string | null,
   provider: string,           // "password" | "google" | "anonymous"
-  removeAds: boolean,         // entitlement. Written server-side only.
+  premium: boolean,           // entitlement: removes ads + unlocks coordinated layer. Written server-side only.
   settings: {
     theme: string,            // "light" | "dark" | "system"
     notificationsOptIn: boolean
@@ -66,7 +66,7 @@ Read/write by that user only. Created on first sign-in (anonymous upgrade).
 }
 ```
 
-`removeAds` is never trusted from the client. A Cloud Function validates the Play purchase token and writes it.
+`premium` is never trusted from the client. A Cloud Function validates the Play purchase token and writes it.
 
 ### `users/{uid}/favorites/{wallpaperId}`
 
@@ -85,7 +85,7 @@ Stored as a subcollection (not an array on the user doc) so favorites scale and 
 
 ## 2. What Is NOT in the Schema (v1)
 
-- **No content tiering.** Monetization is remove-ads-only, so wallpapers have no `isPremium`/`tier` field. (If premium content ever ships in v2, add a `tier` field to `wallpapers` then. Not now.)
+- **No wallpaper tiering.** All wallpapers and widgets are free, so wallpapers have no `isPremium`/`tier` field. The `premium` unlock gates only ads, the extra launcher home styles, and matched widget presets — all app-side feature flags, not per-wallpaper content. (If premium *content* ever ships in v2, add a `tier` field to `wallpapers` then. Not now.)
 - **No notes-widget sync.** Notes are local-only in v1 (TRD open question, recommended local). No Firestore collection for them.
 - **No search index.** `tags` is populated but there's no server-side search service in v1.
 
@@ -114,8 +114,8 @@ match /wallpapers/{id}    { allow read: if true;  allow write: if isAdmin(); }
 match /categories/{id}    { allow read: if true;  allow write: if isAdmin(); }
 match /users/{uid} {
   allow read, write: if request.auth.uid == uid;
-  // removeAds field must not be client-writable:
-  // enforce via a rule that rejects client changes to removeAds,
+  // premium field must not be client-writable:
+  // enforce via a rule that rejects client changes to premium,
   // OR keep all writes to it inside a Cloud Function with admin SDK.
 }
 match /users/{uid}/favorites/{wid} {
@@ -130,7 +130,7 @@ match /wallpapers/{allPaths=**} { allow read: if true; allow write: if isAdmin()
 
 `isAdmin()` keys off a custom claim on your account or a hardcoded UID allowlist for v1.
 
-The critical rule: clients can write their own user doc and favorites, but `removeAds` is owned by the server. Either strip it from client-writable fields in rules or route all entitlement writes through Cloud Functions.
+The critical rule: clients can write their own user doc and favorites, but `premium` is owned by the server. Either strip it from client-writable fields in rules or route all entitlement writes through Cloud Functions.
 
 ---
 
@@ -138,7 +138,7 @@ The critical rule: clients can write their own user doc and favorites, but `remo
 
 | Function | Trigger | Does |
 |---|---|---|
-| `verifyPurchase` | callable from app after purchase | Validates the Play purchase token, writes `removeAds: true` to the user doc |
+| `verifyPurchase` | callable from app after purchase | Validates the Play purchase token, writes `premium: true` to the user doc |
 | `deleteAccount` | callable (in-app) + HTTPS (web page) | Deletes Auth user, user doc, favorites subcollection, user Storage objects |
 | `onNewWallpaper` (optional) | Firestore create on `wallpapers` | Sends FCM to the `new_wallpapers` topic |
 
@@ -155,9 +155,9 @@ Not a backend, but it mirrors backend shape so offline works.
 - `favorites_cache`: local copy of the user's favorites for instant offline display, reconciled with Firestore on sync.
 
 **DataStore (Preferences)**
-- `theme`, `removeAds` (cached read of the server flag), `notificationsOptIn`, per-widget config keyed by `appWidgetId`.
+- `theme`, `premium` (cached read of the server flag), `notificationsOptIn`, per-widget config keyed by `appWidgetId`.
 
-Source-of-truth rule: server wins when online, cache serves when offline. `removeAds` is read from cache for speed but re-validated against Firestore on sign-in and app resume.
+Source-of-truth rule: server wins when online, cache serves when offline. `premium` is read from cache for speed but re-validated against Firestore on sign-in and app resume.
 
 ---
 

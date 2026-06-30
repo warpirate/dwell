@@ -26,7 +26,7 @@ Full specs live in the doc set (PRD, TRD, UI/UX, App Flow, Backend Schema, Imple
 - Coil 3 for images (WebP)
 - Room (cache) + DataStore (prefs)
 - Firebase: Auth, Firestore, Storage, Cloud Functions, Analytics, Crashlytics, FCM
-- Play Billing 7+ (one-time `remove_ads`)
+- Play Billing 7+ (one-time `unlock_premium`)
 - AdMob
 - Widgets: Jetpack Glance, RemoteViews only where Glance can't do it
 
@@ -37,7 +37,7 @@ Full specs live in the doc set (PRD, TRD, UI/UX, App Flow, Backend Schema, Imple
 - Screens render state and emit events. No business logic in composables.
 - Only repositories touch Firebase or the cache. ViewModels call repositories, never Firebase directly.
 - One source of truth per data type. Server wins online; cache serves offline.
-- `removeAds` entitlement is **server-owned**. Never trust or write it from the client. It's set by the `verifyPurchase` Cloud Function.
+- `premium` entitlement is **server-owned**. Never trust or write it from the client. It's set by the `verifyPurchase` Cloud Function.
 - Account deletion goes through the `deleteAccount` Cloud Function and must cascade (user doc + favorites + storage objects).
 
 ---
@@ -45,8 +45,8 @@ Full specs live in the doc set (PRD, TRD, UI/UX, App Flow, Backend Schema, Imple
 ## Product rules (these are decisions, not suggestions)
 
 - **No login wall.** Browsing and applying wallpapers work fully logged out. Login is triggered only by: favoriting/sync, or the unlock purchase.
-- **Monetization is remove-ads-only.** ALL wallpapers and widgets are free. Do NOT add premium content gating, `isPremium`/`tier` fields, or paywall UI. The unlock only removes ads.
-- **Launcher is optional and cuttable.** Never make it a precondition for anything. Build it last. v1 ships ONE home style (default: Zen). Build the home screen from a `HomeStyle` config object, never hardcoded layout, so the P1 home-style picker (Editorial / Structured) is a config addition, not a rewrite. Do NOT build the multi-style picker in v1.
+- **Monetization: one-time `premium` unlock.** ALL wallpapers and widgets are free — do NOT add per-wallpaper gating, `isPremium`/`tier` fields, or a content paywall. The unlock removes ads AND enables the coordinated layer: extra launcher home styles (Editorial / Structured) and wallpaper-matched widget presets, gated by the app-side `premium` flag. The Zen launcher style is free.
+- **Launcher is the hero experience, but never forced.** It is opt-in and easy to back out of; never make it a precondition for anything. Build it last and ship-gated (slips to v1.1 if not solid). v1 ships ONE home style (default: Zen, free). Build the home screen from a `HomeStyle` config object, never hardcoded layout, so the P1 home-style picker (Editorial / Structured) is a config addition, not a rewrite. Do NOT build the multi-style picker in v1.
 - **Static wallpapers only.** No live/animated wallpapers in v1.
 - **No search in v1.** Populate the `tags` field on wallpapers for the future, but build no search UI or service.
 

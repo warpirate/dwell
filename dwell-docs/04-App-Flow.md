@@ -1,6 +1,6 @@
 # App Flow
 
-**Product:** Dwell — minimalist wallpapers + widgets + optional launcher
+**Product:** Dwell — a calm home screen: wallpapers, widgets, and a minimalist launcher
 **Version:** v1.0
 **Status:** Draft
 **Companion to:** 01-PRD.md, 03-UIUX-Design.md
@@ -73,13 +73,13 @@ Play Billing purchase dialog
 Cloud Function verifies purchase token
    │
    ▼
-removeAds = true written to user doc + cached locally
+premium = true written to user doc + cached locally
    │
    ▼
-Ads disappear app-wide. "Remove ads" row shows "Unlocked."
+Ads disappear app-wide. "Unlock" row shows "Unlocked." Matched widget presets + extra home styles become available.
 ```
 
-Restore: signing in on a new device reads `removeAds` from Firestore, so the entitlement follows the account.
+Restore: signing in on a new device reads `premium` from Firestore, so the entitlement follows the account.
 
 ---
 

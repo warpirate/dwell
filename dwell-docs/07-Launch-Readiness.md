@@ -1,6 +1,6 @@
 # Launch Readiness & Compliance
 
-**Product:** Dwell — minimalist wallpapers + widgets + optional launcher
+**Product:** Dwell — a calm home screen: wallpapers, widgets, and a minimalist launcher
 **Version:** v1.0
 **Status:** Draft
 **Purpose:** The checklist that keeps a serious indie build from getting rejected at the finish line.
@@ -53,7 +53,7 @@ This is the step most solo devs underestimate. It is real elapsed time.
 - [ ] Linked in **Play Console** and **inside the app** (More → Privacy policy).
 - [ ] Names the developer/publisher entity that appears on the store listing.
 - [ ] Discloses what data is collected, how it's used, who it's shared with, retention, and the deletion mechanism.
-- [ ] States that the Play purchase (remove-ads) is tied to the Google account and that deleting the app account does not refund it.
+- [ ] States that the Play purchase (the one-time unlock) is tied to the Google account and that deleting the app account does not refund it.
 
 ---
 
@@ -82,7 +82,7 @@ Declare honestly. Third-party SDKs count.
 
 ## 8. Monetization Compliance
 
-- [ ] The remove-ads unlock uses **Google Play Billing** (external payment for in-app digital goods is not allowed).
+- [ ] The one-time unlock uses **Google Play Billing** (external payment for in-app digital goods is not allowed).
 - [ ] Product configured as a one-time (non-consumable) purchase.
 - [ ] Purchase verified **server-side** (Cloud Function), not trusted from the client.
 - [ ] Restore-purchase path works (sign in on a new device → entitlement returns).

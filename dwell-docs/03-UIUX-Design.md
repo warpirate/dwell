@@ -1,6 +1,6 @@
 # UI/UX Design
 
-**Product:** Dwell — minimalist wallpapers + widgets + optional launcher
+**Product:** Dwell — a calm home screen: wallpapers, widgets, and a minimalist launcher
 **Version:** v1.0
 **Status:** Draft
 **Companion to:** 01-PRD.md, 02-TRD.md
@@ -86,7 +86,7 @@ Bottom navigation, three destinations. Minimal labels, minimal icons.
 
 - **Wallpapers** (default landing): categories + grid.
 - **Widgets**: the four widgets, each tappable to preview/configure.
-- **More**: favorites, settings, theme, account, remove-ads, about, launcher toggle.
+- **More**: favorites, settings, theme, account, unlock, about, launcher toggle.
 
 The launcher, if shipped, is not a tab. It's an opt-in toggle under More. It is never forced.
 

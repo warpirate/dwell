@@ -1,6 +1,6 @@
 # Technical Requirements Document
 
-**Product:** Dwell — minimalist wallpapers + widgets + optional launcher
+**Product:** Dwell — a calm home screen: wallpapers, widgets, and a minimalist launcher
 **Platform:** Android
 **Version:** v1.0
 **Status:** Draft
@@ -49,7 +49,7 @@ Rules:
 | Async | Coroutines + Flow | Standard |
 | DI | Hilt | Standard, low ceremony |
 | Local DB | Room | Favorites + wallpaper metadata cache |
-| Key-value | DataStore (Preferences) | Settings, theme, removeAds flag cache |
+| Key-value | DataStore (Preferences) | Settings, theme, premium flag cache |
 | Auth | Firebase Auth | Email + Google, anonymous upgrade |
 | Remote DB | Cloud Firestore | Wallpaper metadata, user docs |
 | File storage | Firebase Storage | Wallpaper image files + CDN delivery |
@@ -94,9 +94,9 @@ Four widgets: clock, calendar, notes, battery.
 
 ---
 
-## 6. Launcher: Technical Approach (P1, cuttable)
+## 6. Launcher: Technical Approach (the hero experience; built last, ship-gated)
 
-If built, the launcher is a separate `Activity` with `CATEGORY_HOME` + `CATEGORY_DEFAULT` intent filters.
+The launcher is a separate `Activity` with `CATEGORY_HOME` + `CATEGORY_DEFAULT` intent filters. It hosts the same Glance / App Widgets as an `AppWidgetHost` and arranges them via the `HomeStyle` config — there is no separate launcher-only widget engine.
 
 - App drawer queries `PackageManager` / `LauncherApps` for installed activities.
 - Home screen, icon grid, gestures.
@@ -104,7 +104,7 @@ If built, the launcher is a separate `Activity` with `CATEGORY_HOME` + `CATEGORY
 
 **Home style as swappable config.** v1 ships one home style (default: Zen), but the home screen must be driven by a `HomeStyle` config object (layout, widget placement, spacing, icon treatment), not hardcoded. A style is data the home renderer reads, so adding Editorial and Structured later (the P1 picker) is a config addition, not a rewrite. Do not bake one layout's assumptions into the launcher core.
 
-This is the heaviest component and is explicitly cuttable from v1. Build it last. Do not let it block launch.
+This is the heaviest component and the highest-value one — the hero experience and the upsell anchor. Build it last because a buggy launcher feels like a bricked phone and would tank the app's rating; bank good reviews on wallpapers and widgets first. If it is not solid at launch it slips to v1.1 rather than blocking the rest — a ship gate, not a deprioritization.
 
 ---
 
@@ -123,11 +123,11 @@ Google sign-in uses Credential Manager (the current recommended API), not the de
 
 ## 8. Monetization: Technical Approach
 
-- **Unlock = remove ads only.** All content is free. No content gating, no per-wallpaper tier.
-- Purchase via Play Billing as a one-time (non-consumable) product, e.g. `remove_ads`.
-- On purchase, verify and write `removeAds: true` to the user's Firestore doc (via a Cloud Function that validates the purchase token, so the flag can't be spoofed client-side).
+- **Unlock = remove ads + the coordinated layer.** Wallpapers and widgets are always free (no content gating, no per-wallpaper tier). The unlock removes ads and enables wallpaper-matched widget presets plus the extra launcher home styles (Editorial / Structured). The Zen launcher style is free.
+- Purchase via Play Billing as a one-time (non-consumable) product, e.g. `unlock_premium`.
+- On purchase, verify and write `premium: true` to the user's Firestore doc (via a Cloud Function that validates the purchase token, so the flag can't be spoofed client-side).
 - The flag is cached in DataStore for offline/fast checks. Firestore is the source of truth and restores the entitlement on a new device after sign-in.
-- AdMob shows ads only when `removeAds` is false. Ad placement is defined in the UI/UX doc, not here.
+- AdMob shows ads only when `premium` is false; the matched presets and extra home styles unlock on the same flag. Ad placement is defined in the UI/UX doc, not here.
 
 ---
 

@@ -1,6 +1,6 @@
 # Implementation Plan
 
-**Product:** Dwell — minimalist wallpapers + widgets + optional launcher
+**Product:** Dwell — a calm home screen: wallpapers, widgets, and a minimalist launcher
 **Version:** v1.0
 **Status:** Draft
 **Build model:** Solo developer + AI coding agent (Claude Code) mix
@@ -50,8 +50,8 @@ Goal: optional login with no data loss.
 ### Phase 3 — Monetization
 Goal: ads on, unlock removes them.
 - AdMob integration, native ad slot in grid per UI/UX doc.
-- Play Billing one-time `remove_ads` product.
-- `verifyPurchase` Cloud Function; `removeAds` flag write + cache.
+- Play Billing one-time `unlock_premium` product.
+- `verifyPurchase` Cloud Function; `premium` flag write + cache.
 - Entitlement restore on new device.
 - **Done when:** ads show for free users, purchase removes them, entitlement survives reinstall/new device.
 
@@ -70,12 +70,12 @@ Goal: drops, analytics, final UI pass.
 - Light/dark final pass, empty/error/offline states, copy pass.
 - **Done when:** a new upload pushes a notification; all states look right in both themes.
 
-### Phase 6 — Launcher (optional, cuttable)
+### Phase 6 — Launcher (the hero experience; built last, ship-gated)
 Goal: ship one solid launcher home style.
 - HOME intent activity, app drawer (PackageManager/LauncherApps), icon grid, gestures.
 - Set-default via RoleManager; easy revert.
 - Build the home screen from a `HomeStyle` config object, not hardcoded layout. v1 ships one style (default: Zen). This makes the P1 home-style picker (Editorial / Structured) a config addition later, not a rewrite.
-- **Done when:** the Zen home style is stable enough not to embarrass the app, driven by config. If the launcher isn't solid by this point, cut it to v2 and move on. Nothing else depends on it. The multi-style picker is explicitly NOT in this phase.
+- **Done when:** the Zen home style is stable enough not to embarrass the app, driven by config. If the launcher isn't solid by this point, slip it to v1.1 rather than ship it broken — nothing else depends on it, so it never blocks the rest. The multi-style picker is explicitly NOT in this phase.
 
 ### Phase 7 — Store prep & compliance
 Goal: submission-ready. (See 07-Launch-Readiness.md for the full checklist.)
@@ -103,7 +103,7 @@ Goal: clear Google's testing requirement.
 
 ## 3. Build Order Logic
 
-Wallpapers first because it's the core value and everything else is optional around it. Accounts before monetization because the unlock attaches to an account. Widgets after the wallpaper loop is solid. Launcher last and cuttable. Compliance before the closed test because you can't test what isn't submission-shaped. The closed test before launch because Google requires it.
+Wallpapers first because it's the cheapest, widest entry point — the front door that brings users in. Accounts before monetization because the unlock attaches to an account. Widgets after the wallpaper loop is solid. Launcher last and ship-gated — it's the highest-value piece and the upsell, but also the heaviest and riskiest, so it's built last on top of a banked good rating and slips to v1.1 if it isn't solid (never blocks the rest). Compliance before the closed test because you can't test what isn't submission-shaped. The closed test before launch because Google requires it.
 
 ---
 
@@ -121,7 +121,7 @@ Wallpapers first because it's the core value and everything else is optional aro
 | Risk | Mitigation |
 |---|---|
 | Closed-test delay (can't find 12 testers) | Start recruiting during Phase 5, not Phase 8. Tester communities exist. |
-| Launcher eats the whole timeline | It's last and explicitly cuttable. Time-box it. |
+| Launcher eats the whole timeline | It's built last and ship-gated — time-box it; if it's not solid it slips to v1.1 rather than blocking launch. |
 | AI wallpaper licensing/disclosure | Resolve generation-tool licensing early; handle Play AI disclosure in Phase 7. |
 | Firestore cost surprise | Paginate reads, cache aggressively. Read-heavy app stays in cheap territory if you don't over-fetch. |
 | Scope creep | Non-goals in the PRD are the contract. New ideas go to a parking lot, not into v1. |
