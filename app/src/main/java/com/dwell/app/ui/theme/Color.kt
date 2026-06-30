@@ -17,12 +17,13 @@ private val LightTextPrimary = Color(0xFF1A1A18)
 private val LightTextSecondary = Color(0xFF6B6B66)
 private val LightDivider = Color(0xFFEAEAE5)
 
-// Dark
-private val DarkBg = Color(0xFF0E0E0D)
-private val DarkSurface = Color(0xFF1A1A18)
-private val DarkTextPrimary = Color(0xFFF5F5F2)
-private val DarkTextSecondary = Color(0xFF9A9A94)
-private val DarkDivider = Color(0xFF2A2A27)
+// Dark. Warm brown-black, not cold gray — matches the Claude Design pass palette
+// (#ece7dd cream text on #221f1a warm surfaces) so the chrome reads premium, not dim.
+private val DarkBg = Color(0xFF12100E)
+private val DarkSurface = Color(0xFF221F1A)
+private val DarkTextPrimary = Color(0xFFECE7DD)
+private val DarkTextSecondary = Color(0xFFC7C0B1)
+private val DarkDivider = Color(0xFF3E3A31)
 
 // Accent. Brand value #3A5A40 on light. On dark, #3A5A40 as a foreground color
 // only reaches ~2.25:1 against the dark surface, which fails WCAG AA. So dark

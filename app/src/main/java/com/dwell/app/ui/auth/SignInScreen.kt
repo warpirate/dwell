@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -29,14 +29,20 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +55,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dwell.app.R
 import com.dwell.app.data.auth.AuthError
 import com.dwell.app.ui.theme.DisplayFontFamily
+import com.dwell.app.ui.theme.warmRadialBrush
 import kotlinx.coroutines.launch
 
 @Composable
@@ -60,6 +67,7 @@ fun SignInScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val density = LocalDensity.current
 
     LaunchedEffect(state.done) {
         if (state.done) {
@@ -70,14 +78,16 @@ fun SignInScreen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-    ) {
+    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val wPx = with(density) { maxWidth.toPx() }
+        val hPx = with(density) { maxHeight.toPx() }
+        val brush = remember(dark, wPx, hPx) { warmRadialBrush(dark, wPx, hPx) }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(brush)
                 .verticalScroll(rememberScrollState())
                 .imePadding()
                 .navigationBarsPadding()
@@ -94,15 +104,16 @@ fun SignInScreen(
                 )
             }
 
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(36.dp))
 
-            // Brand moment, then the action title — Fraunces, large, calm.
+            // Eyebrow wordmark, caps + tracked, like the mockups' section labels.
             Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                text = stringResource(R.string.app_name).uppercase(),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary,
+                letterSpacing = 3.sp,
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(14.dp))
             Text(
                 text = if (state.mode == SignInMode.Create) {
                     stringResource(R.string.account_title_create)
@@ -111,77 +122,94 @@ fun SignInScreen(
                 },
                 fontFamily = DisplayFontFamily,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 36.sp,
-                lineHeight = 42.sp,
+                fontSize = 40.sp,
+                lineHeight = 46.sp,
                 color = MaterialTheme.colorScheme.onBackground,
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(10.dp))
             Text(
                 text = stringResource(R.string.account_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
-            Spacer(Modifier.height(32.dp))
-            ModeToggle(mode = state.mode, onSelect = viewModel::setMode)
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(28.dp))
 
-            OutlinedTextField(
-                value = state.email,
-                onValueChange = viewModel::onEmailChange,
-                label = { Text(stringResource(R.string.account_email_hint)) },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(Modifier.height(12.dp))
-            OutlinedTextField(
-                value = state.password,
-                onValueChange = viewModel::onPasswordChange,
-                label = { Text(stringResource(R.string.account_password_hint)) },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            if (state.inlineError != null) {
-                Spacer(Modifier.height(10.dp))
-                Text(
-                    text = stringResource(errorRes(state.inlineError!!)),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.error,
-                )
-            }
-
-            Spacer(Modifier.height(24.dp))
-            Button(
-                onClick = viewModel::submitEmail,
-                enabled = !state.inProgress && state.email.isNotBlank() && state.password.isNotBlank(),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                ),
-                modifier = Modifier.fillMaxWidth().height(54.dp),
+            // The form sits on a warm layered card with a soft shadow — the
+            // depth that flat fills were missing.
+            Surface(
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(
+                        elevation = 24.dp,
+                        shape = RoundedCornerShape(20.dp),
+                        ambientColor = Color(0xFF1C1810),
+                        spotColor = Color(0xFF1C1810),
+                        clip = false,
+                    ),
             ) {
-                if (state.inProgress) {
-                    CircularProgressIndicator(
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(22.dp),
+                Column(modifier = Modifier.padding(20.dp)) {
+                    ModeToggle(mode = state.mode, onSelect = viewModel::setMode)
+                    Spacer(Modifier.height(18.dp))
+                    OutlinedTextField(
+                        value = state.email,
+                        onValueChange = viewModel::onEmailChange,
+                        label = { Text(stringResource(R.string.account_email_hint)) },
+                        singleLine = true,
+                        shape = RoundedCornerShape(10.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        modifier = Modifier.fillMaxWidth(),
                     )
-                } else {
-                    Text(
-                        text = if (state.mode == SignInMode.Create) {
-                            stringResource(R.string.account_create)
+                    Spacer(Modifier.height(12.dp))
+                    OutlinedTextField(
+                        value = state.password,
+                        onValueChange = viewModel::onPasswordChange,
+                        label = { Text(stringResource(R.string.account_password_hint)) },
+                        singleLine = true,
+                        shape = RoundedCornerShape(10.dp),
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    if (state.inlineError != null) {
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = stringResource(errorRes(state.inlineError!!)),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                    Spacer(Modifier.height(20.dp))
+                    Button(
+                        onClick = viewModel::submitEmail,
+                        enabled = !state.inProgress && state.email.isNotBlank() && state.password.isNotBlank(),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
+                        modifier = Modifier.fillMaxWidth().height(54.dp),
+                    ) {
+                        if (state.inProgress) {
+                            CircularProgressIndicator(
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.size(22.dp),
+                            )
                         } else {
-                            stringResource(R.string.account_sign_in)
-                        },
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                            Text(
+                                text = if (state.mode == SignInMode.Create) {
+                                    stringResource(R.string.account_create)
+                                } else {
+                                    stringResource(R.string.account_sign_in)
+                                },
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+                    }
                 }
             }
 
@@ -197,7 +225,7 @@ fun SignInScreen(
                     }
                 },
                 enabled = !state.inProgress,
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth().height(54.dp),
             ) {
                 Text(
@@ -255,7 +283,7 @@ private fun ModeChip(label: String, selected: Boolean, modifier: Modifier, onCli
     if (selected) {
         Button(
             onClick = onClick,
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -263,7 +291,7 @@ private fun ModeChip(label: String, selected: Boolean, modifier: Modifier, onCli
             modifier = modifier.fillMaxSize(),
         ) { Text(label, style = MaterialTheme.typography.labelLarge) }
     } else {
-        OutlinedButton(onClick = onClick, shape = RoundedCornerShape(8.dp), modifier = modifier.fillMaxSize()) {
+        OutlinedButton(onClick = onClick, shape = RoundedCornerShape(10.dp), modifier = modifier.fillMaxSize()) {
             Text(label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
