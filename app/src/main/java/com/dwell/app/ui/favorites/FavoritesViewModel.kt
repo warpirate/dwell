@@ -8,14 +8,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    favorites: FavoritesRepository,
+    private val repository: FavoritesRepository,
 ) : ViewModel() {
 
     val favorites: StateFlow<List<Wallpaper>> =
-        favorites.observeFavoriteWallpapers()
+        repository.observeFavoriteWallpapers()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    /** Un-save (or re-save) from the favorites grid. Optimistic local write. */
+    fun toggleFavorite(wallpaper: Wallpaper) {
+        viewModelScope.launch { repository.toggle(wallpaper) }
+    }
 }

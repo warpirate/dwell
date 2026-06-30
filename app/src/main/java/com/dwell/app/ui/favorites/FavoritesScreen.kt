@@ -2,19 +2,19 @@ package com.dwell.app.ui.favorites
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,9 +27,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dwell.app.R
 import com.dwell.app.data.model.Wallpaper
+import com.dwell.app.ui.components.DwellScaffold
+import com.dwell.app.ui.theme.DwellSpacing
 import com.dwell.app.ui.wallpapers.components.WallpaperCard
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(
     onBack: () -> Unit,
@@ -38,31 +39,19 @@ fun FavoritesScreen(
     viewModel: FavoritesViewModel = hiltViewModel(),
 ) {
     val favorites by viewModel.favorites.collectAsStateWithLifecycle()
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.favorites_title)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_back),
-                            contentDescription = stringResource(R.string.cd_back),
-                        )
-                    }
-                },
-            )
-        },
-    ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+    DwellScaffold(modifier = modifier, applyStatusBarPadding = true) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            FavoritesHeader(onBack = onBack)
             if (favorites.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.favorites_empty),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.Center).padding(32.dp),
-                )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = stringResource(R.string.favorites_empty),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.Center).padding(32.dp),
+                    )
+                }
             } else {
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Fixed(2),
@@ -72,10 +61,42 @@ fun FavoritesScreen(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     items(items = favorites, key = { it.id }) { wallpaper: Wallpaper ->
-                        WallpaperCard(wallpaper = wallpaper, onClick = { onWallpaperClick(wallpaper.id) })
+                        WallpaperCard(
+                            wallpaper = wallpaper,
+                            onClick = { onWallpaperClick(wallpaper.id) },
+                            favorite = true,
+                            onToggleFavorite = { viewModel.toggleFavorite(wallpaper) },
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun FavoritesHeader(onBack: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(
+            start = DwellSpacing.sm,
+            end = DwellSpacing.screenGutter,
+            top = DwellSpacing.sm,
+            bottom = DwellSpacing.xs,
+        ),
+    ) {
+        IconButton(onClick = onBack) {
+            Icon(
+                painter = painterResource(R.drawable.ic_arrow_back),
+                contentDescription = stringResource(R.string.cd_back),
+                tint = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+        Text(
+            text = stringResource(R.string.favorites_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
     }
 }
