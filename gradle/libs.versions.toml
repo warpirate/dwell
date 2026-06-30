@@ -26,6 +26,7 @@ turbine = "1.2.0"
 
 androidxCredentials = "1.6.0"
 googleid = "1.1.1"
+billing = "7.1.1"
 
 [libraries]
 # AndroidX core
@@ -81,6 +82,10 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-functions = { group = "com.google.firebase", name = "firebase-functions" }
+
+# Play Billing (one-time unlock)
+billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

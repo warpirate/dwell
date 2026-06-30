@@ -89,6 +89,10 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.functions)
+
+    // Play Billing (one-time unlock)
+    implementation(libs.billing.ktx)
 
     // Sign-in (Credential Manager + Google ID)
     implementation(libs.androidx.credentials)
