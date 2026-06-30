@@ -3,8 +3,6 @@ package com.dwell.app.ui.preview
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,9 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +33,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +42,12 @@ import coil3.compose.AsyncImage
 import com.dwell.app.R
 import com.dwell.app.data.model.Wallpaper
 import com.dwell.app.data.wallpaper.WallpaperTarget
+import com.dwell.app.ui.components.DwellPrimaryButton
+import com.dwell.app.ui.components.DwellSegmentedToggle
+import com.dwell.app.ui.theme.DwellSheetShape
+import com.dwell.app.ui.theme.DwellSpacing
+import com.dwell.app.ui.theme.dwellSoftShadow
+import com.dwell.app.ui.theme.topScrim
 
 // A tablet gets the higher-resolution variant. 600dp is the standard split.
 private const val TABLET_SMALLEST_WIDTH_DP = 600
@@ -89,6 +89,14 @@ fun PreviewScreen(
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize(),
+                )
+                // Warm top scrim so the white back control reads on light wallpapers.
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .fillMaxWidth()
+                        .height(140.dp)
+                        .background(topScrim()),
                 )
                 ApplyPanel(
                     wallpaper = wallpaper,
@@ -150,26 +158,40 @@ private fun ApplyPanel(
 ) {
     Surface(
         color = MaterialTheme.colorScheme.surface,
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        modifier = modifier.fillMaxWidth(),
+        shape = DwellSheetShape,
+        modifier = modifier
+            .fillMaxWidth()
+            .dwellSoftShadow(DwellSheetShape),
     ) {
         Column(
             modifier = Modifier
                 .navigationBarsPadding()
-                .padding(horizontal = 20.dp)
-                .padding(top = 10.dp, bottom = 20.dp),
+                .padding(horizontal = DwellSpacing.xl)
+                .padding(top = DwellSpacing.sm + 2.dp, bottom = DwellSpacing.xl),
         ) {
             DragHandle(modifier = Modifier.align(Alignment.CenterHorizontally))
-            Spacer(Modifier.height(14.dp))
+            Spacer(Modifier.height(DwellSpacing.md + 2.dp))
             TitleRow(
                 wallpaper = wallpaper,
                 isFavorite = isFavorite,
                 onToggleFavorite = onToggleFavorite,
             )
-            Spacer(Modifier.height(16.dp))
-            TargetSelector(selected = target, onSelect = onSelectTarget)
-            Spacer(Modifier.height(12.dp))
-            ApplyButton(isApplying = isApplying, onApply = onApply)
+            Spacer(Modifier.height(DwellSpacing.lg))
+            DwellSegmentedToggle(
+                options = listOf(
+                    WallpaperTarget.HOME to stringResource(R.string.preview_target_home),
+                    WallpaperTarget.LOCK to stringResource(R.string.preview_target_lock),
+                    WallpaperTarget.BOTH to stringResource(R.string.preview_target_both),
+                ),
+                selected = target,
+                onSelect = onSelectTarget,
+            )
+            Spacer(Modifier.height(DwellSpacing.md))
+            DwellPrimaryButton(
+                text = stringResource(R.string.preview_apply),
+                onClick = onApply,
+                loading = isApplying,
+            )
         }
     }
 }
@@ -237,84 +259,3 @@ private fun metaLine(wallpaper: Wallpaper): String {
     return "${wallpaper.category} · $source".uppercase()
 }
 
-@Composable
-private fun TargetSelector(
-    selected: WallpaperTarget,
-    onSelect: (WallpaperTarget) -> Unit,
-) {
-    val options = listOf(
-        WallpaperTarget.HOME to R.string.preview_target_home,
-        WallpaperTarget.LOCK to R.string.preview_target_lock,
-        WallpaperTarget.BOTH to R.string.preview_target_both,
-    )
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)),
-        horizontalArrangement = Arrangement.spacedBy(0.dp),
-    ) {
-        options.forEach { (option, labelRes) ->
-            val isSelected = option == selected
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxSize()
-                    .background(
-                        if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
-                    )
-                    .clickable { onSelect(option) },
-            ) {
-                Text(
-                    text = stringResource(labelRes),
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
-                    color = if (isSelected) {
-                        MaterialTheme.colorScheme.onPrimary
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun ApplyButton(isApplying: Boolean, onApply: () -> Unit) {
-    Button(
-        onClick = onApply,
-        enabled = !isApplying,
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(52.dp),
-    ) {
-        if (isApplying) {
-            CircularProgressIndicator(
-                strokeWidth = 2.dp,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(20.dp),
-            )
-        } else {
-            Icon(
-                painter = painterResource(R.drawable.ic_check),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(20.dp),
-            )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = stringResource(R.string.preview_apply),
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
-    }
-}
