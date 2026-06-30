@@ -92,4 +92,9 @@ dependencies {
 
     // Debug-only tooling
     debugImplementation(libs.androidx.ui.tooling)
+
+    // Unit tests (JVM)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }
