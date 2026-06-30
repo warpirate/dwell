@@ -23,7 +23,7 @@ class WidgetConfigViewModelTest {
 
     @Test
     fun `premium flows through`() = runTest {
-        val vm = WidgetConfigViewModel(FakeWidgetStyleStore(), FakeEntitlements(premium = true))
+        val vm = WidgetConfigViewModel(FakeWidgetStyleStore(), FakeBilling(), FakeEntitlements(premium = true))
         vm.isPremium.test {
             assertEquals(true, awaitItem())
             cancelAndIgnoreRemainingEvents()
@@ -32,7 +32,7 @@ class WidgetConfigViewModelTest {
 
     @Test
     fun `setColor updates the draft`() = runTest {
-        val vm = WidgetConfigViewModel(FakeWidgetStyleStore(), FakeEntitlements(premium = true))
+        val vm = WidgetConfigViewModel(FakeWidgetStyleStore(), FakeBilling(), FakeEntitlements(premium = true))
         vm.setColor(WidgetColor.GREEN)
         assertEquals(WidgetColor.GREEN, vm.draft.value.color)
     }
@@ -40,7 +40,7 @@ class WidgetConfigViewModelTest {
     @Test
     fun `save persists the draft`() = runTest {
         val store = FakeWidgetStyleStore()
-        val vm = WidgetConfigViewModel(store, FakeEntitlements(premium = true))
+        val vm = WidgetConfigViewModel(store, FakeBilling(), FakeEntitlements(premium = true))
         vm.setColor(WidgetColor.GREEN)
         vm.save(appWidgetId = 7)
         assertEquals(WidgetStyle(color = WidgetColor.GREEN), store.get(7))
@@ -50,7 +50,7 @@ class WidgetConfigViewModelTest {
     fun `load reads existing style into the draft`() = runTest {
         val store = FakeWidgetStyleStore()
         store.save(7, WidgetStyle(color = WidgetColor.CHARCOAL))
-        val vm = WidgetConfigViewModel(store, FakeEntitlements(premium = false))
+        val vm = WidgetConfigViewModel(store, FakeBilling(), FakeEntitlements(premium = false))
         vm.load(7)
         assertEquals(WidgetColor.CHARCOAL, vm.draft.value.color)
     }

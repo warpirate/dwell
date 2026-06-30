@@ -1,6 +1,9 @@
 package com.dwell.app.ui.widgetconfig
 
+import android.app.Activity
+import com.dwell.app.data.billing.BillingRepository
 import com.dwell.app.data.billing.EntitlementRepository
+import com.dwell.app.data.billing.PurchaseResult
 import com.dwell.app.data.widget.WidgetStyle
 import com.dwell.app.data.widget.WidgetStyleStore
 import kotlinx.coroutines.flow.Flow
@@ -23,4 +26,9 @@ class FakeWidgetStyleStore : WidgetStyleStore {
 class FakeEntitlements(premium: Boolean) : EntitlementRepository {
     private val flow = MutableStateFlow(premium)
     override fun observePremium(): Flow<Boolean> = flow
+}
+
+class FakeBilling : BillingRepository {
+    override val productId = "unlock_premium"
+    override suspend fun launchPurchase(activity: Activity): PurchaseResult = PurchaseResult.Verifying
 }

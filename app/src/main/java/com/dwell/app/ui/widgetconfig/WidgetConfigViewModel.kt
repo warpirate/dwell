@@ -1,7 +1,9 @@
 package com.dwell.app.ui.widgetconfig
 
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dwell.app.data.billing.BillingRepository
 import com.dwell.app.data.billing.EntitlementRepository
 import com.dwell.app.data.widget.WidgetColor
 import com.dwell.app.data.widget.WidgetSize
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WidgetConfigViewModel @Inject constructor(
     private val store: WidgetStyleStore,
+    private val billing: BillingRepository,
     entitlements: EntitlementRepository,
 ) : ViewModel() {
 
@@ -36,6 +39,11 @@ class WidgetConfigViewModel @Inject constructor(
     fun setColor(color: WidgetColor) = _draft.update { it.copy(color = color) }
     fun setSize(size: WidgetSize) = _draft.update { it.copy(size = size) }
     fun setOpacity(opacity: Int) = _draft.update { it.copy(opacity = opacity).coerced() }
+
+    /** Launch the one-time unlock; premium flips reactively via [isPremium] on success. */
+    fun unlock(activity: Activity) {
+        viewModelScope.launch { billing.launchPurchase(activity) }
+    }
 
     suspend fun save(appWidgetId: Int) = store.save(appWidgetId, _draft.value)
 }

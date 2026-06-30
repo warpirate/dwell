@@ -15,12 +15,13 @@ object WidgetStyleResolver {
     }
 
     fun timeSizeSp(style: WidgetStyle): Float = when (style.size) {
-        WidgetSize.SMALL -> 28f
-        WidgetSize.MEDIUM -> 40f
-        WidgetSize.LARGE -> 56f
+        WidgetSize.SMALL -> 44f
+        WidgetSize.MEDIUM -> 56f
+        WidgetSize.LARGE -> 72f
     }
 
-    fun dateSizeSp(style: WidgetStyle): Float = timeSizeSp(style) * 0.4f
+    /** The date is a tracked-out caption, kept small and constant regardless of time size. */
+    fun dateSizeSp(style: WidgetStyle): Float = 12f
 
     fun backgroundArgb(style: WidgetStyle): Int {
         val alpha = (style.opacity.coerceIn(0, 100) * 255 + 50) / 100 // rounded

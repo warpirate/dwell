@@ -39,7 +39,9 @@ class ClockWidgetProvider : AppWidgetProvider() {
         views.setTextColor(R.id.widget_date, textColor)
         views.setTextViewTextSize(R.id.widget_time, TypedValue.COMPLEX_UNIT_SP, WidgetStyleResolver.timeSizeSp(style))
         views.setTextViewTextSize(R.id.widget_date, TypedValue.COMPLEX_UNIT_SP, WidgetStyleResolver.dateSizeSp(style))
-        views.setInt(R.id.widget_root, "setBackgroundColor", WidgetStyleResolver.backgroundArgb(style))
+        // NB: do not setBackgroundColor here — it replaces the rounded @drawable/widget_bg
+        // with a flat rect. Background opacity for the RemoteViews clock is deferred
+        // (needs API 31 background tint, or the Glance widgets).
         manager.updateAppWidget(id, views)
     }
 
