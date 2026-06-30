@@ -65,6 +65,14 @@
     <string name="account_err_unknown">Couldn\'t sign you in. Try again.</string>
     <string name="cd_toggle_password">Show or hide password</string>
 
+    <!-- Widgets tab -->
+    <string name="widgets_clock_title">Clock</string>
+    <string name="widgets_clock_subtitle">A calm clock for your home screen.</string>
+    <string name="widgets_add">Add to home screen</string>
+    <string name="widgets_customize">Customize</string>
+    <string name="widgets_more_soon">Calendar, notes, and battery are coming next.</string>
+    <string name="widgets_pin_unsupported">Your launcher doesn\'t support adding widgets from here. Long-press your home screen instead.</string>
+
     <!-- Unlock / premium -->
     <string name="unlock_title">Unlock Dwell</string>
     <string name="unlock_subtitle">Remove ads and unlock matched widgets and home styles.</string>
