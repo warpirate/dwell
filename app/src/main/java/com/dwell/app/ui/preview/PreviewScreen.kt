@@ -232,7 +232,7 @@ private fun TitleRow(
             onClick = onToggleFavorite,
             modifier = Modifier
                 .size(44.dp)
-                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)),
+                .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small),
         ) {
             Icon(
                 painter = painterResource(
