@@ -25,6 +25,8 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -139,7 +141,28 @@ fun SignInSheet(
                     )
                 }
             }
-            // Google button is added in Task 11 (gated on google-services.json).
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.account_or),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.align(androidx.compose.ui.Alignment.CenterHorizontally),
+            )
+            Spacer(Modifier.height(12.dp))
+            val scope = rememberCoroutineScope()
+            OutlinedButton(
+                onClick = {
+                    scope.launch {
+                        val token = getGoogleIdToken(context)
+                        if (token != null) viewModel.submitGoogle(token)
+                    }
+                },
+                enabled = !state.inProgress,
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+            ) {
+                Text(stringResource(R.string.account_continue_google), style = MaterialTheme.typography.labelLarge)
+            }
         }
     }
 }
