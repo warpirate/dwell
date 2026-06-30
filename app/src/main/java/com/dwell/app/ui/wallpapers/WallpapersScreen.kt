@@ -43,6 +43,7 @@ private const val PREFETCH_DISTANCE = 6
 
 @Composable
 fun WallpapersScreen(
+    onWallpaperClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: WallpapersViewModel = hiltViewModel(),
 ) {
@@ -53,8 +54,7 @@ fun WallpapersScreen(
         onRefresh = viewModel::refresh,
         onRetry = viewModel::retry,
         onLoadMore = viewModel::loadMore,
-        // TODO(Phase 1 Part B): open full-bleed preview + apply sheet.
-        onWallpaperClick = { _ -> },
+        onWallpaperClick = { wallpaper -> onWallpaperClick(wallpaper.id) },
         modifier = modifier,
     )
 }

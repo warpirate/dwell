@@ -19,4 +19,18 @@
     <string name="wallpapers_error_title">Couldn\'t load wallpapers</string>
     <string name="wallpapers_error_body">Check your connection and try again.</string>
     <string name="action_try_again">Try again</string>
+
+    <!-- Preview + apply sheet -->
+    <string name="cd_back">Back</string>
+    <string name="cd_favorite">Save to favorites</string>
+    <string name="preview_target_home">Home</string>
+    <string name="preview_target_lock">Lock</string>
+    <string name="preview_target_both">Both</string>
+    <string name="preview_apply">Apply</string>
+    <string name="preview_applied">Applied.</string>
+    <string name="preview_apply_failed">Couldn\'t apply. Check your connection and try again.</string>
+    <string name="preview_meta_ai">AI generated</string>
+    <string name="preview_meta_designed">Designed</string>
+    <string name="preview_untitled">Untitled</string>
+    <string name="preview_not_found">This wallpaper isn\'t available.</string>
 </resources>
