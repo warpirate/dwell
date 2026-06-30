@@ -33,6 +33,18 @@ private val DarkDivider = Color(0xFF3E3A31)
 val AccentLight = Color(0xFF3A5A40)
 val AccentDark = Color(0xFF6E9576)
 
+// The one solid green button fill (identical both themes; white text passes AA
+// on it). Foreground green text/marks use the colorScheme primary (AccentDark on
+// dark for AA). See design system, Color tokens.
+val AccentFill = Color(0xFF3A5A40)
+val OnAccentFill = Color(0xFFFAFAF8)
+
+// Warm ambient+spot shadow color for dwellSoftShadow. Never a cold black.
+val DwellShadow = Color(0xFF1C1810)
+
+// Dark end of every text-over-image scrim. Warm near-black, never pure #000.
+val ScrimWarm = Color(0xFF0E0B07)
+
 val DwellLightColorScheme: ColorScheme = lightColorScheme(
     primary = AccentLight,
     onPrimary = LightBg,

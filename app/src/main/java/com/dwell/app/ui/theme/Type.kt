@@ -39,6 +39,13 @@ val DwellTypography = Typography(
         fontSize = 28.sp,
         lineHeight = 36.sp,
     ),
+    // Hero/auth headline only. Fraunces stays rare and large (design system).
+    displayMedium = TextStyle(
+        fontFamily = DisplayFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 40.sp,
+        lineHeight = 46.sp,
+    ),
     titleLarge = TextStyle(
         fontFamily = DisplayFontFamily,
         fontWeight = FontWeight.Medium,

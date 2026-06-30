@@ -15,3 +15,6 @@ val DwellShapes = Shapes(
     large = DwellCorner,
     extraLarge = DwellCorner,
 )
+
+// The only sanctioned second radius: bottom-sheet top corners (design system).
+val DwellSheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
