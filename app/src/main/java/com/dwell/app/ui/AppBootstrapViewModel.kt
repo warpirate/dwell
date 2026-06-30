@@ -31,4 +31,9 @@ class AppBootstrapViewModel @Inject constructor(
             favorites.reconcile()
         }
     }
+
+    /** Re-pull favorites when the app comes to the foreground. Safe no-op offline/anonymous. */
+    fun onResume() {
+        viewModelScope.launch { favorites.reconcile() }
+    }
 }
