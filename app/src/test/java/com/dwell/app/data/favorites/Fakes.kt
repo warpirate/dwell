@@ -1,6 +1,7 @@
 package com.dwell.app.data.favorites
 
 import com.dwell.app.data.auth.AuthRepository
+import com.dwell.app.data.auth.UpgradeResult
 import com.dwell.app.data.local.FavoriteDao
 import com.dwell.app.data.local.FavoriteEntity
 import com.dwell.app.data.local.WallpaperDao
@@ -84,6 +85,13 @@ class FakeAuthRepository(private val current: String?) : AuthRepository {
     override val uid: Flow<String?> = MutableStateFlow(current)
     override fun currentUid(): String? = current
     override suspend fun ensureSignedIn() {}
+    override fun isAnonymous(): Boolean = current == null
+    override fun currentEmail(): String? = null
+    override suspend fun linkEmail(email: String, password: String, createAccount: Boolean): UpgradeResult =
+        UpgradeResult.Linked(current ?: "u1")
+    override suspend fun linkGoogle(idToken: String): UpgradeResult =
+        UpgradeResult.Linked(current ?: "u1")
+    override suspend fun signOut() {}
 }
 
 fun wallpaperEntity(id: String, category: String = "nature") = WallpaperEntity(
