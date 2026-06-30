@@ -6,6 +6,10 @@ import com.dwell.app.data.auth.UpgradeResult
 import com.dwell.app.data.favorites.FavoriteRemote
 import com.dwell.app.data.favorites.FavoritesRepository
 import com.dwell.app.data.model.Wallpaper
+import com.dwell.app.data.repository.PageCursor
+import com.dwell.app.data.repository.WallpaperPage
+import com.dwell.app.data.repository.WallpaperRepository
+import com.dwell.app.data.model.Category
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +41,14 @@ class SignInViewModelTest {
         override suspend fun signOut() {}
     }
 
+    private class FakeWallpapers : WallpaperRepository {
+        override suspend fun getCategories() = Result.success(emptyList<Category>())
+        override suspend fun getWallpapers(categoryId: String?, cursor: PageCursor?, pageSize: Int) =
+            Result.success(WallpaperPage(emptyList(), null, true, false))
+        override suspend fun getWallpaper(id: String): Wallpaper? = null
+        override suspend fun getHeroWallpaper(): Wallpaper? = null
+    }
+
     private class RecordingFavorites(val snapshot: List<FavoriteRemote>) : FavoritesRepository {
         val calls = mutableListOf<String>()
         override fun observeFavoriteIds(): Flow<Set<String>> = MutableStateFlow(emptySet())
@@ -51,7 +63,7 @@ class SignInViewModelTest {
     @Test
     fun linked_reconcilesOnly_noMerge() = runTest {
         val fav = RecordingFavorites(listOf(FavoriteRemote("b", 1L)))
-        val vm = SignInViewModel(FakeAuth(UpgradeResult.Linked("u1")), fav)
+        val vm = SignInViewModel(FakeAuth(UpgradeResult.Linked("u1")), fav, FakeWallpapers())
         vm.onEmailChange("a@b.com"); vm.onPasswordChange("secret1"); vm.setMode(SignInMode.Create)
 
         vm.submitEmail()
@@ -64,7 +76,7 @@ class SignInViewModelTest {
     @Test
     fun signedInExisting_mergesThenReconciles_inOrder() = runTest {
         val fav = RecordingFavorites(listOf(FavoriteRemote("b", 1L)))
-        val vm = SignInViewModel(FakeAuth(UpgradeResult.SignedInExisting("existing")), fav)
+        val vm = SignInViewModel(FakeAuth(UpgradeResult.SignedInExisting("existing")), fav, FakeWallpapers())
         vm.onEmailChange("a@b.com"); vm.onPasswordChange("secret1"); vm.setMode(SignInMode.SignIn)
 
         vm.submitEmail()
@@ -81,7 +93,7 @@ class SignInViewModelTest {
     @Test
     fun error_setsInlineError_noDone() = runTest {
         val fav = RecordingFavorites(emptyList())
-        val vm = SignInViewModel(FakeAuth(UpgradeResult.Error(AuthError.INVALID_CREDENTIALS)), fav)
+        val vm = SignInViewModel(FakeAuth(UpgradeResult.Error(AuthError.INVALID_CREDENTIALS)), fav, FakeWallpapers())
         vm.onEmailChange("a@b.com"); vm.onPasswordChange("x")
 
         vm.submitEmail()

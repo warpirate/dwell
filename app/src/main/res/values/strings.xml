@@ -45,6 +45,11 @@
     <string name="account_title_create">Create your account</string>
     <string name="account_subtitle">Save your favorites and sync them across devices.</string>
     <string name="account_footer">Browsing and applying wallpapers work without an account.</string>
+    <string name="account_skip">Skip for now</string>
+    <string name="account_hero_headline">A wallpaper worth living with.</string>
+    <string name="account_hero_subline">Set it once. Notice it every day.</string>
+    <string name="account_continue_email">Continue with email</string>
+    <string name="account_legal">By continuing you agree to our Terms and Privacy.</string>
     <string name="account_sign_out">Sign out</string>
     <string name="account_email_hint">Email</string>
     <string name="account_password_hint">Password</string>

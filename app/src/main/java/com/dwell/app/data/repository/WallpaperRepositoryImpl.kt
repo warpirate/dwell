@@ -82,6 +82,9 @@ class WallpaperRepositoryImpl @Inject constructor(
     override suspend fun getWallpaper(id: String): Wallpaper? =
         wallpaperDao.getById(id)?.toModel()
 
+    override suspend fun getHeroWallpaper(): Wallpaper? =
+        wallpaperDao.getAll().firstOrNull()?.toModel()
+
     private fun buildWallpaperQuery(
         categoryId: String?,
         cursor: PageCursor?,

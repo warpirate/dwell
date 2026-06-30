@@ -43,6 +43,7 @@ class WallpapersViewModelFavoritesTest {
         override suspend fun getWallpapers(categoryId: String?, cursor: PageCursor?, pageSize: Int) =
             Result.success(page)
         override suspend fun getWallpaper(id: String): Wallpaper? = null
+        override suspend fun getHeroWallpaper(): Wallpaper? = null
     }
 
     private class FakeFavoritesRepo(val favs: List<Wallpaper>) : FavoritesRepository {

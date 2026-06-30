@@ -45,6 +45,9 @@ interface WallpaperRepository {
      */
     suspend fun getWallpaper(id: String): Wallpaper?
 
+    /** A cached wallpaper to show as a hero (e.g. the auth backdrop), or null. */
+    suspend fun getHeroWallpaper(): Wallpaper?
+
     companion object {
         const val PAGE_SIZE = 20
     }

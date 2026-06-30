@@ -6,6 +6,7 @@ import com.dwell.app.data.auth.AuthRepository
 import com.dwell.app.data.auth.UpgradeResult
 import com.dwell.app.data.favorites.FavoriteRemote
 import com.dwell.app.data.favorites.FavoritesRepository
+import com.dwell.app.data.repository.WallpaperRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,10 +19,20 @@ import javax.inject.Inject
 class SignInViewModel @Inject constructor(
     private val auth: AuthRepository,
     private val favorites: FavoritesRepository,
+    wallpapers: WallpaperRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
+
+    private val _heroUrl = MutableStateFlow<String?>(null)
+    val heroUrl: StateFlow<String?> = _heroUrl.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            _heroUrl.value = wallpapers.getHeroWallpaper()?.thumbUrl
+        }
+    }
 
     fun setMode(mode: SignInMode) = _uiState.update { it.copy(mode = mode, inlineError = null) }
     fun onEmailChange(v: String) = _uiState.update { it.copy(email = v, inlineError = null) }
