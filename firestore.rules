@@ -3,7 +3,7 @@ rules_version = '2';
 // Dwell Firestore rules (Backend Schema 4).
 // Wallpapers + categories are world-readable, never client-writable (admin
 // writes go through the Admin SDK, which bypasses rules). User docs/favorites
-// are private to their owner. removeAds is written server-side only (Cloud
+// are private to their owner. premium is written server-side only (Cloud
 // Function with Admin SDK), so clients get no write path to it here.
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -21,9 +21,9 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow create: if request.auth != null && request.auth.uid == uid
-                    && !('removeAds' in request.resource.data);
+                    && !('premium' in request.resource.data);
       allow update: if request.auth != null && request.auth.uid == uid
-                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['removeAds']);
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['premium']);
 
       match /favorites/{wallpaperId} {
         allow read, write: if request.auth != null && request.auth.uid == uid;
