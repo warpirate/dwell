@@ -3,11 +3,13 @@ package com.dwell.app.ui.preview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dwell.app.data.favorites.FavoritesRepository
 import com.dwell.app.data.repository.WallpaperRepository
 import com.dwell.app.data.wallpaper.WallpaperApplier
 import com.dwell.app.data.wallpaper.WallpaperTarget
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,6 +21,7 @@ class PreviewViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: WallpaperRepository,
     private val applier: WallpaperApplier,
+    private val favorites: FavoritesRepository,
 ) : ViewModel() {
 
     private val wallpaperId: String = checkNotNull(savedStateHandle[ARG_WALLPAPER_ID])
@@ -35,6 +38,11 @@ class PreviewViewModel @Inject constructor(
                     isLoading = false,
                     notFound = wallpaper == null,
                 )
+            }
+        }
+        viewModelScope.launch {
+            favorites.observeFavoriteIds().collectLatest { ids ->
+                _uiState.update { it.copy(isFavorite = ids.contains(wallpaperId)) }
             }
         }
     }
@@ -61,6 +69,11 @@ class PreviewViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun onToggleFavorite() {
+        val wallpaper = _uiState.value.wallpaper ?: return
+        viewModelScope.launch { favorites.toggle(wallpaper) }
     }
 
     /** Acknowledge a finished apply so the toast fires once. */

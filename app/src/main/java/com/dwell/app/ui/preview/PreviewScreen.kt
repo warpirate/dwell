@@ -94,8 +94,10 @@ fun PreviewScreen(
                     wallpaper = wallpaper,
                     target = state.target,
                     isApplying = state.applyState == ApplyState.Applying,
+                    isFavorite = state.isFavorite,
                     onSelectTarget = viewModel::selectTarget,
                     onApply = { viewModel.apply(isTablet) },
+                    onToggleFavorite = viewModel::onToggleFavorite,
                     modifier = Modifier.align(Alignment.BottomCenter),
                 )
             }
@@ -140,8 +142,10 @@ private fun ApplyPanel(
     wallpaper: Wallpaper,
     target: WallpaperTarget,
     isApplying: Boolean,
+    isFavorite: Boolean,
     onSelectTarget: (WallpaperTarget) -> Unit,
     onApply: () -> Unit,
+    onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -157,7 +161,11 @@ private fun ApplyPanel(
         ) {
             DragHandle(modifier = Modifier.align(Alignment.CenterHorizontally))
             Spacer(Modifier.height(14.dp))
-            TitleRow(wallpaper = wallpaper)
+            TitleRow(
+                wallpaper = wallpaper,
+                isFavorite = isFavorite,
+                onToggleFavorite = onToggleFavorite,
+            )
             Spacer(Modifier.height(16.dp))
             TargetSelector(selected = target, onSelect = onSelectTarget)
             Spacer(Modifier.height(12.dp))
@@ -178,7 +186,11 @@ private fun DragHandle(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun TitleRow(wallpaper: Wallpaper) {
+private fun TitleRow(
+    wallpaper: Wallpaper,
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -194,18 +206,22 @@ private fun TitleRow(wallpaper: Wallpaper) {
                 letterSpacing = 1.sp,
             )
         }
-        // Favoriting is Phase 2 (it triggers the optional login). Shown here to
-        // hold its place in the layout; wired to the favorites repo later.
         IconButton(
-            onClick = { /* TODO(Phase 2): favorite -> anonymous-upgrade login */ },
+            onClick = onToggleFavorite,
             modifier = Modifier
                 .size(44.dp)
                 .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)),
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_heart_outline),
+                painter = painterResource(
+                    if (isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart_outline,
+                ),
                 contentDescription = stringResource(R.string.cd_favorite),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = if (isFavorite) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
             )
         }
     }

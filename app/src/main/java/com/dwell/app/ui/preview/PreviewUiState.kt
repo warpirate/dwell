@@ -12,4 +12,5 @@ data class PreviewUiState(
     val notFound: Boolean = false,
     val target: WallpaperTarget = WallpaperTarget.BOTH,
     val applyState: ApplyState = ApplyState.Idle,
+    val isFavorite: Boolean = false,
 )
