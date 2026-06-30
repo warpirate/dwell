@@ -1,7 +1,7 @@
 package com.dwell.app.data.widget
 
 /** Text color options for a widget. Keys map to locked design tokens in WidgetStyleResolver. */
-enum class WidgetColor { CREAM, GREEN, CHARCOAL }
+enum class WidgetColor { CREAM, GREEN, SAND }
 
 /** Text size buckets. */
 enum class WidgetSize { SMALL, MEDIUM, LARGE }

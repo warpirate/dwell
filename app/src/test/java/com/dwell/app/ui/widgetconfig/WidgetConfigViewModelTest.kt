@@ -49,9 +49,9 @@ class WidgetConfigViewModelTest {
     @Test
     fun `load reads existing style into the draft`() = runTest {
         val store = FakeWidgetStyleStore()
-        store.save(7, WidgetStyle(color = WidgetColor.CHARCOAL))
+        store.save(7, WidgetStyle(color = WidgetColor.SAND))
         val vm = WidgetConfigViewModel(store, FakeBilling(), FakeEntitlements(premium = false))
         vm.load(7)
-        assertEquals(WidgetColor.CHARCOAL, vm.draft.value.color)
+        assertEquals(WidgetColor.SAND, vm.draft.value.color)
     }
 }

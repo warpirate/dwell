@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dwell — Clock Widget System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Dwell locked tokens */
+    --bg:#12100E; --surface:#221F1A; --surface-2:#2A2620; --surface-3:#17140F;
+    --cream:#ECE7DD; --cream-muted:#A89F8E; --cream-faint:#6E665A;
+    --green:#6E9576; --green-deep:#3A5A40;
+    --hairline:rgba(236,231,221,.10); --hairline-strong:rgba(236,231,221,.16);
+    --radius:26px; --radius-sm:18px;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--cream);font-family:var(--sans);
+       -webkit-font-smoothing:antialiased;line-height:1.5;padding:64px 32px 120px}
+  .wrap{max-width:1180px;margin:0 auto}
+
+  /* Masthead */
+  .masthead{display:flex;align-items:baseline;justify-content:space-between;
+            gap:24px;flex-wrap:wrap;border-bottom:1px solid var(--hairline);padding-bottom:28px;margin-bottom:14px}
+  .masthead h1{font-family:var(--serif);font-weight:400;font-size:40px;letter-spacing:-.02em}
+  .masthead .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);
+                    font-weight:600;margin-bottom:10px}
+  .masthead p{color:var(--cream-muted);font-size:14px;max-width:380px}
+  .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);vertical-align:middle}
+
+  .section-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-faint);
+                 font-weight:600;margin:64px 0 20px;display:flex;align-items:center;gap:12px}
+  .section-label::after{content:"";flex:1;height:1px;background:var(--hairline)}
+
+  /* Wallpaper stage */
+  .stage{position:relative;border-radius:28px;overflow:hidden;padding:64px 56px;min-height:520px;
+         display:flex;align-items:center;gap:48px;flex-wrap:wrap;
+         background:
+           radial-gradient(120% 90% at 20% 10%, #6b5a44 0%, #3b3024 38%, #1c160f 78%) ,
+           #1c160f;
+         box-shadow:inset 0 0 140px rgba(0,0,0,.5)}
+  .stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+                background:radial-gradient(80% 60% at 80% 90%, rgba(110,149,118,.10), transparent 60%)}
+  .stage .caption{position:absolute;left:24px;bottom:18px;font-size:11px;letter-spacing:.16em;
+                  text-transform:uppercase;color:rgba(236,231,221,.45)}
+
+  /* --- WIDGET BASE --- */
+  .w{position:relative;border-radius:var(--radius);
+     background:linear-gradient(160deg, rgba(42,38,32,.92) 0%, rgba(23,20,15,.94) 100%);
+     box-shadow:0 18px 40px -12px rgba(0,0,0,.55), 0 2px 0 rgba(236,231,221,.05) inset,
+                0 0 0 1px rgba(236,231,221,.06);
+     overflow:hidden}
+  .w::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+             background:linear-gradient(90deg,transparent,var(--hairline-strong),transparent)}
+  .w .time{font-family:var(--serif);color:var(--cream);font-weight:400;line-height:.92;
+           letter-spacing:-.015em;font-variant-numeric:lining-nums tabular-nums}
+  .w .date{font-family:var(--sans);font-weight:500;text-transform:uppercase;letter-spacing:.18em;
+           color:var(--cream-muted);display:flex;align-items:center;gap:9px}
+  .w .date .dot{width:6px;height:6px}
+  .w .rule{height:1px;background:var(--hairline);border:none}
+
+  /* Editorial 4x2 */
+  .w-editorial{width:360px;height:180px;padding:24px 26px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+  .w-editorial .time{font-size:66px}
+  .w-editorial .sub{display:flex;flex-direction:column;gap:11px}
+  .w-editorial .rule{width:46px}
+  .w-editorial .date{font-size:11.5px}
+
+  /* Stacked serif 2x2 */
+  .w-stack{width:200px;height:200px;padding:24px;display:flex;flex-direction:column;justify-content:space-between}
+  .w-stack .time{font-size:52px}
+  .w-stack .meta{display:flex;flex-direction:column;gap:10px}
+  .w-stack .rule{width:38px}
+  .w-stack .date{font-size:10.5px}
+  .w-stack .top{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-faint);font-weight:600}
+
+  /* Two-tone 2x2 */
+  .w-twotone{width:200px;height:200px;padding:24px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+  .w-twotone .time{font-size:58px}
+  .w-twotone .time .min{color:var(--green)}
+  .w-twotone .date{font-size:10.5px}
+
+  /* Hairline mono 4x1 */
+  .w-mono{width:360px;height:96px;padding:0 26px;display:flex;align-items:center;gap:20px}
+  .w-mono .bar{width:2px;align-self:stretch;margin:24px 0;background:linear-gradient(var(--green),var(--green-deep));border-radius:2px}
+  .w-mono .time{font-size:40px}
+  .w-mono .stack{display:flex;flex-direction:column;gap:7px}
+  .w-mono .date{font-size:10px;letter-spacing:.2em}
+
+  /* concept grid */
+  .grid{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+  .concept{display:flex;flex-direction:column;gap:14px}
+  .concept .tag{font-size:12px;color:var(--cream-muted)}
+  .concept .tag b{color:var(--cream);font-weight:600}
+  .concept .tag .size{color:var(--cream-faint);margin-left:8px}
+
+  /* variants */
+  .variants{display:flex;flex-wrap:wrap;gap:24px}
+  .v-cream .time{color:var(--cream)} .v-cream .dot{background:var(--green)}
+  .v-green .time{color:var(--green)} .v-green .date{color:var(--cream-muted)}
+  .v-sand{background:linear-gradient(160deg,#3a3326,#241e14)} .v-sand .time{color:#E8D9BC}
+  .v-mist{background:linear-gradient(160deg, rgba(46,52,48,.92), rgba(20,24,21,.94))} .v-mist .time{color:#DCE7DE}
+  .lock{position:absolute;top:12px;right:14px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+        color:var(--cream-faint);display:flex;align-items:center;gap:5px}
+  .lock svg{width:11px;height:11px;opacity:.7}
+  .badge{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+         padding:4px 9px;border-radius:999px}
+  .badge.free{color:var(--green);border:1px solid rgba(110,149,118,.4)}
+  .badge.pro{color:#E8D9BC;border:1px solid rgba(232,217,188,.35);background:rgba(232,217,188,.06)}
+  .vrow{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+
+  /* tier cards */
+  .tiers{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .tier{border:1px solid var(--hairline);border-radius:20px;padding:28px;background:rgba(34,31,26,.4)}
+  .tier h3{font-family:var(--serif);font-weight:500;font-size:22px;margin-bottom:6px}
+  .tier .price{color:var(--cream-muted);font-size:13px;margin-bottom:18px}
+  .tier ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .tier li{font-size:14px;color:var(--cream-muted);display:flex;gap:10px;align-items:flex-start}
+  .tier li svg{width:15px;height:15px;flex-shrink:0;margin-top:3px;color:var(--green)}
+  .tier li b{color:var(--cream);font-weight:500}
+
+  .specs{columns:2;column-gap:48px;font-size:13.5px;color:var(--cream-muted)}
+  .specs p{break-inside:avoid;margin-bottom:14px}
+  .specs b{color:var(--cream);font-weight:600;display:block;margin-bottom:3px;
+           font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+  @media(max-width:760px){.tiers{grid-template-columns:1fr}.specs{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div>
+      <div class="kicker">Dwell · Widget System</div>
+      <h1>A clock worth keeping on your screen.</h1>
+    </div>
+    <p>Editorial typography, warm depth, one quiet green mark. Built to render in RemoteViews on Android 8+ — bundled Fraunces, baked gradients, no live blur.</p>
+  </header>
+
+  <!-- HERO STAGE -->
+  <div class="section-label">In context — on the wallpaper</div>
+  <div class="stage">
+    <div class="w w-editorial">
+      <div class="time">9:41</div>
+      <div class="sub">
+        <hr class="rule" />
+        <div class="date"><span class="dot"></span>Tuesday, June 30</div>
+      </div>
+    </div>
+    <div class="w w-stack">
+      <div class="top">Today</div>
+      <div class="time">9:41</div>
+      <div class="meta"><hr class="rule" /><div class="date">Tue · Jun 30</div></div>
+    </div>
+    <span class="caption">Default style · free · shown on a warm wallpaper</span>
+  </div>
+
+  <!-- CONCEPTS -->
+  <div class="section-label">Four layouts</div>
+  <div class="grid">
+    <div class="concept">
+      <div class="w w-editorial">
+        <div class="time">9:41</div>
+        <div class="sub"><hr class="rule" /><div class="date"><span class="dot"></span>Tuesday, June 30</div></div>
+      </div>
+      <div class="tag"><b>Editorial</b><span class="size">4 × 2 · the flagship</span></div>
+    </div>
+
+    <div class="concept">
+      <div class="w w-twotone">
+        <div class="time">9<span class="min">:41</span></div>
+        <div class="date"><span class="dot"></span>Tue, Jun 30</div>
+      </div>
+      <div class="tag"><b>Two-tone</b><span class="size">2 × 2 · minute in green</span></div>
+    </div>
+
+    <div class="concept">
+      <div class="w w-stack">
+        <div class="top">Today</div>
+        <div class="time">9:41</div>
+        <div class="meta"><hr class="rule" /><div class="date">Tue · Jun 30</div></div>
+      </div>
+      <div class="tag"><b>Stacked</b><span class="size">2 × 2 · masthead</span></div>
+    </div>
+
+    <div class="concept">
+      <div class="w w-mono">
+        <div class="bar"></div>
+        <div class="stack">
+          <div class="time">9:41</div>
+          <div class="date">Tuesday, June 30</div>
+        </div>
+      </div>
+      <div class="tag"><b>Hairline</b><span class="size">4 × 1 · compact</span></div>
+    </div>
+  </div>
+
+  <!-- FREE vs PREMIUM -->
+  <div class="section-label">Free default vs the premium style engine</div>
+  <div class="grid">
+    <div class="concept">
+      <div class="vrow"><span class="badge free">Free</span><span class="tag">ships looking great, no choice needed</span></div>
+      <div class="w w-stack v-cream">
+        <div class="top">Today</div><div class="time">9:41</div>
+        <div class="meta"><hr class="rule" /><div class="date">Tue · Jun 30</div></div>
+      </div>
+    </div>
+    <div class="concept">
+      <div class="vrow"><span class="badge pro">Premium</span><span class="tag">recolor · restyle · resize</span></div>
+      <div class="variants">
+        <div class="w w-stack v-green">
+          <span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Pro</span>
+          <div class="top">Today</div><div class="time">9:41</div>
+          <div class="meta"><hr class="rule" /><div class="date">Tue · Jun 30</div></div>
+        </div>
+        <div class="w w-stack v-sand">
+          <span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Pro</span>
+          <div class="top">Today</div><div class="time">9:41</div>
+          <div class="meta"><hr class="rule" /><div class="date">Tue · Jun 30</div></div>
+        </div>
+        <div class="w w-stack v-mist">
+          <span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Pro</span>
+          <div class="top">Today</div><div class="time">9:41</div>
+          <div class="meta"><hr class="rule" /><div class="date">Tue · Jun 30</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIERS -->
+  <div class="section-label">What sells</div>
+  <div class="tiers">
+    <div class="tier">
+      <h3>Free</h3>
+      <div class="price">Every widget, one tasteful default</div>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>The <b>Editorial</b> clock in cream, fully working</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Live time + date, battery-free <b>TextClock</b></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Looks premium out of the box — no setup</li>
+      </ul>
+    </div>
+    <div class="tier" style="border-color:rgba(232,217,188,.22)">
+      <h3>Premium · the style engine</h3>
+      <div class="price">One-time unlock</div>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><b>Color</b> — cream, green, sand, mist, charcoal</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><b>Layout</b> — Editorial, Two-tone, Stacked, Hairline</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><b>Size</b> — small, medium, large numerals</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Later: <b>wallpaper-matched</b> tints + presets</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SPECS -->
+  <div class="section-label">Build spec — RemoteViews-safe</div>
+  <div class="specs">
+    <p><b>Type</b>Fraunces (bundled .ttf in res/font — static layout fonts inflate fine; downloadable fonts do not). Time weight 400, optical size large. Date: Inter/sans-serif-medium, uppercase, +0.18em tracking, 11–12sp.</p>
+    <p><b>Card depth</b>Vertical gradient drawable #2A2620 → #17140F (kills the flat look). 1px top hairline highlight via layer-list. 26dp radius. Drop shadow is the launcher's; we fake lift with the gradient + hairline.</p>
+    <p><b>Translucency</b>Bake ~92% alpha into the gradient colors so the wallpaper warms through. No live blur (RemoteViews can't) — the baked warm tint reads as glass without it.</p>
+    <p><b>Accent</b>Exactly one green mark per widget — a 6dp dot (ImageView + oval drawable) or a 2dp rule. Never a fill. AA green is #6E9576 on the warm card.</p>
+    <p><b>Sizing</b>Time numerals tabular + lining so the clock never reflows. Editorial 4×2, the square layouts 2×2, Hairline 4×1. resizeMode horizontal|vertical.</p>
+    <p><b>Gating</b>Free = Editorial/cream, hardcoded. Premium flips color/layout/size via the saved WidgetStyle. Config screen shows the controls locked (already built) so the upgrade sells itself.</p>
+  </div>
+
+</div>
+</body>
+</html>

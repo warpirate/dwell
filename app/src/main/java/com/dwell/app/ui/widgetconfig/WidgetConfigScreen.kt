@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.dwell.app.R
 import com.dwell.app.data.widget.WidgetColor
@@ -39,17 +40,18 @@ import com.dwell.app.data.widget.WidgetStyle
 import com.dwell.app.ui.components.DwellPrimaryButton
 import com.dwell.app.ui.components.DwellScaffold
 import com.dwell.app.ui.components.DwellSecondaryButton
+import com.dwell.app.ui.theme.DisplayFontFamily
 import com.dwell.app.ui.theme.DwellSpacing
 
 private val Cream = Color(0xFFECE7DD)
 private val Green = Color(0xFF6E9576)
-private val Charcoal = Color(0xFF221F1A)
+private val Sand = Color(0xFFE8D9BC)
 private val DateMuted = Color(0xFFA89F8E)
 
 private fun textColorOf(c: WidgetColor): Color = when (c) {
     WidgetColor.CREAM -> Cream
     WidgetColor.GREEN -> Green
-    WidgetColor.CHARCOAL -> Charcoal
+    WidgetColor.SAND -> Sand
 }
 
 @Composable
@@ -148,8 +150,10 @@ private fun PreviewCard(style: WidgetStyle) {
             Text(
                 text = "9:41",
                 color = timeColor,
-                fontWeight = FontWeight.Light,
+                fontFamily = DisplayFontFamily,
+                fontWeight = FontWeight.Normal,
                 fontSize = timeSp,
+                letterSpacing = (-0.01).em,
             )
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {

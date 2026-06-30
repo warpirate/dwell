@@ -34,14 +34,11 @@ class ClockWidgetProvider : AppWidgetProvider() {
     private suspend fun renderOne(context: Context, manager: AppWidgetManager, id: Int) {
         val style = store.get(id)
         val views = RemoteViews(context.packageName, R.layout.widget_clock)
-        val textColor = WidgetStyleResolver.textColorArgb(style)
-        views.setTextColor(R.id.widget_time, textColor)
-        views.setTextColor(R.id.widget_date, textColor)
+        // The premium style recolors and resizes only the Fraunces time. The tracked
+        // date and the green accent dot are fixed editorial chrome (set in the layout).
+        // Never setBackgroundColor here — it would replace the rounded gradient drawable.
+        views.setTextColor(R.id.widget_time, WidgetStyleResolver.textColorArgb(style))
         views.setTextViewTextSize(R.id.widget_time, TypedValue.COMPLEX_UNIT_SP, WidgetStyleResolver.timeSizeSp(style))
-        views.setTextViewTextSize(R.id.widget_date, TypedValue.COMPLEX_UNIT_SP, WidgetStyleResolver.dateSizeSp(style))
-        // NB: do not setBackgroundColor here — it replaces the rounded @drawable/widget_bg
-        // with a flat rect. Background opacity for the RemoteViews clock is deferred
-        // (needs API 31 background tint, or the Glance widgets).
         manager.updateAppWidget(id, views)
     }
 

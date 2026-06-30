@@ -5,13 +5,13 @@ object WidgetStyleResolver {
 
     private const val CREAM = 0xFFECE7DD.toInt()
     private const val GREEN = 0xFF6E9576.toInt()    // AccentDark (AA over warm surfaces)
-    private const val CHARCOAL = 0xFF221F1A.toInt()
+    private const val SAND = 0xFFE8D9BC.toInt()     // warm gold — premium on-dark alt
     private const val SURFACE = 0x221F1A            // warm surface, alpha applied from opacity
 
     fun textColorArgb(style: WidgetStyle): Int = when (style.color) {
         WidgetColor.CREAM -> CREAM
         WidgetColor.GREEN -> GREEN
-        WidgetColor.CHARCOAL -> CHARCOAL
+        WidgetColor.SAND -> SAND
     }
 
     fun timeSizeSp(style: WidgetStyle): Float = when (style.size) {
