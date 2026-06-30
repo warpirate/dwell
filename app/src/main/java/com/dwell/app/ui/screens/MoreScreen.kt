@@ -28,6 +28,8 @@ fun MoreScreen(
     onSignIn: () -> Unit,
     onSignOut: () -> Unit,
     onOpenFavorites: () -> Unit,
+    isPremium: Boolean,
+    onUnlock: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     DwellScaffold(modifier = modifier) {
@@ -47,6 +49,20 @@ fun MoreScreen(
                 onClick = onOpenFavorites,
                 leadingIcon = painterResource(R.drawable.ic_heart_outline),
             )
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+            if (isPremium) {
+                SettingsRow(
+                    title = stringResource(R.string.unlock_unlocked),
+                    onClick = {},
+                    leadingIcon = painterResource(R.drawable.ic_check),
+                )
+            } else {
+                SettingsRow(
+                    title = stringResource(R.string.unlock_title),
+                    onClick = onUnlock,
+                    leadingIcon = painterResource(R.drawable.ic_check),
+                )
+            }
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
         }
     }

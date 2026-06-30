@@ -64,4 +64,12 @@
     <string name="account_err_network">Check your connection and try again.</string>
     <string name="account_err_unknown">Couldn\'t sign you in. Try again.</string>
     <string name="cd_toggle_password">Show or hide password</string>
+
+    <!-- Unlock / premium -->
+    <string name="unlock_title">Unlock Dwell</string>
+    <string name="unlock_subtitle">Remove ads and unlock matched widgets and home styles.</string>
+    <string name="unlock_unlocked">Unlocked</string>
+    <string name="unlock_thanks">Thanks — everything\'s unlocked.</string>
+    <string name="unlock_cancelled">No worries, maybe later.</string>
+    <string name="unlock_error">Couldn\'t complete the purchase. Try again.</string>
 </resources>

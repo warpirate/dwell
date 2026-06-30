@@ -1,5 +1,6 @@
 package com.dwell.app.ui
 
+import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,6 +37,7 @@ import com.dwell.app.ui.preview.PreviewScreen
 import com.dwell.app.ui.preview.PreviewViewModel
 import com.dwell.app.ui.screens.MoreScreen
 import com.dwell.app.ui.screens.WidgetsScreen
+import com.dwell.app.ui.unlock.UnlockViewModel
 import com.dwell.app.ui.wallpapers.WallpapersScreen
 
 private const val ROUTE_MAIN = "main"
@@ -141,12 +144,17 @@ private fun MainShell(
             }
             composable(DwellDestination.WIDGETS.route) { WidgetsScreen() }
             composable(DwellDestination.MORE.route) {
+                val unlockViewModel: UnlockViewModel = hiltViewModel()
+                val isPremium by unlockViewModel.isPremium.collectAsStateWithLifecycle()
+                val activity = LocalContext.current as Activity
                 MoreScreen(
                     isSignedIn = account.isSignedIn,
                     email = account.email,
                     onSignIn = onOpenSignIn,
                     onSignOut = accountVm::signOut,
                     onOpenFavorites = onOpenFavorites,
+                    isPremium = isPremium,
+                    onUnlock = { unlockViewModel.unlock(activity) },
                 )
             }
         }
