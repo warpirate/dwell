@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.dwell.app.data.local.CategoryDao
 import com.dwell.app.data.local.DwellDatabase
+import com.dwell.app.data.local.FavoriteDao
 import com.dwell.app.data.local.WallpaperDao
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
@@ -45,4 +46,7 @@ object DataModule {
 
     @Provides
     fun provideCategoryDao(database: DwellDatabase): CategoryDao = database.categoryDao()
+
+    @Provides
+    fun provideFavoriteDao(database: DwellDatabase): FavoriteDao = database.favoriteDao()
 }
