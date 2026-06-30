@@ -90,6 +90,11 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.crashlytics)
 
+    // Sign-in (Credential Manager + Google ID)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+
     // Debug-only tooling
     debugImplementation(libs.androidx.ui.tooling)
 
