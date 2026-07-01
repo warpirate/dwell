@@ -1,52 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Editorial date: big Fraunces day number (bundled @font/fraunces), a green tracked
-     weekday, an AA-muted month + year. Self-updating via TextClock. RemoteViews-safe:
-     no <View>, no downloadable font, static radius, shared @drawable/widget_bg. -->
+<!-- Editorial date poster: a huge Fraunces day number pinned to the top, the green
+     weekday + AA-muted month/year pinned to the bottom, so the content spans the whole
+     cell instead of floating in the middle. The day TextClock is weighted (height=0dp,
+     weight=1) to eat all the free vertical space — RemoteViews-safe (no <Space>/<View>,
+     bundled font, static radius, shared @drawable/widget_bg). -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="start|center_vertical"
     android:background="@drawable/widget_bg"
-    android:paddingHorizontal="20dp"
-    android:paddingVertical="18dp">
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="16dp">
 
     <TextClock
         android:id="@+id/widget_day"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="start|top"
         android:fontFamily="@font/fraunces"
         android:includeFontPadding="false"
         android:format12Hour="d"
         android:format24Hour="d"
-        android:letterSpacing="-0.02"
+        android:letterSpacing="-0.03"
         android:textColor="#ECE7DD"
-        android:textSize="60sp" />
+        android:textSize="84sp" />
 
     <TextClock
         android:id="@+id/widget_weekday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:fontFamily="sans-serif-medium"
         android:textAllCaps="true"
         android:letterSpacing="0.16"
         android:format12Hour="EEEE"
         android:format24Hour="EEEE"
         android:textColor="#6E9576"
-        android:textSize="13sp" />
+        android:textSize="15sp" />
 
     <TextClock
         android:id="@+id/widget_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="sans-serif-medium"
         android:textAllCaps="true"
         android:letterSpacing="0.14"
         android:format12Hour="MMMM yyyy"
         android:format24Hour="MMMM yyyy"
         android:textColor="#A89F8E"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 </LinearLayout>
