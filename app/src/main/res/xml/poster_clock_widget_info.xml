@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Poster clock: wide 4x2 hero. updatePeriodMillis = 30min drives the slow palette
+     drift (the time itself ticks live via TextClock, so this only repaints the sky). -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="110dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_poster"
+    android:previewLayout="@layout/widget_poster"
+    android:description="@string/widgets_clock_subtitle"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen" />

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Poster clock: a full-bleed painted scene (poster_bg, set to a per-hour Bitmap by
+     PosterClockWidgetProvider) with live TextClock time + date stacked on top, bottom-
+     anchored over the baked scrim. The FrameLayout background is a static golden gradient
+     so the picker preview and the pre-bitmap frame look intentional (the ImageView covers
+     it at runtime). RemoteViews-safe: ImageView scene + ImageView rule/dot, bundled
+     @font/fraunces, TextClock for the self-updating fields. System rounds corners on 12+. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/poster_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/poster_preview">
+
+    <ImageView
+        android:id="@+id/poster_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp">
+
+        <TextClock
+            android:id="@+id/poster_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/fraunces"
+            android:includeFontPadding="false"
+            android:format12Hour="h:mm"
+            android:format24Hour="H:mm"
+            android:letterSpacing="-0.02"
+            android:shadowColor="#66000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="12"
+            android:textColor="#F1ECE2"
+            android:textSize="54sp" />
+
+        <ImageView
+            android:id="@+id/poster_rule"
+            android:layout_width="52dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="11dp"
+            android:background="@drawable/widget_rule"
+            android:contentDescription="@null" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/poster_dot"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginEnd="9dp"
+                android:src="@drawable/widget_dot"
+                android:contentDescription="@null" />
+
+            <TextClock
+                android:id="@+id/poster_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"
+                android:letterSpacing="0.17"
+                android:format12Hour="EEEE · MMM d"
+                android:format24Hour="EEEE · MMM d"
+                android:shadowColor="#59000000"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="6"
+                android:textColor="#F1ECE2"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

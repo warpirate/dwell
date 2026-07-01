@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Static golden-hour gradient behind the poster clock: shown in the widget picker
+     preview and for the frame before the per-hour Bitmap lands. Mirrors the 18:00
+     keyframe in PosterRenderer so the preview reads as the real thing. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="26dp" />
+    <gradient
+        android:angle="270"
+        android:startColor="#732a52"
+        android:centerColor="#df5a3c"
+        android:endColor="#f6a15c"
+        android:centerY="0.5" />
+</shape>
