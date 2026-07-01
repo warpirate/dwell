@@ -8,6 +8,7 @@ import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PendingPurchasesParams
+import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
@@ -67,14 +68,7 @@ class BillingRepositoryImpl @Inject constructor(
         pending = deferred
         runCatching {
             ensureConnected()
-            val product = QueryProductDetailsParams.Product.newBuilder()
-                .setProductId(productId)
-                .setProductType(BillingClient.ProductType.INAPP)
-                .build()
-            val details = client.queryProductDetails(
-                QueryProductDetailsParams.newBuilder().setProductList(listOf(product)).build(),
-            ).productDetailsList?.firstOrNull()
-                ?: return PurchaseResult.Error("product not found")
+            val details = queryDetails() ?: return PurchaseResult.Error("product not found")
 
             val params = BillingFlowParams.newBuilder()
                 .setProductDetailsParamsList(
@@ -87,6 +81,22 @@ class BillingRepositoryImpl @Inject constructor(
             client.launchBillingFlow(activity, params)
         }.onFailure { return PurchaseResult.Error(it.message ?: "billing setup failed") }
         return deferred.await()
+    }
+
+    override suspend fun formattedPrice(): String? = runCatching {
+        ensureConnected()
+        queryDetails()?.oneTimePurchaseOfferDetails?.formattedPrice
+    }.getOrNull()
+
+    /** Query the single INAPP unlock product's details. Assumes the client is connected. */
+    private suspend fun queryDetails(): ProductDetails? {
+        val product = QueryProductDetailsParams.Product.newBuilder()
+            .setProductId(productId)
+            .setProductType(BillingClient.ProductType.INAPP)
+            .build()
+        return client.queryProductDetails(
+            QueryProductDetailsParams.newBuilder().setProductList(listOf(product)).build(),
+        ).productDetailsList?.firstOrNull()
     }
 
     private fun verify(purchase: Purchase, deferred: CompletableDeferred<PurchaseResult>) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.dwell.app.data.billing.BillingRepository
 import com.dwell.app.data.billing.EntitlementRepository
 import com.dwell.app.data.widget.WidgetColor
+import com.dwell.app.data.widget.WidgetPreset
 import com.dwell.app.data.widget.WidgetSize
 import com.dwell.app.data.widget.WidgetStyle
 import com.dwell.app.data.widget.WidgetStyleStore
@@ -14,6 +15,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,13 +32,34 @@ class WidgetConfigViewModel @Inject constructor(
     val isPremium: StateFlow<Boolean> = entitlements.observePremium()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
-    private val _draft = MutableStateFlow(WidgetStyle.Default)
+    private val _draft = MutableStateFlow(WidgetPreset.Default.style)
     val draft: StateFlow<WidgetStyle> = _draft.asStateFlow()
+
+    /** The preset the draft currently matches, or null for a custom (engine) style. */
+    val selected: StateFlow<WidgetPreset?> = _draft
+        .map { WidgetPreset.of(it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), WidgetPreset.Default)
+
+    /** True when the current selection is a premium option and the user hasn't unlocked. */
+    val needsUnlock: StateFlow<Boolean> = combine(_draft, isPremium) { style, premium ->
+        !premium && WidgetPreset.of(style)?.free != true
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    private val _priceLabel = MutableStateFlow(FALLBACK_PRICE)
+    val priceLabel: StateFlow<String> = _priceLabel.asStateFlow()
+
+    init {
+        viewModelScope.launch { _priceLabel.value = billing.formattedPrice() ?: FALLBACK_PRICE }
+    }
 
     fun load(appWidgetId: Int) {
         viewModelScope.launch { _draft.value = store.get(appWidgetId) }
     }
 
+    /** Pick a curated preset. Free presets apply; premium presets preview (the tease). */
+    fun selectPreset(preset: WidgetPreset) = _draft.update { preset.style }
+
+    // The open style engine — premium only, used by the inline controls.
     fun setColor(color: WidgetColor) = _draft.update { it.copy(color = color) }
     fun setSize(size: WidgetSize) = _draft.update { it.copy(size = size) }
     fun setOpacity(opacity: Int) = _draft.update { it.copy(opacity = opacity).coerced() }
@@ -46,4 +70,8 @@ class WidgetConfigViewModel @Inject constructor(
     }
 
     suspend fun save(appWidgetId: Int) = store.save(appWidgetId, _draft.value)
+
+    private companion object {
+        const val FALLBACK_PRICE = "₹299"
+    }
 }

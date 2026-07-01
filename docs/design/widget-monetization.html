@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dwell · Widgets — reframed free/premium + paywall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,380;9..144,460;9..144,560&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#12100E;            /* app background  */
+    --surface:#221F1A;       /* card / control  */
+    --surface-2:#2A2620;     /* raised control  */
+    --cream:#ECE7DD;         /* primary text    */
+    --muted:#A89F8E;         /* caption / muted */
+    --faint:#6F675A;         /* disabled-ish    */
+    --green:#6E9576;         /* accent mark (AA over warm) */
+    --green-deep:#3A5A40;    /* deep accent     */
+    --gold:#E8D9BC;          /* premium warm alt */
+    --coral:#D9A38C;         /* wallpaper-matched sample */
+    --sky:#9FB6C4;           /* wallpaper-matched sample */
+    --hair:rgba(236,231,221,.09);
+    --hair-strong:rgba(236,231,221,.14);
+    --r-sm:8px; --r-md:14px; --r-lg:24px; --r-xl:30px;
+    --gut:22px;
+    --ui:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    --display:"Fraunces",Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#0B0A08;
+    color:var(--cream);
+    font-family:var(--ui);
+    -webkit-font-smoothing:antialiased;
+    padding:48px 24px 80px;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+  }
+  .lede{max-width:860px;text-align:center;margin-bottom:28px}
+  .lede h1{font-family:var(--display);font-weight:460;font-size:30px;letter-spacing:-.01em;color:var(--cream)}
+  .lede p{color:var(--muted);font-size:14.5px;line-height:1.6;margin-top:10px}
+  .lede .tokens{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+  .tok{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);
+       background:rgba(255,255,255,.03);border:1px solid var(--hair);border-radius:999px;padding:5px 11px}
+  .tok i{width:11px;height:11px;border-radius:50%;display:inline-block}
+
+  .stage{display:flex;gap:40px;flex-wrap:wrap;justify-content:center;align-items:flex-start}
+  .framewrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .frametag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .frametag b{color:var(--cream);font-weight:600}
+
+  /* ---- phone frame ---- */
+  .phone{
+    width:390px;border-radius:44px;background:#000;
+    padding:10px;box-shadow:0 40px 90px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.05);
+    position:relative;
+  }
+  .screen{
+    position:relative;width:370px;min-height:812px;border-radius:35px;overflow:hidden;
+    background:var(--bg);display:flex;flex-direction:column;
+  }
+  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 6px;
+    font-size:13px;color:var(--cream);font-weight:500;flex:0 0 auto}
+  .statusbar .r{display:flex;gap:7px;align-items:center;opacity:.9}
+  .statusbar .r span{width:15px;height:11px;background:var(--cream);border-radius:2px;display:inline-block}
+  .scroll{flex:1 1 auto;overflow:visible;position:relative;display:flex;flex-direction:column}
+  .content{padding:6px var(--gut) 0}
+
+  /* ---- app bar ---- */
+  .appbar{display:flex;align-items:center;gap:14px;padding:10px 0 18px}
+  .appbar .chev{width:22px;height:22px;color:var(--muted)}
+  .appbar h2{font-family:var(--display);font-weight:460;font-size:23px;letter-spacing:-.01em}
+  .appbar .x{margin-left:auto;color:var(--muted);width:22px;height:22px}
+
+  /* ---- widget preview card (RemoteViews-faithful: flat gradient, static radius, no blur) ---- */
+  .widget{
+    position:relative;border-radius:var(--r-lg);
+    background:linear-gradient(168deg,#322D26 0%,#221E18 42%,#15110C 100%);
+    border:1px solid var(--hair);
+    box-shadow:inset 0 1px 0 rgba(236,231,221,.06);
+    padding:22px 24px;overflow:hidden;
+  }
+  .widget .time{font-family:var(--display);font-weight:460;letter-spacing:-.015em;line-height:.92;color:var(--cream)}
+  .widget .rule{height:1px;width:52px;background:var(--hair-strong);margin:14px 0 12px}
+  .widget .daterow{display:flex;align-items:center;gap:10px}
+  .widget .dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:0 0 auto}
+  .widget .date{font-size:11.5px;letter-spacing:.19em;text-transform:uppercase;color:var(--muted);font-weight:500}
+
+  .hero .time{font-size:66px}
+  /* variants */
+  .w-sage .time{color:var(--cream)} .w-sage .dot{background:var(--green)} .w-sage .date{color:var(--green)}
+  .w-gold .time{color:var(--gold)} .w-gold .dot{background:var(--gold)}
+  .w-two .time em{font-style:normal;color:var(--green)}
+  .w-coral .time{color:#F0D9CC} .w-coral .dot{background:var(--coral)} .w-coral .date{color:var(--coral)}
+  .w-sky .time{color:#E4EDF2} .w-sky .dot{background:var(--sky)} .w-sky .date{color:var(--sky)}
+
+  .selectedwrap{position:relative}
+  .pill{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:6px;
+    background:rgba(18,16,14,.72);border:1px solid var(--hair-strong);
+    padding:5px 10px;border-radius:999px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .pill svg{width:11px;height:11px}
+
+  /* ---- section label ---- */
+  .seclabel{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    margin:26px 0 13px;display:flex;align-items:center;justify-content:space-between}
+  .seclabel .hint{letter-spacing:.02em;text-transform:none;font-size:11.5px;color:var(--faint)}
+
+  /* ---- preset rail ---- */
+  .rail{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:2px 0 4px}
+  .preset{cursor:pointer}
+  .preset .mini{
+    height:96px;border-radius:16px;border:1px solid var(--hair);
+    background:linear-gradient(168deg,#2E2A23,#161209);
+    padding:14px 15px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;
+  }
+  .preset.sel .mini{border-color:var(--cream);box-shadow:0 0 0 1px var(--cream)}
+  .preset .mini .mt{font-family:var(--display);font-weight:460;font-size:29px;line-height:.9;color:var(--cream)}
+  .preset .mini .mr{height:1px;width:30px;background:var(--hair-strong);margin:7px 0 6px}
+  .preset .mini .md{display:flex;align-items:center;gap:6px}
+  .preset .mini .md i{width:5px;height:5px;border-radius:50%;background:var(--green)}
+  .preset .mini .md span{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .preset .lockbadge{position:absolute;top:9px;right:9px;width:22px;height:22px;border-radius:50%;
+    background:rgba(18,16,14,.66);display:flex;align-items:center;justify-content:center}
+  .preset .lockbadge svg{width:11px;height:11px;color:var(--gold)}
+  .preset .cap{display:flex;align-items:center;gap:6px;margin-top:9px;padding:0 2px}
+  .preset .cap .nm{font-size:12.5px;color:var(--cream);font-weight:500}
+  .preset .cap .tg{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;margin-left:auto;font-weight:600}
+  .tg.free{color:var(--green)} .tg.prem{color:var(--gold)}
+  /* mini variants */
+  .m-sage .mt{color:var(--cream)} .m-sage .md i{background:var(--green)} .m-sage .md span{color:var(--green)}
+  .m-hair .mt{font-weight:380;color:var(--cream)} .m-hair .mr{width:44px}
+  .m-gold .mt{color:var(--gold)} .m-gold .md i{background:var(--gold)}
+  .m-two .mt em{font-style:normal;color:var(--green)}
+  .m-match .mini{background:linear-gradient(168deg,#3a2c28,#17110d)}
+  .m-match .mt{color:#F0D9CC} .m-match .md i{background:var(--coral)} .m-match .md span{color:var(--coral)}
+
+  /* ---- customize (engine) row, locked ---- */
+  .enginerow{margin-top:22px;display:flex;align-items:center;gap:14px;padding:16px 18px;
+    border-radius:var(--r-md);background:var(--surface);border:1px solid var(--hair)}
+  .enginerow .ic{width:38px;height:38px;border-radius:11px;background:var(--surface-2);
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .enginerow .ic svg{width:19px;height:19px;color:var(--gold)}
+  .enginerow .tx b{font-size:14px;color:var(--cream);font-weight:600;display:block}
+  .enginerow .tx span{font-size:12px;color:var(--muted);display:block;margin-top:2px;line-height:1.45}
+  .enginerow .go{margin-left:auto;color:var(--faint);width:20px;height:20px;flex:0 0 auto}
+
+  /* ---- bottom CTA (sticky feel) ---- */
+  .ctabar{margin-top:auto;padding:22px var(--gut) 26px;
+    background:linear-gradient(to top,var(--bg) 62%,rgba(18,16,14,0));display:flex;flex-direction:column;gap:9px}
+  .btn{height:56px;border-radius:16px;border:0;font-family:var(--ui);font-size:15.5px;font-weight:600;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;letter-spacing:.01em}
+  .btn-primary{background:var(--green-deep);color:#F4F1EA}
+  .btn-primary.warm{background:var(--green-deep)}
+  .btn svg{width:17px;height:17px}
+  .btn-ghost{background:transparent;color:var(--muted);height:auto;padding:6px;font-weight:500;font-size:13.5px}
+  .ctahint{text-align:center;font-size:11.5px;color:var(--faint)}
+
+  /* ---- paywall specifics ---- */
+  .pw-head{padding:8px 0 4px}
+  .pw-head .kicker{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:600}
+  .pw-head h2{font-family:var(--display);font-weight:460;font-size:30px;line-height:1.08;letter-spacing:-.015em;margin-top:12px}
+  .pw-head p{color:var(--muted);font-size:13.5px;line-height:1.6;margin-top:11px}
+
+  .match{margin-top:22px;border-radius:var(--r-lg);border:1px solid var(--hair);overflow:hidden;background:var(--surface)}
+  .match .mhdr{display:flex;align-items:center;gap:8px;padding:14px 18px 10px}
+  .match .mhdr svg{width:15px;height:15px;color:var(--green)}
+  .match .mhdr b{font-size:12.5px;letter-spacing:.03em;color:var(--cream);font-weight:600}
+  .match .pair{display:flex;align-items:stretch;gap:12px;padding:4px 16px 18px}
+  .wall{flex:1;border-radius:14px;min-height:118px;position:relative;overflow:hidden;
+    display:flex;align-items:flex-end;padding:11px}
+  .wall.dusk{background:linear-gradient(150deg,#c98a6a,#8a5a6e 55%,#3d3550)}
+  .wall.forest{background:linear-gradient(150deg,#6d8a6f,#3f5f4a 55%,#20302a)}
+  .wall .wl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.82);font-weight:600}
+  .arrow{align-self:center;color:var(--faint);flex:0 0 auto;width:18px;height:18px}
+  .match .mw{flex:1;border-radius:14px;border:1px solid var(--hair);
+    background:linear-gradient(168deg,#2E2A23,#15110C);padding:13px 14px;display:flex;flex-direction:column;justify-content:center}
+  .match .mw .mt{font-family:var(--display);font-weight:460;font-size:30px;line-height:.9}
+  .match .mw .mr{height:1px;width:28px;background:var(--hair-strong);margin:7px 0 6px}
+  .match .mw .md{display:flex;align-items:center;gap:6px}
+  .match .mw .md i{width:5px;height:5px;border-radius:50%}
+  .match .mw .md span{font-size:8px;letter-spacing:.13em;text-transform:uppercase}
+  .mw.coral .mt{color:#F2DDD0}.mw.coral .md i{background:var(--coral)}.mw.coral .md span{color:var(--coral)}
+  .mw.sage .mt{color:#E7EFE6}.mw.sage .md i{background:#9ab89a}.mw.sage .md span{color:#9ab89a}
+  .match .mcap{padding:0 18px 16px;font-size:12px;color:var(--muted);line-height:1.55}
+
+  .feat{margin-top:24px;display:flex;flex-direction:column;gap:2px}
+  .feat .fi{display:flex;align-items:flex-start;gap:13px;padding:12px 2px;border-bottom:1px solid var(--hair)}
+  .feat .fi:last-child{border-bottom:0}
+  .feat .fi .ck{width:22px;height:22px;border-radius:50%;background:rgba(110,149,118,.16);
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:1px}
+  .feat .fi .ck svg{width:12px;height:12px;color:var(--green)}
+  .feat .fi .ft b{font-size:14px;color:var(--cream);font-weight:600;display:block}
+  .feat .fi .ft span{font-size:12px;color:var(--muted);display:block;margin-top:2px;line-height:1.5}
+
+  .gallery{margin:22px calc(-1 * var(--gut)) 0;padding:0 var(--gut);display:flex;gap:11px;overflow-x:auto;scrollbar-width:none}
+  .gallery::-webkit-scrollbar{display:none}
+  .gcard{flex:0 0 auto;width:104px;height:78px;border-radius:14px;border:1px solid var(--hair);
+    padding:12px;display:flex;flex-direction:column;justify-content:center;
+    background:linear-gradient(168deg,#2E2A23,#15110C)}
+  .gcard .mt{font-family:var(--display);font-weight:460;font-size:23px;line-height:.9;color:var(--cream)}
+  .gcard .md{display:flex;gap:5px;align-items:center;margin-top:8px}
+  .gcard .md i{width:4px;height:4px;border-radius:50%;background:var(--green)}
+  .gcard .md span{font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .g-gold .mt{color:var(--gold)}.g-gold .md i{background:var(--gold)}
+  .g-coral .mt{color:#F0D9CC}.g-coral .md i{background:var(--coral)}
+  .g-sky .mt{color:#E4EDF2}.g-sky .md i{background:var(--sky)}
+  .g-two .mt em{font-style:normal;color:var(--green)}
+
+  .reassure{display:flex;align-items:center;gap:9px;justify-content:center;margin-top:22px;
+    font-size:12px;color:var(--muted);text-align:center;line-height:1.5}
+  .reassure svg{width:14px;height:14px;color:var(--green);flex:0 0 auto}
+
+  .price-note{text-align:center;font-size:11.5px;color:var(--faint);margin-top:2px}
+  .annot{max-width:360px;text-align:center;color:var(--muted);font-size:12px;line-height:1.6;margin-top:6px}
+  .annot b{color:var(--cream)}
+</style>
+</head>
+<body>
+
+  <div class="lede">
+    <h1>Widgets — reframed</h1>
+    <p>Free stops being a one-clock demo and becomes a set of <b style="color:var(--cream)">finished, lovable looks — including the brand green</b>. Premium stops gating colours and starts selling the thing worth paying for: an open style engine and <b style="color:var(--cream)">wallpaper-matched</b> widgets.</p>
+    <div class="tokens">
+      <span class="tok"><i style="background:#12100E;border:1px solid #333"></i>#12100E bg</span>
+      <span class="tok"><i style="background:#221F1A"></i>#221F1A surface</span>
+      <span class="tok"><i style="background:#ECE7DD"></i>#ECE7DD cream</span>
+      <span class="tok"><i style="background:#A89F8E"></i>#A89F8E muted</span>
+      <span class="tok"><i style="background:#6E9576"></i>#6E9576 green mark</span>
+      <span class="tok"><i style="background:#E8D9BC"></i>#E8D9BC gold</span>
+      <span class="tok">Fraunces display</span>
+    </div>
+  </div>
+
+  <div class="stage">
+
+    <!-- ============ SCREEN 1 · WIDGET PICKER ============ -->
+    <div class="framewrap">
+      <div class="frametag"><b>1</b> · Widget picker &nbsp;—&nbsp; free preset selected</div>
+      <div class="phone"><div class="screen">
+        <div class="statusbar">
+          <span>10:24</span>
+          <div class="r"><span style="width:16px;clip-path:polygon(0 100%,100% 100%,100% 0)"></span><span></span></div>
+        </div>
+
+        <div class="scroll">
+          <div class="content">
+            <div class="appbar">
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+              <h2>Clock widget</h2>
+            </div>
+
+            <!-- live preview of the SELECTED preset (Sage — free, uses brand green) -->
+            <div class="selectedwrap">
+              <div class="widget hero w-sage">
+                <div class="time">9:41</div>
+                <div class="rule"></div>
+                <div class="daterow"><div class="dot"></div><div class="date">Wed, Jul 1</div></div>
+              </div>
+            </div>
+
+            <div class="seclabel"><span>Presets</span><span class="hint">Tap any to preview</span></div>
+
+            <div class="rail">
+              <!-- FREE -->
+              <div class="preset sel">
+                <div class="mini m-sage">
+                  <div class="mt">9:41</div><div class="mr"></div>
+                  <div class="md"><i></i><span>Wed</span></div>
+                </div>
+                <div class="cap"><span class="nm">Sage</span><span class="tg free">Free</span></div>
+              </div>
+              <div class="preset">
+                <div class="mini">
+                  <div class="mt">9:41</div><div class="mr"></div>
+                  <div class="md"><i></i><span>Wed</span></div>
+                </div>
+                <div class="cap"><span class="nm">Editorial</span><span class="tg free">Free</span></div>
+              </div>
+              <div class="preset">
+                <div class="mini m-hair">
+                  <div class="mt">9:41</div><div class="mr"></div>
+                  <div class="md"><i></i><span>Wed</span></div>
+                </div>
+                <div class="cap"><span class="nm">Hairline</span><span class="tg free">Free</span></div>
+              </div>
+              <!-- PREMIUM (locked, still tappable) -->
+              <div class="preset">
+                <div class="mini m-gold">
+                  <div class="lockbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+                  <div class="mt">9:41</div><div class="mr"></div>
+                  <div class="md"><i></i><span>Wed</span></div>
+                </div>
+                <div class="cap"><span class="nm">Gold</span><span class="tg prem">Premium</span></div>
+              </div>
+              <div class="preset">
+                <div class="mini m-match">
+                  <div class="lockbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+                  <div class="mt">9:41</div><div class="mr"></div>
+                  <div class="md"><i></i><span>Wed</span></div>
+                </div>
+                <div class="cap"><span class="nm">Match ✦</span><span class="tg prem">Premium</span></div>
+              </div>
+              <div class="preset">
+                <div class="mini m-two">
+                  <div class="lockbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+                  <div class="mt">9<em>:</em>41</div><div class="mr"></div>
+                  <div class="md"><i></i><span>Wed</span></div>
+                </div>
+                <div class="cap"><span class="nm">Two-tone</span><span class="tg prem">Premium</span></div>
+              </div>
+            </div>
+
+            <!-- open style engine, premium -->
+            <div class="enginerow">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg></div>
+              <div class="tx"><b>Fine-tune it yourself</b><span>Any colour, size, opacity &amp; font — mix your own.</span></div>
+              <svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+
+          </div>
+
+          <div class="ctabar">
+            <button class="btn btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Add widget
+            </button>
+            <div class="ctahint">Sage is free · pin it straight to your home screen</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="annot">Tap a <b>locked</b> preset and the preview still updates (the tease) — the CTA swaps to <b>“Unlock everything”</b> → Screen 2.</div>
+    </div>
+
+    <!-- ============ SCREEN 2 · PAYWALL ============ -->
+    <div class="framewrap">
+      <div class="frametag"><b>2</b> · Paywall &nbsp;—&nbsp; what you get</div>
+      <div class="phone"><div class="screen">
+        <div class="statusbar">
+          <span>10:24</span>
+          <div class="r"><span style="width:16px;clip-path:polygon(0 100%,100% 100%,100% 0)"></span><span></span></div>
+        </div>
+
+        <div class="scroll">
+          <div class="content">
+            <div class="appbar">
+              <h2 style="font-size:20px">Dwell</h2>
+              <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+
+            <div class="pw-head">
+              <div class="kicker">One unlock</div>
+              <h2>Make every widget<br/>match your home.</h2>
+              <p>Dwell reads your wallpaper and tints your widgets to sit inside it — plus the full style engine and every preset. Yours forever, once.</p>
+            </div>
+
+            <!-- WALLPAPER → WIDGET MATCH (the moat, top billing) -->
+            <div class="match">
+              <div class="mhdr">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18" opacity=".0"/><circle cx="12" cy="12" r="9"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+                <b>Wallpaper-matched</b>
+              </div>
+              <div class="pair">
+                <div class="wall dusk"><span class="wl">Dusk</span></div>
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="mw coral">
+                  <div class="mt">9:41</div><div class="mr"></div>
+                  <div class="md"><i></i><span>Wed</span></div>
+                </div>
+              </div>
+              <div class="pair" style="padding-top:0">
+                <div class="wall forest"><span class="wl">Forest</span></div>
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                <div class="mw sage">
+                  <div class="mt">9:41</div><div class="mr"></div>
+                  <div class="md"><i></i><span>Wed</span></div>
+                </div>
+              </div>
+              <div class="mcap">Change your wallpaper, the widget follows. No fiddling.</div>
+            </div>
+
+            <!-- premium gallery -->
+            <div class="seclabel" style="margin-top:26px"><span>Every preset &amp; layout</span></div>
+            <div class="gallery">
+              <div class="gcard g-gold"><div class="mt">9:41</div><div class="md"><i></i><span>Gold</span></div></div>
+              <div class="gcard g-two"><div class="mt">9<em style="font-style:normal;color:var(--green)">:</em>41</div><div class="md"><i></i><span>Two-tone</span></div></div>
+              <div class="gcard g-coral"><div class="mt">9:41</div><div class="md"><i></i><span>Coral</span></div></div>
+              <div class="gcard g-sky"><div class="mt">9:41</div><div class="md"><i></i><span>Sky</span></div></div>
+              <div class="gcard"><div class="mt" style="font-weight:380">9:41</div><div class="md"><i></i><span>Hairline+</span></div></div>
+            </div>
+
+            <!-- checklist -->
+            <div class="feat">
+              <div class="fi"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></div>
+                <div class="ft"><b>Wallpaper-matched palettes</b><span>Widgets auto-coordinate with whatever you set.</span></div></div>
+              <div class="fi"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></div>
+                <div class="ft"><b>The full style engine</b><span>Any colour, size, opacity and font — mix your own.</span></div></div>
+              <div class="fi"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></div>
+                <div class="ft"><b>Every preset &amp; layout</b><span>Gold, Two-tone, Stacked, Hairline — the whole library.</span></div></div>
+              <div class="fi"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></div>
+                <div class="ft"><b>New layouts as they ship</b><span>Calendar, notes and battery widgets included.</span></div></div>
+            </div>
+
+            <div class="reassure">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              One-time purchase. No subscription. Yours across devices.
+            </div>
+
+          </div>
+
+          <div class="ctabar">
+            <button class="btn btn-primary warm">Unlock Dwell — ₹299, once</button>
+            <button class="btn btn-ghost">Maybe later</button>
+          </div>
+        </div>
+      </div></div>
+      <div class="annot">Green is the <b>mark</b> (dot, checks, kicker) and the <b>CTA fill</b> — matching the real <b>DwellPrimaryButton</b>. Every widget preview is flat-gradient + static-radius, so it maps 1:1 to RemoteViews.</div>
+    </div>
+
+  </div>
+</body>
+</html>

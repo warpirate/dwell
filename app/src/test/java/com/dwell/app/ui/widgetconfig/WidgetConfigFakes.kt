@@ -28,7 +28,8 @@ class FakeEntitlements(premium: Boolean) : EntitlementRepository {
     override fun observePremium(): Flow<Boolean> = flow
 }
 
-class FakeBilling : BillingRepository {
+class FakeBilling(private val price: String? = "₹299.00") : BillingRepository {
     override val productId = "unlock_premium"
     override suspend fun launchPurchase(activity: Activity): PurchaseResult = PurchaseResult.Verifying
+    override suspend fun formattedPrice(): String? = price
 }
