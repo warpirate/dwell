@@ -8,6 +8,9 @@ import com.dwell.app.data.billing.EntitlementRepository
 import com.dwell.app.data.widget.WidgetColor
 import com.dwell.app.data.widget.WidgetPreset
 import com.dwell.app.data.widget.WidgetSize
+import com.dwell.app.data.widget.WallpaperPaletteExtractor
+import com.dwell.app.data.widget.WallpaperSample
+import com.dwell.app.data.widget.SampleWallpaper
 import com.dwell.app.data.widget.WidgetStyle
 import com.dwell.app.data.widget.WidgetStyleStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -58,6 +61,18 @@ class WidgetConfigViewModel @Inject constructor(
 
     /** Pick a curated preset. Free presets apply; premium presets preview (the tease). */
     fun selectPreset(preset: WidgetPreset) = _draft.update { preset.style }
+
+    /**
+     * The moat, demonstrated: sample a wallpaper we own, extract its palette, and recolour the
+     * widget text to match. (POC uses a generated stand-in wallpaper; the real path samples the
+     * bitmap the user applied from Dwell.)
+     */
+    fun matchWallpaper(sample: WallpaperSample) {
+        viewModelScope.launch {
+            val argb = WallpaperPaletteExtractor.match(SampleWallpaper.of(sample))
+            _draft.update { it.copy(matchedArgb = argb) }
+        }
+    }
 
     // The open style engine — premium only, used by the inline controls.
     fun setColor(color: WidgetColor) = _draft.update { it.copy(color = color) }

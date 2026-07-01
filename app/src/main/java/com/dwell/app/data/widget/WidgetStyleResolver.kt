@@ -8,7 +8,7 @@ object WidgetStyleResolver {
     private const val SAND = 0xFFE8D9BC.toInt()     // warm gold — premium on-dark alt
     private const val SURFACE = 0x221F1A            // warm surface, alpha applied from opacity
 
-    fun textColorArgb(style: WidgetStyle): Int = when (style.color) {
+    fun textColorArgb(style: WidgetStyle): Int = style.matchedArgb ?: when (style.color) {
         WidgetColor.CREAM -> CREAM
         WidgetColor.GREEN -> GREEN
         WidgetColor.SAND -> SAND

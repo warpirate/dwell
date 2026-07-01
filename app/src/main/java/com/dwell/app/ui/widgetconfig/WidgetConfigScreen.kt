@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.dwell.app.R
+import com.dwell.app.data.widget.WallpaperSample
 import com.dwell.app.data.widget.WidgetColor
 import com.dwell.app.data.widget.WidgetPreset
 import com.dwell.app.data.widget.WidgetSize
@@ -68,6 +69,7 @@ fun WidgetConfigScreen(
     onSelectPreset: (WidgetPreset) -> Unit,
     onColor: (WidgetColor) -> Unit,
     onSize: (WidgetSize) -> Unit,
+    onMatchWallpaper: (WallpaperSample) -> Unit,
     onOpenPaywall: () -> Unit,
     onAdd: () -> Unit,
     modifier: Modifier = Modifier,
@@ -103,6 +105,9 @@ fun WidgetConfigScreen(
                     PresetCell(p, selected == p, locked = !isPremium, Modifier.weight(1f), onSelectPreset)
                 }
             }
+
+            Spacer(Modifier.height(DwellSpacing.xl))
+            MatchSection(onMatchWallpaper)
 
             Spacer(Modifier.height(DwellSpacing.xl))
             if (isPremium) {
@@ -289,9 +294,43 @@ private fun LockedEngineRow(onOpenPaywall: () -> Unit) {
     }
 }
 
+/** POC: prove the wallpaper-match pipeline — tap a wallpaper, the widget text recolours to match. */
+@Composable
+private fun MatchSection(onMatchWallpaper: (WallpaperSample) -> Unit) {
+    SectionLabel("Match your wallpaper")
+    Spacer(Modifier.height(DwellSpacing.sm))
+    Row(horizontalArrangement = Arrangement.spacedBy(DwellSpacing.sm)) {
+        WallpaperChip("Dusk", listOf(Color(0xFFC98A6A), Color(0xFF8A5A6E), Color(0xFF3D3550)),
+            Modifier.weight(1f)) { onMatchWallpaper(WallpaperSample.DUSK) }
+        WallpaperChip("Forest", listOf(Color(0xFF6D8A6F), Color(0xFF3F5F4A), Color(0xFF20302A)),
+            Modifier.weight(1f)) { onMatchWallpaper(WallpaperSample.FOREST) }
+    }
+}
+
+@Composable
+private fun WallpaperChip(label: String, colors: List<Color>, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Box(
+        modifier = modifier
+            .height(56.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(Brush.verticalGradient(colors))
+            .clickable(onClick = onClick)
+            .padding(12.dp),
+        contentAlignment = Alignment.BottomStart,
+    ) {
+        Text(
+            text = label.uppercase(),
+            color = Color.White,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+            letterSpacing = 1.2.sp,
+        )
+    }
+}
+
 @Composable
 private fun PreviewCard(style: WidgetStyle) {
-    val timeColor = textColorOf(style.color)
+    val timeColor = style.matchedArgb?.let { Color(it) } ?: textColorOf(style.color)
     val timeSp = when (style.size) {
         WidgetSize.SMALL -> 44.sp
         WidgetSize.MEDIUM -> 56.sp

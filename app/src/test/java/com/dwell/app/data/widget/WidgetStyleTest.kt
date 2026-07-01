@@ -30,4 +30,16 @@ class WidgetStyleTest {
         assertEquals(WidgetStyle.Default, WidgetStyle.decode("not-a-style"))
         assertEquals(WidgetStyle.Default, WidgetStyle.decode(""))
     }
+
+    @Test
+    fun `matched color round-trips as an optional fourth field`() {
+        val style = WidgetStyle(WidgetColor.CREAM, WidgetSize.MEDIUM, 100, matchedArgb = 0xFFD9A38C.toInt())
+        assertEquals(style, WidgetStyle.decode(style.encode()))
+    }
+
+    @Test
+    fun `legacy three-field encoding still decodes with no matched color`() {
+        val decoded = WidgetStyle.decode("GREEN|LARGE|80")
+        assertEquals(WidgetStyle(WidgetColor.GREEN, WidgetSize.LARGE, 80, matchedArgb = null), decoded)
+    }
 }
