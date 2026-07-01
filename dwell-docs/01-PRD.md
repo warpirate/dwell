@@ -127,8 +127,8 @@ _Acceptance:_
 - Given any user, when they visit the public account-deletion web page, then they can request deletion without needing to open the app.
 
 **Monetization**
-- Free tier (with ads): all wallpapers, all widgets (in a default style), the launcher with the Zen home style. Widget customization (the style engine) is part of the premium unlock; widgets themselves are free.
-- One-time "unlock" IAP via Google Play Billing: removes ads **and** unlocks the coordinated layer — wallpaper-matched widget presets, plus extra launcher home styles as they ship.
+- Free tier (with ads): all wallpapers, all widgets, a curated set of finished widget **presets** (including Sage, which uses the brand green — the identity colour is never locked), and the launcher with the Zen home style. The free presets are genuinely usable on their own; the open style engine and the premium presets are the unlock.
+- One-time "unlock" IAP via Google Play Billing (placeholder **₹299**; the app shows Play's real localized price): removes ads **and** unlocks the full style engine + premium presets, and — as they ship — the coordinated layer (wallpaper-matched widget presets, extra launcher home styles).
 - Premium state stored as a `premium` flag on the user record and respected across devices.
 
 _Acceptance:_

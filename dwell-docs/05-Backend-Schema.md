@@ -85,7 +85,7 @@ Stored as a subcollection (not an array on the user doc) so favorites scale and 
 
 ## 2. What Is NOT in the Schema (v1)
 
-- **No wallpaper tiering.** All wallpapers and widgets are free, so wallpapers have no `isPremium`/`tier` field. The `premium` unlock gates only ads, the extra launcher home styles, and matched widget presets — all app-side feature flags, not per-wallpaper content. (If premium *content* ever ships in v2, add a `tier` field to `wallpapers` then. Not now.)
+- **No wallpaper tiering.** All wallpapers and widgets are free, so wallpapers have no `isPremium`/`tier` field. The `premium` unlock gates only app-side feature flags — the widget style engine + premium presets, ads, the extra launcher home styles, and (roadmap) matched widget presets — never per-wallpaper content, and never the free widget presets (which include the brand green). (If premium *content* ever ships in v2, add a `tier` field to `wallpapers` then. Not now.)
 - **No notes-widget sync.** Notes are local-only in v1 (TRD open question, recommended local). No Firestore collection for them.
 - **No search index.** `tags` is populated but there's no server-side search service in v1.
 
