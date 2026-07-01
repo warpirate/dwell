@@ -1,7 +1,6 @@
 package com.dwell.app.ui.screens
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +16,7 @@ import com.dwell.app.R
 import com.dwell.app.ui.components.DwellPrimaryButton
 import com.dwell.app.ui.components.DwellScaffold
 import com.dwell.app.ui.theme.DwellSpacing
-import com.dwell.app.widget.clock.ClockWidgetProvider
+import com.dwell.app.ui.widgetconfig.WidgetConfigActivity
 
 @Composable
 fun WidgetsScreen(modifier: Modifier = Modifier) {
@@ -37,11 +36,8 @@ fun WidgetsScreen(modifier: Modifier = Modifier) {
             DwellPrimaryButton(
                 text = stringResource(R.string.widgets_add),
                 onClick = {
-                    val manager = AppWidgetManager.getInstance(context)
-                    val provider = ComponentName(context, ClockWidgetProvider::class.java)
-                    if (manager.isRequestPinAppWidgetSupported) {
-                        manager.requestPinAppWidget(provider, null, null)
-                    }
+                    // Open the gallery (tease) — pick a style, then it pins the widget.
+                    context.startActivity(Intent(context, WidgetConfigActivity::class.java))
                 },
             )
             Spacer(Modifier.height(DwellSpacing.xl))

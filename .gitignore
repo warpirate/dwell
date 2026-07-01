@@ -39,3 +39,4 @@ seed/node_modules/
 # Any Firebase Admin SDK private key, wherever it lands (secret; never commit)
 *-firebase-adminsdk-*.json
 pglite-debug.log
+.superpowers/

@@ -6,6 +6,5 @@
     android:targetCellHeight="2"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget_clock"
-    android:configure="com.dwell.app.ui.widgetconfig.WidgetConfigActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />
