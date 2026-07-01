@@ -2,6 +2,7 @@ package com.dwell.app.ui.widgetconfig
 
 import app.cash.turbine.test
 import com.dwell.app.data.widget.WidgetColor
+import com.dwell.app.data.widget.WidgetPreset
 import com.dwell.app.data.widget.WidgetStyle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,5 +54,47 @@ class WidgetConfigViewModelTest {
         val vm = WidgetConfigViewModel(store, FakeBilling(), FakeEntitlements(premium = false))
         vm.load(7)
         assertEquals(WidgetColor.SAND, vm.draft.value.color)
+    }
+
+    @Test
+    fun `selecting the free green preset needs no unlock`() = runTest {
+        val vm = WidgetConfigViewModel(FakeWidgetStyleStore(), FakeBilling(), FakeEntitlements(premium = false))
+        vm.selectPreset(WidgetPreset.SAGE)
+        assertEquals(WidgetColor.GREEN, vm.draft.value.color)
+        vm.needsUnlock.test {
+            assertEquals(false, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `selecting a premium preset while free needs unlock`() = runTest {
+        val vm = WidgetConfigViewModel(FakeWidgetStyleStore(), FakeBilling(), FakeEntitlements(premium = false))
+        vm.selectPreset(WidgetPreset.GOLD)
+        vm.needsUnlock.test {
+            assertEquals(true, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `a premium user never needs to unlock a premium preset`() = runTest {
+        val vm = WidgetConfigViewModel(FakeWidgetStyleStore(), FakeBilling(), FakeEntitlements(premium = true))
+        vm.selectPreset(WidgetPreset.GOLD)
+        vm.needsUnlock.test {
+            assertEquals(false, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `price label comes from billing`() = runTest {
+        val vm = WidgetConfigViewModel(
+            FakeWidgetStyleStore(), FakeBilling(price = "₹249.00"), FakeEntitlements(premium = false),
+        )
+        vm.priceLabel.test {
+            assertEquals("₹249.00", awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }
