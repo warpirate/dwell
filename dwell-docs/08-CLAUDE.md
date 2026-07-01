@@ -53,6 +53,23 @@ Full specs live in the doc set (PRD, TRD, UI/UX, App Flow, Backend Schema, Imple
 
 ---
 
+## Widget vision (where widgets can go)
+
+Full research + roadmap: `docs/research/2026-07-01-widget-maximization-map.md`. Approved paywall/reframe mock: `docs/design/widget-monetization.html`. See also the `dwell-widget-monetization` memory.
+
+- **The bet:** widgets aren't a side feature — they're what fuses the wallpaper app + launcher into one coordinated product. Grow from one clock → a **wallpaper-aware widget system** (~10 types, 60+ curated looks) without losing the calm editorial identity.
+- **Our moat — wallpaper-matched widgets:** the market's #1 "premium" signal. A normal app **cannot read the current wallpaper on Android 14+** (`WallpaperManager.getDrawable()` throws `SecurityException`; the raw bitmap needs Play-restricted `MANAGE_EXTERNAL_STORAGE`). **Dwell owns the wallpaper bitmap the moment a user applies one**, so we can extract its palette (AndroidX Palette) and even pre-blur it for frosted glass. Blocked for every competitor, free for us. This — not colours/sizes — is the paid headline (P2).
+- **Lane:** curated editorial + coordination + one clean one-time unlock. NOT KWGT (infinite ugly tinkering / formula language), NOT ThemePack (weekly subs + gem currency + ads-to-unlock — the category's "greedy/cheap" triggers). Keep the one-time `unlock_premium` (₹299 placeholder) as a positioning weapon; add optional one-time seasonal/designer **preset packs** (~₹49–99) as the reopen loop — never gems, never ads-to-unlock.
+- **Free must ship one share-worthy screen** (a wallpaper + a free preset widget that looks great) — that screenshot is the growth engine (Reddit/TikTok "aesthetic home screen").
+- **Widget tech rules (minSdk 26):**
+  - Build new widgets in **Glance** (forward-compatible; inherits Android 16 RemoteCompose later). RemoteViews only where Glance can't.
+  - **Custom fonts don't render natively** in RemoteViews/Glance → **bitmap-render Fraunces** headline/numerals for fidelity across launchers.
+  - Wallpaper palette: own-bitmap + AndroidX Palette, or `WallpaperManager.getWallpaperColors()` (API 27+, no permission) / Material You `GlanceTheme` (API 31+). Never `getDrawable()`.
+  - No real backdrop blur (own-bitmap pre-blur only). Refresh floor ~15 min (WorkManager) → design for "eventually fresh"; clocks self-tick via `TextClock`. Interactive (tap-to-log) is API 31+. Lock-screen widgets roll out ~Dec 2025 (Pixel-first, fragmented) at near-zero dev cost — a forward bet, not a reach play.
+- **Build order:** P1 = Glance migration + core suite (Weather/Battery/Photo/Date-Agenda) + clock-family looks (typographic/word-clock/analog). P2 = wallpaper-match moat + interactive (now-playing, habit/countdown). P3 = seasonal preset packs + delight lane (photo-drop, mood) + lock-screen.
+
+---
+
 ## Design rules
 
 - The wallpapers are the hero. App chrome stays quiet so imagery carries the color.
