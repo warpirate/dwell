@@ -35,11 +35,11 @@ import com.dwell.app.data.widget.WidgetSpan
 import com.dwell.app.ui.theme.DwellSpacing
 
 /**
- * The Widgets tab: a browsable masonry of the whole catalog. Clock is live and opens the
- * configurator; every other card is a faithful roadmap preview that lights up as it ships.
+ * The Widgets tab: a browsable masonry of the whole catalog. Live widgets are tappable (open
+ * config or pin directly); the rest are faithful roadmap previews that light up as they ship.
  */
 @Composable
-fun WidgetGallery(onOpenClock: () -> Unit, modifier: Modifier = Modifier) {
+fun WidgetGallery(onSelect: (CatalogWidget) -> Unit, modifier: Modifier = Modifier) {
     var category by remember { mutableStateOf<WidgetCategory?>(null) }
     val widgets = CatalogWidget.inCategory(category)
 
@@ -65,10 +65,7 @@ fun WidgetGallery(onOpenClock: () -> Unit, modifier: Modifier = Modifier) {
                 span = if (w.span == WidgetSpan.WIDE) StaggeredGridItemSpan.FullLine
                 else StaggeredGridItemSpan.SingleLane,
             ) {
-                WidgetPreviewCard(
-                    widget = w,
-                    onClick = { if (w == CatalogWidget.CLOCK) onOpenClock() },
-                )
+                WidgetPreviewCard(widget = w, onClick = { onSelect(w) })
             }
         }
     }

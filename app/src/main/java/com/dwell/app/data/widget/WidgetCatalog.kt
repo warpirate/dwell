@@ -29,7 +29,7 @@ enum class CatalogWidget(
 ) {
     CLOCK("Clock", WidgetCategory.TIME, WidgetSpan.WIDE, WidgetStatus.LIVE),
     WEATHER("Weather", WidgetCategory.WEATHER, WidgetSpan.SQUARE, WidgetStatus.SOON),
-    DATE("Date", WidgetCategory.TIME, WidgetSpan.SQUARE, WidgetStatus.SOON),
+    DATE("Date", WidgetCategory.TIME, WidgetSpan.SQUARE, WidgetStatus.LIVE),
     BATTERY("Battery", WidgetCategory.LIFE, WidgetSpan.SQUARE, WidgetStatus.SOON),
     STEPS("Steps", WidgetCategory.LIFE, WidgetSpan.SQUARE, WidgetStatus.SOON),
     AGENDA("Agenda", WidgetCategory.LIFE, WidgetSpan.WIDE, WidgetStatus.SOON),

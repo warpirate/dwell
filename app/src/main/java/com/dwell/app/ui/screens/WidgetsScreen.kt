@@ -1,20 +1,41 @@
 package com.dwell.app.ui.screens
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.dwell.app.data.widget.CatalogWidget
 import com.dwell.app.ui.components.DwellScaffold
 import com.dwell.app.ui.screens.widgets.WidgetGallery
 import com.dwell.app.ui.widgetconfig.WidgetConfigActivity
+import com.dwell.app.widget.date.DateWidgetProvider
 
 @Composable
 fun WidgetsScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     DwellScaffold(modifier = modifier) {
         WidgetGallery(
-            // Tapping the live Clock card opens the configurator (tease → pin).
-            onOpenClock = { context.startActivity(Intent(context, WidgetConfigActivity::class.java)) },
+            onSelect = { widget ->
+                when (widget) {
+                    // Clock has a style engine, so it opens the configurator (tease → pin).
+                    CatalogWidget.CLOCK ->
+                        context.startActivity(Intent(context, WidgetConfigActivity::class.java))
+                    // Date has no styling yet — pin it straight to the home screen.
+                    CatalogWidget.DATE -> pinWidget(context, DateWidgetProvider::class.java)
+                    else -> Unit // Soon cards aren't tappable.
+                }
+            },
         )
+    }
+}
+
+/** Ask the launcher to pin a widget for [provider]; no-op on launchers that don't support it. */
+private fun pinWidget(context: Context, provider: Class<*>) {
+    val manager = context.getSystemService(AppWidgetManager::class.java) ?: return
+    if (manager.isRequestPinAppWidgetSupported) {
+        manager.requestPinAppWidget(ComponentName(context, provider), null, null)
     }
 }
