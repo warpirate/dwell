@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dwell — Widgets gallery + lean config</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12100E; --bg-canvas:#0B0A08; --surface:#221F1A; --surface-2:#2A2620;
+    --cream:#ECE7DD; --muted:#A89F8E; --green:#6E9576; --green-deep:#3A5A40;
+    --sand:#E8D9BC; --hairline:rgba(236,231,221,.10);
+    --card-hi:#322D26; --card-lo:#15110C;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 700px at 20% -5%, #1a1712 0%, transparent 55%),
+      radial-gradient(1000px 700px at 100% 10%, #17140f 0%, transparent 50%),
+      var(--bg-canvas);
+    font-family:var(--sans); color:var(--cream);
+    min-height:100vh; padding:56px 40px 72px; display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+  .head{text-align:center; margin-bottom:20px}
+  .head h1{font-family:var(--serif); font-weight:500; font-size:30px; letter-spacing:-.01em}
+  .head p{color:var(--muted); font-size:14px; margin-top:6px; letter-spacing:.01em}
+  .stage{display:flex; gap:48px; align-items:flex-start; flex-wrap:wrap; justify-content:center}
+  .col{display:flex; flex-direction:column; align-items:center; gap:14px}
+  .cap{color:var(--muted); font-size:12px; letter-spacing:.14em; text-transform:uppercase}
+  .cap b{color:var(--sand); font-weight:600}
+
+  /* phone */
+  .phone{
+    width:390px; height:830px; border-radius:46px; background:var(--bg);
+    border:1px solid rgba(236,231,221,.08);
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.8), inset 0 1px 0 rgba(236,231,221,.05);
+    position:relative; overflow:hidden;
+  }
+  .scr{position:absolute; inset:0; display:flex; flex-direction:column}
+  .status{height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; font-size:13px; color:var(--cream); flex:0 0 auto}
+  .status .r{display:flex; gap:6px; opacity:.9; font-size:11px}
+  .body{flex:1; overflow:hidden; padding:6px 22px 0}
+  .foot{flex:0 0 auto; padding:14px 22px 26px; background:linear-gradient(to top, var(--bg) 62%, transparent)}
+
+  h2.title{font-family:var(--serif); font-weight:500; font-size:26px; letter-spacing:-.01em}
+  .sub{color:var(--muted); font-size:13px; margin-top:3px}
+  .label{color:var(--muted); font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:600}
+
+  /* the big widget preview (RemoteViews-faithful: flat gradient, static radius, no blur) */
+  .widget{
+    border-radius:24px; background:linear-gradient(160deg,var(--card-hi),var(--card-lo));
+    border:1px solid var(--hairline); padding:22px; position:relative;
+  }
+  .widget .time{font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:.9}
+  .rule{height:1px; background:rgba(236,231,221,.16); margin:12px 0}
+  .daterow{display:flex; align-items:center; gap:9px}
+  .dot{width:7px; height:7px; border-radius:50%; background:var(--green)}
+  .date{color:var(--muted); font-size:11px; letter-spacing:.18em; font-weight:500}
+  .badge{position:absolute; top:16px; right:16px; font-size:10px; letter-spacing:.12em; color:var(--muted);
+    border:1px solid var(--hairline); border-radius:999px; padding:5px 11px; text-transform:uppercase}
+
+  /* horizontal look strip */
+  .strip{display:flex; gap:11px; overflow:hidden; padding:2px 0}
+  .look{flex:0 0 116px; border-radius:16px; background:linear-gradient(160deg,#2E2A23,#15110C);
+    border:1px solid var(--hairline); padding:13px; position:relative}
+  .look.sel{border:1.5px solid var(--cream)}
+  .look .lt{font-family:var(--serif); font-size:22px; font-weight:500; letter-spacing:-.02em}
+  .look .lr{height:1px; width:26px; background:rgba(236,231,221,.18); margin:7px 0}
+  .look .ld{display:flex; align-items:center; gap:5px}
+  .look .ld .dot{width:4px;height:4px}
+  .look .ld span{font-size:7px; letter-spacing:.14em; color:var(--muted)}
+  .lock{position:absolute; top:9px; right:9px; width:20px; height:20px; border-radius:50%;
+    background:rgba(18,16,14,.78); display:flex; align-items:center; justify-content:center}
+  .lock svg{width:10px;height:10px; stroke:var(--sand)}
+  .lname{display:flex; align-items:baseline; justify-content:space-between; margin-top:9px}
+  .lname .n{font-size:14px; font-weight:600; color:var(--cream)}
+  .lname .t{font-size:11px; font-weight:600; letter-spacing:.02em}
+  .t.free{color:var(--green)} .t.prem{color:var(--sand)}
+
+  /* moat teaser */
+  .moat{border-radius:20px; overflow:hidden; border:1px solid var(--hairline); display:flex; align-items:stretch; height:96px; position:relative}
+  .moat .wall{flex:1; background:linear-gradient(150deg,#C98A6A,#8A5A6E 55%,#3D3550)}
+  .moat .arrow{position:absolute; left:calc(50% - 15px); top:calc(50% - 15px); width:30px;height:30px; border-radius:50%;
+    background:rgba(18,16,14,.7); display:flex;align-items:center;justify-content:center; color:var(--cream); font-size:15px; z-index:2}
+  .moat .wid{flex:1; background:linear-gradient(160deg,#322D26,#15110C); display:flex; flex-direction:column; justify-content:center; align-items:flex-end; padding:0 20px}
+  .moat .wid .time{font-family:var(--serif); font-size:30px; font-weight:400; color:#8FC7B4}
+  .moat .cap2{position:absolute; left:14px; bottom:10px; z-index:2; font-size:10px; color:#fff; letter-spacing:.12em; text-transform:uppercase; text-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .prem-tag{position:absolute; top:12px; right:12px; z-index:2; font-size:10px; font-weight:600; color:var(--sand);
+    background:rgba(18,16,14,.7); border-radius:999px; padding:4px 10px; letter-spacing:.08em}
+
+  /* coming-next ghost cards */
+  .soon{display:flex; gap:11px}
+  .ghost{flex:1; border-radius:16px; border:1px dashed rgba(236,231,221,.14); background:rgba(34,31,26,.35);
+    padding:13px 12px; opacity:.72; position:relative; height:92px; display:flex; flex-direction:column; justify-content:space-between}
+  .ghost .gi{width:22px;height:22px; border-radius:7px; background:rgba(236,231,221,.10); display:flex;align-items:center;justify-content:center}
+  .ghost .gi svg{width:13px;height:13px; stroke:var(--muted)}
+  .ghost .gn{font-size:12px; color:var(--cream); font-weight:500}
+  .ghost .st{position:absolute; top:10px; right:10px; font-size:8px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase}
+
+  /* rows */
+  .matchrow{display:flex; align-items:center; gap:14px; border-radius:16px; padding:15px 16px;
+    background:linear-gradient(160deg,#2E2A23,#15110C); border:1px solid var(--hairline)}
+  .sw{width:28px;height:28px;border-radius:50%; background:#8FC7B4; flex:0 0 auto}
+  .matchrow .mt{font-size:15px; font-weight:600}
+  .matchrow .ms{font-size:12px; color:var(--muted); margin-top:1px}
+  .chev{margin-left:auto; color:var(--muted); font-size:20px}
+  .finerow{display:flex; align-items:center; gap:14px; border-radius:16px; padding:15px 16px; background:var(--surface)}
+  .finerow .fi{width:36px;height:36px;border-radius:11px;background:var(--surface-2); display:flex;align-items:center;justify-content:center}
+  .finerow .fi svg{width:16px;height:16px;stroke:var(--sand)}
+  .tinylink{font-size:12px; color:var(--muted); text-align:center; padding:2px}
+  .tinylink b{color:var(--green); font-weight:600}
+
+  .cta{border-radius:16px; background:var(--green-deep); color:#F3EEE4; text-align:center; font-weight:600; font-size:16px; padding:17px; letter-spacing:.01em}
+  .cta.ghost-cta{background:transparent; border:1px solid var(--hairline); color:var(--cream)}
+  .backrow{display:flex; align-items:center; gap:14px}
+  .backrow .bk{font-size:20px; color:var(--cream)}
+
+  .gap6{height:6px}.gap10{height:10px}.gap14{height:14px}.gap18{height:18px}.gap22{height:22px}.gap26{height:26px}
+  .note{max-width:880px; text-align:center; color:var(--muted); font-size:13px; line-height:1.6; margin-top:18px}
+  .note b{color:var(--sand)}
+</style>
+</head>
+<body>
+  <div class="head">
+    <h1>Widgets, reimagined</h1>
+    <p>A gallery you can see — and a config screen with half the friction.</p>
+  </div>
+
+  <div class="stage">
+
+    <!-- ============ SCREEN A: WIDGETS GALLERY ============ -->
+    <div class="col">
+      <div class="cap"><b>Widgets tab</b> — now a gallery</div>
+      <div class="phone"><div class="scr">
+        <div class="status"><span>1:14</span><span class="r">✦ ▲ ▮</span></div>
+        <div class="body">
+          <h2 class="title">Widgets</h2>
+          <div class="sub">Live looks for your home screen.</div>
+          <div class="gap18"></div>
+
+          <!-- hero: the clock, shown big -->
+          <div class="widget">
+            <div class="badge">Clock · 6 looks</div>
+            <div class="time" style="font-size:58px; color:var(--cream)">9:41</div>
+            <div class="rule" style="width:48px"></div>
+            <div class="daterow"><span class="dot"></span><span class="date">TUE, JUN 30</span></div>
+          </div>
+          <div class="gap18"></div>
+
+          <div class="label">The looks</div>
+          <div class="gap10"></div>
+          <div class="strip">
+            <div class="look sel">
+              <div class="lt" style="color:var(--cream)">9:41</div><div class="lr"></div>
+              <div class="ld"><span class="dot"></span><span>WED</span></div>
+            </div>
+            <div class="look">
+              <div class="lt" style="color:var(--green)">9:41</div><div class="lr"></div>
+              <div class="ld"><span class="dot"></span><span>WED</span></div>
+            </div>
+            <div class="look">
+              <div class="lt" style="color:var(--cream); font-weight:600">9:41</div><div class="lr"></div>
+              <div class="ld"><span class="dot"></span><span>WED</span></div>
+            </div>
+            <div class="look">
+              <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+              <div class="lt" style="color:var(--sand)">9:41</div><div class="lr"></div>
+              <div class="ld"><span class="dot"></span><span>WED</span></div>
+            </div>
+          </div>
+          <div class="gap6"></div>
+          <div class="sub" style="font-size:11px">Editorial · Sage · Bold — free.&nbsp;&nbsp;Gold · Quiet · Forest — premium.</div>
+          <div class="gap18"></div>
+
+          <!-- moat teaser -->
+          <div class="moat">
+            <span class="prem-tag">Premium</span>
+            <div class="wall"></div>
+            <div class="arrow">→</div>
+            <div class="wid"><div class="time">9:41</div><div class="date" style="margin-top:4px">WALLPAPER-MATCHED</div></div>
+            <span class="cap2">Coloured by your wallpaper</span>
+          </div>
+          <div class="gap18"></div>
+
+          <div class="label">Coming next</div>
+          <div class="gap10"></div>
+          <div class="soon">
+            <div class="ghost"><span class="st">Soon</span>
+              <div class="gi"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></div>
+              <div class="gn">Calendar</div>
+            </div>
+            <div class="ghost"><span class="st">Soon</span>
+              <div class="gi"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h6"/></svg></div>
+              <div class="gn">Notes</div>
+            </div>
+            <div class="ghost"><span class="st">Soon</span>
+              <div class="gi"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="8" width="16" height="8" rx="2"/><path d="M21 11v2"/></svg></div>
+              <div class="gn">Battery</div>
+            </div>
+          </div>
+        </div>
+        <div class="foot"><div class="cta">Add clock widget</div></div>
+      </div></div>
+    </div>
+
+    <!-- ============ SCREEN B: LEAN CONFIG ============ -->
+    <div class="col">
+      <div class="cap"><b>Configure</b> — one clean screen</div>
+      <div class="phone"><div class="scr">
+        <div class="status"><span>1:14</span><span class="r">✦ ▲ ▮</span></div>
+        <div class="body">
+          <div class="backrow"><span class="bk">←</span><h2 class="title" style="font-size:22px">Clock widget</h2></div>
+          <div class="gap18"></div>
+
+          <!-- live preview -->
+          <div class="widget">
+            <div class="time" style="font-size:56px; color:#8FC7B4">9:41</div>
+            <div class="rule" style="width:48px"></div>
+            <div class="daterow"><span class="dot"></span><span class="date">TUE, JUN 30</span></div>
+          </div>
+          <div class="gap18"></div>
+
+          <!-- one strip of looks, no per-card price clutter -->
+          <div class="label">Choose a look</div>
+          <div class="gap10"></div>
+          <div class="strip">
+            <div class="look sel"><div class="lt" style="color:var(--cream)">9:41</div><div class="lr"></div><div class="ld"><span class="dot"></span><span>WED</span></div></div>
+            <div class="look"><div class="lt" style="color:var(--green)">9:41</div><div class="lr"></div><div class="ld"><span class="dot"></span><span>WED</span></div></div>
+            <div class="look"><div class="lt" style="color:var(--cream);font-weight:600">9:41</div><div class="lr"></div><div class="ld"><span class="dot"></span><span>WED</span></div></div>
+            <div class="look"><div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div><div class="lt" style="color:var(--sand)">9:41</div><div class="lr"></div><div class="ld"><span class="dot"></span><span>WED</span></div></div>
+          </div>
+          <div class="lname"><span class="n">Editorial</span><span class="t free">Free</span></div>
+          <div class="gap18"></div>
+
+          <!-- match: one live row, sample tucked to a tiny link -->
+          <div class="label">Match your wallpaper</div>
+          <div class="gap10"></div>
+          <div class="matchrow">
+            <span class="sw"></span>
+            <div><div class="mt">Match my wallpaper</div><div class="ms">From your current wallpaper</div></div>
+            <span class="chev">›</span>
+          </div>
+          <div class="gap6"></div>
+          <div class="tinylink">No Dwell wallpaper yet? <b>Preview a sample →</b></div>
+          <div class="gap18"></div>
+
+          <!-- fine-tune collapsed to a single row -->
+          <div class="finerow">
+            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+            <div><div class="mt">Fine-tune it yourself</div><div class="ms">Any colour, size &amp; opacity.</div></div>
+            <span class="chev">›</span>
+          </div>
+        </div>
+        <div class="foot"><div class="cta">Add widget</div></div>
+      </div></div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <b>Widgets tab</b> stops being a button — it becomes a gallery: the clock shown big, all six looks in a swipe strip, the wallpaper-match moat as a live before→after, and Calendar/Notes/Battery as real ghost previews so the roadmap is <i>seen</i>, not read.&nbsp;
+    <b>Config</b> drops from five stacked blocks to four: one look-strip instead of two labelled rows, price shown once, samples tucked behind a link, fine-tune collapsed. Same power, half the scroll.
+  </div>
+</body>
+</html>
