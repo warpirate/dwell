@@ -58,6 +58,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     onSelectPreset = viewModel::selectPreset,
                     onColor = viewModel::setColor,
                     onSize = viewModel::setSize,
+                    onMatchWallpaper = viewModel::matchWallpaper,
                     onOpenPaywall = { startActivity(Intent(this, PaywallActivity::class.java)) },
                     onAdd = ::commit,
                 )

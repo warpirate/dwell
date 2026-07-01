@@ -14,21 +14,30 @@ data class WidgetStyle(
     val color: WidgetColor = WidgetColor.CREAM,
     val size: WidgetSize = WidgetSize.MEDIUM,
     val opacity: Int = 100, // 0..100, background alpha
+    /**
+     * A wallpaper-matched text colour (already legibility-coerced by [WallpaperMatch]). When
+     * set, it overrides [color]. Null for the curated presets and the free defaults.
+     */
+    val matchedArgb: Int? = null,
 ) {
     fun coerced(): WidgetStyle = copy(opacity = opacity.coerceIn(0, 100))
 
-    /** Pipe-delimited, no extra serialization dependency. */
-    fun encode(): String = "${color.name}|${size.name}|$opacity"
+    /** Pipe-delimited, no extra serialization dependency. Matched colour is an optional 4th field. */
+    fun encode(): String = buildString {
+        append(color.name); append('|'); append(size.name); append('|'); append(opacity)
+        if (matchedArgb != null) { append('|'); append(matchedArgb) }
+    }
 
     companion object {
         val Default = WidgetStyle()
 
         fun decode(raw: String): WidgetStyle = runCatching {
-            val (c, s, o) = raw.split("|").also { require(it.size == 3) }
+            val p = raw.split("|").also { require(it.size == 3 || it.size == 4) }
             WidgetStyle(
-                color = WidgetColor.valueOf(c),
-                size = WidgetSize.valueOf(s),
-                opacity = o.toInt(),
+                color = WidgetColor.valueOf(p[0]),
+                size = WidgetSize.valueOf(p[1]),
+                opacity = p[2].toInt(),
+                matchedArgb = p.getOrNull(3)?.toInt(),
             ).coerced()
         }.getOrDefault(Default)
     }

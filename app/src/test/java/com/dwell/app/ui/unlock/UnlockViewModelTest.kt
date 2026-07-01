@@ -29,6 +29,7 @@ class UnlockViewModelTest {
         override val productId = "unlock_premium"
         override suspend fun launchPurchase(activity: Activity): PurchaseResult =
             PurchaseResult.Verifying
+        override suspend fun formattedPrice(): String? = "₹299.00"
     }
 
     @Before fun setUp() = Dispatchers.setMain(UnconfinedTestDispatcher())

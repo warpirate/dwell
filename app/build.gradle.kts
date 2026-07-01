@@ -76,6 +76,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
+    // Palette (extract a wallpaper's colours for matched widgets)
+    implementation(libs.androidx.palette)
+
     // Room offline cache
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

@@ -12,6 +12,15 @@ class WidgetStyleResolverTest {
     }
 
     @Test
+    fun `matched wallpaper color overrides the token`() {
+        val matched = 0xFFD9A38C.toInt()
+        assertEquals(
+            matched,
+            WidgetStyleResolver.textColorArgb(WidgetStyle(color = WidgetColor.CREAM, matchedArgb = matched)),
+        )
+    }
+
+    @Test
     fun `time text size grows with bucket`() {
         val small = WidgetStyleResolver.timeSizeSp(WidgetStyle(size = WidgetSize.SMALL))
         val large = WidgetStyleResolver.timeSizeSp(WidgetStyle(size = WidgetSize.LARGE))
