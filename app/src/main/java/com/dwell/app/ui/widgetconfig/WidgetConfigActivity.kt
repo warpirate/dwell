@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.core.os.bundleOf
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.dwell.app.ui.paywall.PaywallActivity
 import com.dwell.app.ui.theme.DwellTheme
 import com.dwell.app.widget.clock.ClockWidgetProvider
 import com.dwell.app.widget.clock.WidgetPinReceiver
@@ -47,13 +48,18 @@ class WidgetConfigActivity : ComponentActivity() {
             DwellTheme {
                 val isPremium by viewModel.isPremium.collectAsStateWithLifecycle()
                 val draft by viewModel.draft.collectAsStateWithLifecycle()
+                val selected by viewModel.selected.collectAsStateWithLifecycle()
+                val needsUnlock by viewModel.needsUnlock.collectAsStateWithLifecycle()
                 WidgetConfigScreen(
                     style = draft,
+                    selected = selected,
                     isPremium = isPremium,
+                    needsUnlock = needsUnlock,
+                    onSelectPreset = viewModel::selectPreset,
                     onColor = viewModel::setColor,
                     onSize = viewModel::setSize,
-                    onUnlock = { viewModel.unlock(this) },
-                    onSave = ::commit,
+                    onOpenPaywall = { startActivity(Intent(this, PaywallActivity::class.java)) },
+                    onAdd = ::commit,
                 )
             }
         }

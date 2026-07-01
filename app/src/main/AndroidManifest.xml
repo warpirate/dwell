@@ -53,6 +53,11 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.paywall.PaywallActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Dwell" />
     </application>
 
 </manifest>
