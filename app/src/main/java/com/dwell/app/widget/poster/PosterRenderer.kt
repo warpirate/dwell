@@ -11,6 +11,8 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RadialGradient
 import android.graphics.Shader
+import com.dwell.app.data.widget.PosterWeather
+import com.dwell.app.data.widget.WeatherCondition
 import java.util.Random
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -150,7 +152,7 @@ object PosterRenderer {
      * across. The provider caps the dimensions; centerCrop scales it up on screen. All the
      * alpha compositing below blends against the opaque sky, which is correct on RGB_565.
      */
-    fun render(w: Int, h: Int, hour: Float): Bitmap {
+    fun render(w: Int, h: Int, hour: Float, weather: PosterWeather = PosterWeather.Default): Bitmap {
         val ww = w.coerceAtLeast(1)
         val hh = h.coerceAtLeast(1)
         val bmp = Bitmap.createBitmap(ww, hh, Bitmap.Config.RGB_565)
@@ -167,60 +169,90 @@ object PosterRenderer {
         val night = ((0.34f - luma(p.sky[0])) / 0.30f).coerceIn(0f, 1f)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        // 1. SKY — 5-stop vertical gradient.
+        val weatherSky = WeatherPainter.weatherSky(p, weather, night)
+        val glowMul = WeatherPainter.glowMul(weather)
+        val starMul = WeatherPainter.starMul(weather)
+        val darken = WeatherPainter.darken(weather)
+        val hgX = sp.first.coerceIn(.15f, .85f) * wF
+        val sceneCtx = WeatherPainter.SceneCtx(wF, hF, p, cx, cy, sp.first, sp.second, isDay, night, horizonY, hgX)
+
+        // 1. SKY — weather-tinted 5-stop vertical gradient.
         paint.shader = LinearGradient(
             0f, 0f, 0f, hF,
-            intArrayOf(p.sky[0], p.sky[1], p.sky[2], p.sky[3], p.sky[4]),
+            weatherSky,
             floatArrayOf(0f, .28f, .5f, .72f, 1f),
             Shader.TileMode.CLAMP,
         )
         cv.drawRect(0f, 0f, wF, hF, paint)
 
-        // 2. HORIZON GLOW — warm band under the sun, clipped to the sky.
-        val hgX = sp.first.coerceIn(.15f, .85f) * wF
+        // 1b. DARKEN — rain/storm only.
+        if (darken > 0f) {
+            paint.shader = LinearGradient(
+                0f, 0f, 0f, hF,
+                intArrayOf(withAlpha(c("#0b0e15"), a255(darken)), withAlpha(c("#0b0e15"), a255(darken * .75f)), withAlpha(c("#0b0e15"), a255(darken * .35f))),
+                floatArrayOf(0f, .6f, 1f),
+                Shader.TileMode.CLAMP,
+            )
+            cv.drawRect(0f, 0f, wF, hF, paint)
+        }
+
+        // 2. HORIZON GLOW — scaled by glowMul.
         paint.shader = RadialGradient(
             hgX, horizonY, wF * .95f,
-            intArrayOf(withAlpha(p.hz, a255(.5f * p.glow + .22f)), withAlpha(p.hz, a255(.16f)), withAlpha(p.hz, 0)),
+            intArrayOf(withAlpha(p.hz, a255((.5f * p.glow + .22f) * glowMul)), withAlpha(p.hz, a255(.16f * glowMul)), withAlpha(p.hz, 0)),
             floatArrayOf(0f, .4f, 1f),
             Shader.TileMode.CLAMP,
         )
         cv.drawRect(0f, 0f, wF, horizonY + 2f, paint)
 
-        // 3. NIGHT SKY — milky way + stars.
-        if (night > .05f) {
-            milkyWay(cv, wF, hF, night)
-            stars(cv, wF, horizonY, night)
+        // 3. NIGHT SKY — scaled by starMul.
+        if (night * starMul > .05f) {
+            milkyWay(cv, wF, hF, night * starMul)
+            stars(cv, wF, horizonY, night * starMul)
         }
 
-        // 4. SUN / MOON GLOW — big soft radial (baked, no blur).
-        paint.shader = RadialGradient(
-            cx, cy, hF * .98f,
-            intArrayOf(withAlpha(p.sun, a255(.9f * p.glow)), withAlpha(p.sun, a255(.42f * p.glow)), withAlpha(p.sun, a255(.1f * p.glow)), withAlpha(p.sun, 0)),
-            floatArrayOf(0f, .16f, .5f, 1f),
-            Shader.TileMode.CLAMP,
-        )
-        cv.drawRect(0f, 0f, wF, hF, paint)
+        // 4. SUN / MOON GLOW — scaled by glowMul.
+        if (glowMul > .04f) {
+            paint.shader = RadialGradient(
+                cx, cy, hF * .98f,
+                intArrayOf(withAlpha(p.sun, a255(.9f * p.glow * glowMul)), withAlpha(p.sun, a255(.42f * p.glow * glowMul)), withAlpha(p.sun, a255(.1f * p.glow * glowMul)), withAlpha(p.sun, 0)),
+                floatArrayOf(0f, .16f, .5f, 1f),
+                Shader.TileMode.CLAMP,
+            )
+            cv.drawRect(0f, 0f, wF, hF, paint)
+        }
 
-        // 5. GOD-RAYS — low, strong sun (dawn / golden).
-        if (p.glow > .82f && sp.second > .30f) godRays(cv, hF, cx, cy, p.sun, (p.glow - .82f) * 3.2f)
+        // 5. GOD-RAYS — CLEAR and PARTLY only.
+        if (p.glow > .82f && sp.second > .30f &&
+            (weather.condition == WeatherCondition.CLEAR || weather.condition == WeatherCondition.PARTLY)
+        ) {
+            val strength = (p.glow - .82f) * 3.2f * (if (weather.condition == WeatherCondition.PARTLY) .6f else 1f)
+            godRays(cv, hF, cx, cy, p.sun, strength)
+        }
 
-        // 6. FAR RIDGE — hazy, recedes into the sky.
-        ridge(cv, wF, hF, horizonY, .62f, lerp(p.hillFar, p.sky[4], .12f), p, far = true)
+        // 6. FAR RIDGE — weather-tinted.
+        val baseFar = lerp(p.hillFar, p.sky[4], .12f)
+        val farColor = WeatherPainter.farTint(p, baseFar, weather, night)
+        ridge(cv, wF, hF, horizonY, .62f, farColor, p, far = true)
 
-        // 7. HAZE / CLOUD BANDS — soft, undersides catch the sun.
-        haze(cv, wF, hF, cx, p, night)
+        // 7. CONDITION LAYER — the per-weather sky content + light source.
+        WeatherPainter.paintConditionLayer(cv, sceneCtx, weather, p.hillNear)
 
-        // 8. SUN / MOON DISC — the light source: crisp core + halo, gibbous moon at night.
-        //    Painted above the haze so the body always reads, even at golden hour.
-        bodyPublic(cv, cx, cy, hF, isDay, p)
+        // 8. NEAR RIDGE — weather-tinted; the text bed.
+        val nearColor = WeatherPainter.nearTint(p, p.hillNear, weather, night)
+        ridge(cv, wF, hF, horizonY + hF * .11f, .96f, nearColor, p, far = false)
 
-        // 9. NEAR RIDGE — dark silhouette foreground; the text bed.
-        ridge(cv, wF, hF, horizonY + hF * .11f, .96f, p.hillNear, p, far = false)
+        // 8b. GROUND TREATMENT — snow blanket / wet sheen / fog front.
+        WeatherPainter.paintGroundTreatment(cv, sceneCtx, weather)
 
-        // 10. BOTTOM SCRIM — deepen toward the base so the overlaid time stays legible.
+        // 9. PRECIP — static-baked rain/snow/lightning.
+        WeatherPainter.paintPrecip(cv, sceneCtx, weather)
+
+        // 10. BOTTOM SCRIM — scaled by scrimMul.
+        val scrimMul = WeatherPainter.scrimMul(weather)
         paint.shader = LinearGradient(
             0f, hF * .42f, 0f, hF,
-            withAlpha(p.hillNear, 0), withAlpha(p.hillNear, a255(.88f)),
+            withAlpha(nearColor, 0), withAlpha(nearColor, a255(.88f * scrimMul)),
             Shader.TileMode.CLAMP,
         )
         cv.drawRect(0f, hF * .42f, wF, hF, paint)
