@@ -146,16 +146,19 @@ object PosterRenderer {
     /**
      * Paint the scene (no text) into a [w]×[h] px bitmap for [hour] (0..24).
      *
-     * RGB_565 (not ARGB_8888): the scene is fully opaque — the sky covers every pixel and
-     * the host rounds the corners — so we need no alpha channel, and halving the bytes keeps
-     * the bitmap under the ~1MB Binder limit that RemoteViews.setImageViewBitmap ships it
-     * across. The provider caps the dimensions; centerCrop scales it up on screen. All the
-     * alpha compositing below blends against the opaque sky, which is correct on RGB_565.
+     * ARGB_8888, not RGB_565: the sky's smooth gradients band visibly at 565's 64/32/32
+     * levels-per-channel (obvious comb-stripe artifacts on device, absent in the browser
+     * mock's 24-bit canvas) — the quality loss was worse than the extra bytes cost. The
+     * provider sizes the bitmap by a total pixel *byte budget*, not a fixed dimension cap,
+     * so it stays under the ~1MB Binder limit RemoteViews.setImageViewBitmap ships it across
+     * while accounting for the larger per-pixel cost. The scene itself is fully opaque — the
+     * alpha channel goes unused on screen (the host rounds the corners) but costs little
+     * next to eliminating the banding.
      */
     fun render(w: Int, h: Int, hour: Float, weather: PosterWeather = PosterWeather.Default): Bitmap {
         val ww = w.coerceAtLeast(1)
         val hh = h.coerceAtLeast(1)
-        val bmp = Bitmap.createBitmap(ww, hh, Bitmap.Config.RGB_565)
+        val bmp = Bitmap.createBitmap(ww, hh, Bitmap.Config.ARGB_8888)
         val cv = Canvas(bmp)
         val p = paletteFor(hour)
         val wF = ww.toFloat()

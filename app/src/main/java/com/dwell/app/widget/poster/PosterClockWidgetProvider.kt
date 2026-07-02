@@ -75,11 +75,19 @@ class PosterClockWidgetProvider : AppWidgetProvider() {
         // host's centerCrop barely crops and the sun/moon never scrolls out of frame.
         var w = px(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 320)
         var h = px(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 160)
-        // Cap the longest side so the bitmap stays small enough to cross the RemoteViews
-        // Binder limit; centerCrop scales it back up over the (smooth-gradient) scene.
-        val cap = 512
-        if (w > cap) { h = h * cap / w; w = cap }
-        if (h > cap) { w = w * cap / h; h = cap }
+        // Cap by total PIXEL BUDGET (not a single-side px cap) so the bitmap stays under the
+        // RemoteViews Binder limit without downscaling typical widgets far below native
+        // density. ARGB_8888 is 4 bytes/px; 900_000 bytes leaves headroom under the ~1MB
+        // Binder transaction limit. A flat "longest side ≤512px" cap was far too aggressive
+        // at real densities (a 300dp-wide widget is ~787px at 2.6x density) — it forced a
+        // downscale that centerCrop then stretched back up ~1.5x, blurring the whole scene.
+        // Only oversized resizes (e.g. maxResizeWidth 400dp at 3x+ density) still hit this cap.
+        val maxPixels = 225_000L // 900_000 bytes / 4 bytes-per-pixel (ARGB_8888)
+        if (w.toLong() * h > maxPixels) {
+            val scale = kotlin.math.sqrt(maxPixels.toDouble() / (w.toLong() * h))
+            w = (w * scale).toInt().coerceAtLeast(1)
+            h = (h * scale).toInt().coerceAtLeast(1)
+        }
 
         try {
             val bmp = PosterRenderer.render(w, h, hour, weather)
