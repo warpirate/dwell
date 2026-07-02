@@ -10,8 +10,10 @@ import com.dwell.app.data.billing.EntitlementRepository
 import com.dwell.app.data.billing.EntitlementRepositoryImpl
 import com.dwell.app.data.favorites.FavoritesRemoteSource
 import com.dwell.app.data.favorites.FavoritesRemoteSourceImpl
+import com.dwell.app.data.widget.DataStorePosterWeatherStore
 import com.dwell.app.data.widget.DataStoreWallpaperMatchStore
 import com.dwell.app.data.widget.DataStoreWidgetStyleStore
+import com.dwell.app.data.widget.PosterWeatherStore
 import com.dwell.app.data.widget.WallpaperMatchStore
 import com.dwell.app.data.widget.WidgetStyleStore
 import com.dwell.app.data.favorites.FavoritesRepository
@@ -69,4 +71,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindWallpaperMatchStore(impl: DataStoreWallpaperMatchStore): WallpaperMatchStore
+
+    @Binds
+    @Singleton
+    abstract fun bindPosterWeatherStore(impl: DataStorePosterWeatherStore): PosterWeatherStore
 }
