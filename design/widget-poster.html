@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!--
+  DWELL widget SWING — widgets as time-of-day poster art, not text-on-a-card.
+  Concept: each widget is a generated scene whose palette + sun/moon position
+  track the real hour. Dawn peach → noon blue → dusk amber → night aurora.
+
+  SHIPS FOR REAL on minSdk 26: RemoteViews renders a full-bleed ImageView Bitmap.
+  Draw this on an android.graphics.Canvas in Kotlin (gradients=LinearGradient/
+  RadialGradient shaders, grain=BitmapShader noise, type=Fraunces via Paint+Typeface),
+  refresh once a minute (AlarmManager/updatePeriodMillis or a 1-min worker).
+  No blur/box-shadow needed at runtime — every glow is baked into the bitmap.
+
+  Drag the slider to scrub the day and watch every widget re-paint.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DWELL · poster widgets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Fraunces:ital,opsz,wght@1,9..144,400&display=swap" rel="stylesheet" />
+<style>
+  :root{--cream:#F1ECE2;--muted:#cabfad;--green:#8FBE97;--green-deep:#6E9576}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0a0908;color:#F1ECE2;min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;gap:20px;padding:26px 16px 70px}
+  .fraunces{font-family:"Fraunces",Georgia,serif;font-optical-sizing:auto}
+
+  /* scrubber */
+  .ctl{display:flex;flex-direction:column;gap:10px;width:393px;max-width:100%;
+    background:#151311;border:1px solid #262320;border-radius:20px;padding:14px 18px}
+  .ctl .top{display:flex;justify-content:space-between;align-items:baseline}
+  .ctl .lab{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8f8578}
+  .ctl .now{font-size:15px;letter-spacing:.06em;color:#F1ECE2}
+  .ctl .phase{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;
+    background:linear-gradient(90deg,#12183a,#e98a6a,#bfe0f5,#e6c79a,#e0623f,#2a1f4a);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:#F1ECE2;border:2px solid #0a0908;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+  .hint{font-size:12px;color:#6f675c;max-width:410px;text-align:center;line-height:1.5}
+
+  /* phone */
+  .phone{position:relative;width:393px;height:830px;border-radius:44px;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.6);border:9px solid #050505;background:#0d0d0f}
+  .wall{position:absolute;inset:0;z-index:0;
+    background:radial-gradient(120% 90% at 25% 8%,#20242a 0,#141518 45%,#0b0c0e 100%)}
+  .status{position:absolute;z-index:5;top:15px;left:24px;right:24px;display:flex;justify-content:space-between;
+    font-size:13px;color:#f3efe8;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .grid{position:absolute;z-index:2;inset:0;padding:74px 18px 0;display:flex;flex-direction:column;gap:18px}
+  .row{display:flex;gap:18px}
+
+  /* ---- poster widget shell ---- */
+  .w{position:relative;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.06);
+    box-shadow:0 8px 24px rgba(0,0,0,.35)}          /* sim-only shadow; runtime depth is baked in bitmap */
+  .w .sky{position:absolute;inset:0;z-index:0}
+  .w .grain{position:absolute;inset:0;z-index:1;opacity:.5;mix-blend-mode:overlay;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .w .scrim{position:absolute;left:0;right:0;bottom:0;z-index:2;pointer-events:none}
+  .w .body{position:absolute;inset:0;z-index:3;padding:16px 18px;display:flex;flex-direction:column}
+  .sun{position:absolute;z-index:1;width:120px;height:120px;border-radius:50%;transform:translate(-50%,-50%);
+    filter:blur(2px)}   /* sim blur only; runtime = RadialGradient shader, no blur pass */
+
+  .sq{width:162px;height:162px}
+  .wide{flex:1}
+  .h-hero{height:190px}
+  .h-strip{height:96px}
+
+  .spacer{flex:1}
+  .time{line-height:.9;letter-spacing:-.02em;font-weight:400;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+  .cap{font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:500;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+  .rule{height:1px;width:52px;margin-bottom:11px;background:rgba(255,255,255,.35)}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:9px;vertical-align:middle;
+    box-shadow:0 0 8px rgba(143,190,151,.8)}
+  .footer{display:flex;align-items:center}
+
+  /* numeral date crop */
+  .numeral{position:absolute;z-index:2;font-weight:600;line-height:.8;letter-spacing:-.04em;
+    right:-6px;top:-30px;font-size:172px;opacity:.96;text-shadow:0 4px 24px rgba(0,0,0,.35)}
+
+  .tag{position:absolute;z-index:4;top:11px;left:14px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.72);background:rgba(0,0,0,.28);padding:3px 8px;border-radius:20px;
+    backdrop-filter:none;border:1px solid rgba(255,255,255,.12)}
+  .tier{position:absolute;z-index:4;top:11px;right:14px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+    padding:3px 8px;border-radius:20px}
+  .tier.free{color:#cfe6d2;background:rgba(20,40,26,.55);border:1px solid rgba(143,190,151,.4)}
+  .tier.prem{color:#f0d9a6;background:rgba(52,40,20,.55);border:1px solid rgba(200,160,90,.45)}
+</style>
+</head>
+<body>
+
+  <div class="ctl">
+    <div class="top">
+      <span class="lab">Scrub the day</span>
+      <span class="now"><span id="clockLbl">3:30 PM</span> · <span class="phase" id="phaseLbl">AFTERNOON</span></span>
+    </div>
+    <input type="range" id="scrub" min="0" max="1439" step="1" value="930" />
+  </div>
+  <p class="hint">Every widget is a bitmap poster — palette + sun/moon track the hour. Drag to scrub dawn→night. This ships via a Canvas bitmap in an ImageView, repainted each minute.</p>
+
+  <div class="phone">
+    <div class="wall"></div>
+    <div class="status"><span id="statusClk">3:30</span><span>▽ ⤢ ▮</span></div>
+
+    <div class="grid">
+      <!-- HERO: Sky clock (wide) -->
+      <div class="row">
+        <div class="w wide h-hero" id="wHero">
+          <div class="sky" id="heroSky"></div>
+          <div class="sun" id="heroSun"></div>
+          <div class="grain"></div>
+          <div class="scrim" id="heroScrim" style="height:60%"></div>
+          <span class="tag">Daylight</span><span class="tier free">Free</span>
+          <div class="body">
+            <div class="spacer"></div>
+            <div class="time fraunces" id="heroTime" style="font-size:66px;color:#fff">3:30</div>
+            <div style="height:12px"></div>
+            <div class="rule" id="heroRule"></div>
+            <div class="footer"><span class="dot" id="heroDot"></span><span class="cap" id="heroDate">WEDNESDAY · JULY 1</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW: Numeral date (crop poster) + Aurora night clock -->
+      <div class="row">
+        <div class="w sq" id="wDate">
+          <div class="sky" id="dateSky"></div>
+          <div class="grain"></div>
+          <div class="scrim" id="dateScrim" style="height:58%"></div>
+          <span class="tier free">Free</span>
+          <div class="body">
+            <div class="time fraunces" id="dateNum" style="font-size:90px;color:#fff">1</div>
+            <div class="spacer"></div>
+            <div class="footer"><span class="dot" id="dateDot"></span><span class="cap" id="dateWd" style="color:#fff">WEDNESDAY</span></div>
+            <div class="cap" id="dateMo" style="opacity:.75;margin-top:5px;font-size:10.5px">JULY 2026</div>
+          </div>
+        </div>
+
+        <div class="w sq" id="wAur">
+          <div class="sky" id="aurSky"></div>
+          <div class="sun" id="aurGlow" style="width:150px;height:150px"></div>
+          <div class="grain"></div>
+          <span class="tier prem">Premium</span>
+          <div class="body">
+            <div class="cap" style="color:#bfe0c7">NOW</div>
+            <div class="spacer"></div>
+            <div class="time fraunces" id="aurTime" style="font-size:46px;color:#EAF6EC">3:30</div>
+            <div style="height:8px"></div>
+            <div class="footer"><span class="dot" id="aurDot"></span><span class="cap" id="aurDate" style="color:#bfe0c7">WED · JUL 1</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STRIP: cinematic 4x1 horizon clock -->
+      <div class="row">
+        <div class="w wide h-strip" id="wStrip">
+          <div class="sky" id="stripSky"></div>
+          <div class="sun" id="stripSun" style="width:90px;height:90px"></div>
+          <div class="grain"></div>
+          <div class="scrim" id="stripScrim" style="height:100%"></div>
+          <span class="tier free" style="top:9px">Free</span>
+          <div class="body" style="flex-direction:row;align-items:center;justify-content:space-between;padding:0 20px">
+            <div class="time fraunces" id="stripTime" style="font-size:44px;color:#fff">3:30</div>
+            <div style="text-align:right">
+              <div class="cap" id="stripWd" style="color:#fff">WEDNESDAY</div>
+              <div class="cap" id="stripMo" style="opacity:.8;margin-top:3px">JULY 1 · 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  var WD=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+  var WD3=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  var MO=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+
+  // palette keyframes by hour: sky = 3-stop [top,mid,bottom], sun color, sun glow alpha, phase, ink
+  var KEYS=[
+    {h:0,  sky:['#0c1130','#141a3e','#0a0e22'], sun:'#c7d2f5', glow:.5, ph:'NIGHT',      ink:'#EAF0FF'},
+    {h:5,  sky:['#20223f','#4a3552','#171225'], sun:'#e9b48a', glow:.55,ph:'PRE-DAWN',   ink:'#F1ECE2'},
+    {h:7,  sky:['#f6b284','#e77e63','#5c3556'], sun:'#ffd9a0', glow:.9, ph:'DAWN',       ink:'#FFF6EC'},
+    {h:9,  sky:['#c7e6f4','#9cc7ea','#5f83b8'], sun:'#fff0cf', glow:.85,ph:'MORNING',    ink:'#12283c'},
+    {h:12, sky:['#dff1fb','#b6dcf3','#7fb0e0'], sun:'#fff7e6', glow:.8, ph:'NOON',       ink:'#12283c'},
+    {h:16, sky:['#f2e0bf','#e3c193','#b07d5c'], sun:'#ffe6b8', glow:.85,ph:'AFTERNOON',  ink:'#2b1d12'},
+    {h:18, sky:['#f6a15c','#df5a3c','#732a52'], sun:'#ffce93', glow:.95,ph:'GOLDEN HOUR',ink:'#FFF3E6'},
+    {h:20, sky:['#7c4a72','#3d2c5c','#14122c'], sun:'#f0bd84', glow:.7, ph:'DUSK',       ink:'#F6ECDF'},
+    {h:22, sky:['#241a44','#181436','#0b0a1e'], sun:'#cfd6f0', glow:.55,ph:'NIGHT',      ink:'#EAF0FF'},
+    {h:24, sky:['#0c1130','#141a3e','#0a0e22'], sun:'#c7d2f5', glow:.5, ph:'NIGHT',      ink:'#EAF0FF'}
+  ];
+  function hex(c){c=c.replace('#','');return[parseInt(c.substr(0,2),16),parseInt(c.substr(2,2),16),parseInt(c.substr(4,2),16)]}
+  function mix(a,b,t){var A=hex(a),B=hex(b);return'rgb('+Math.round(A[0]+(B[0]-A[0])*t)+','+Math.round(A[1]+(B[1]-A[1])*t)+','+Math.round(A[2]+(B[2]-A[2])*t)+')'}
+  function pal(hr){
+    var i=0;for(;i<KEYS.length-1;i++){if(hr>=KEYS[i].h&&hr<=KEYS[i+1].h)break}
+    var a=KEYS[i],b=KEYS[i+1],t=(hr-a.h)/(b.h-a.h||1);
+    return{sky:[mix(a.sky[0],b.sky[0],t),mix(a.sky[1],b.sky[1],t),mix(a.sky[2],b.sky[2],t)],
+      sun:mix(a.sun,b.sun,t),glow:a.glow+(b.glow-a.glow)*t,ph:t<.5?a.ph:b.ph,ink:mix(a.ink,b.ink,t)}
+  }
+  function skyCss(p){return'linear-gradient(180deg,'+p.sky[0]+' 0%,'+p.sky[1]+' 52%,'+p.sky[2]+' 100%)'}
+  function scrimCss(p){var b=hex(p.sky[2]);return'linear-gradient(180deg,rgba('+b[0]+','+b[1]+','+b[2]+',0) 0%,rgba('+b[0]+','+b[1]+','+b[2]+',.72) 100%)'}
+  function sunStyle(el,p,xPct,yPct){
+    el.style.left=xPct+'%';el.style.top=yPct+'%';
+    var s=hex(p.sun);
+    el.style.background='radial-gradient(circle,rgba('+s[0]+','+s[1]+','+s[2]+','+p.glow+') 0%,rgba('+s[0]+','+s[1]+','+s[2]+',.35) 35%,rgba('+s[0]+','+s[1]+','+s[2]+',0) 70%)';
+  }
+  // sun arc: 6→18h across x 6%→94%, parabolic height (top ~14%, horizon ~78%)
+  function sunPos(hr){
+    var x,y;
+    if(hr>=6&&hr<=18){x=6+(hr-6)/12*88;var u=(hr-12)/6;y=14+u*u*64;}
+    else{ // moon at night: 18→30(6am)
+      var mh=hr<6?hr+24:hr;x=6+(mh-18)/12*88;var u=(mh-24)/6;y=18+u*u*58;}
+    return{x:x,y:y};
+  }
+
+  function two(n){return n<10?'0'+n:''+n}
+  function render(min){
+    var hr=min/60, h=Math.floor(hr), m=min%60;
+    var h12=h%12; if(h12===0)h12=12; var ap=h<12?'AM':'PM';
+    var t=h12+':'+two(m);
+    var p=pal(hr), sp=sunPos(hr);
+    // labels
+    set('clockLbl',t+' '+ap); set('phaseLbl',p.ph); set('statusClk',t);
+
+    // date (fixed sample: Wed Jul 1 2026)
+    var wd=3, day=1, mo=6, yr=2026;
+
+    // HERO
+    byId('heroSky').style.background=skyCss(p);
+    byId('heroScrim').style.background=scrimCss(p);
+    sunStyle(byId('heroSun'),p,sp.x,sp.y*.9);
+    set('heroTime',t); byId('heroTime').style.color=p.ink;
+    byId('heroRule').style.background=alpha(p.ink,.4);
+    set('heroDate',WD[wd]+' · '+MO[mo]+' '+day);
+    byId('heroDate').style.color=p.ink;
+
+    // DATE — big legible numeral on its own warm duotone sky, palette-tinted
+    byId('dateSky').style.background='linear-gradient(150deg,'+p.sky[0]+' 0%,'+p.sky[2]+' 100%)';
+    byId('dateScrim').style.background=scrimCss(p);
+    set('dateNum',day); byId('dateNum').style.color=p.ink;
+    byId('dateDot').style.background='#8FBE97';
+    set('dateWd',WD[wd]); byId('dateWd').style.color=p.ink;
+    set('dateMo',MO[mo]+' '+yr); byId('dateMo').style.color=p.ink;
+
+    // AURORA — always night/green identity (shows palette range), ignores scrub
+    byId('aurSky').style.background='radial-gradient(120% 90% at 30% 20%,#1c3a2a 0%,#12203a 55%,#0a0f1e 100%)';
+    byId('aurGlow').style.left='72%';byId('aurGlow').style.top='24%';
+    byId('aurGlow').style.background='radial-gradient(circle,rgba(120,200,150,.5) 0%,rgba(90,150,200,.25) 40%,rgba(0,0,0,0) 70%)';
+    set('aurTime',t);
+    set('aurDate',WD3[wd]+' · '+MO[mo].substr(0,3)+' '+day);
+    byId('aurDot').style.background='#8FBE97';
+
+    // STRIP
+    byId('stripSky').style.background=skyCss(p);
+    byId('stripScrim').style.background='linear-gradient(90deg,'+scr(p,.6)+' 0%,rgba(0,0,0,0) 55%),'+scrimCss(p);
+    sunStyle(byId('stripSun'),p,sp.x,sp.y*.5+10);
+    set('stripTime',t); byId('stripTime').style.color=p.ink;
+    set('stripWd',WD[wd]); byId('stripWd').style.color=p.ink;
+    set('stripMo',MO[mo]+' '+day+' · '+yr); byId('stripMo').style.color=p.ink;
+  }
+  function scr(p,a){var b=hex(p.sky[2]);return'rgba('+b[0]+','+b[1]+','+b[2]+','+a+')'}
+  function alpha(rgb,a){var m=rgb.match(/\d+/g);return'rgba('+m[0]+','+m[1]+','+m[2]+','+a+')'}
+  function byId(i){return document.getElementById(i)}
+  function set(i,v){var e=byId(i);if(e)e.textContent=v}
+
+  var sc=byId('scrub');
+  sc.oninput=function(){render(+sc.value)};
+  // seed from #minutes (headless screenshots / deep-link a time of day)
+  var seed=parseInt((location.hash||'').replace('#',''),10);
+  if(!isNaN(seed)){sc.value=seed;}
+  render(+sc.value);
+</script>
+</body>
+</html>

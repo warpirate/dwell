@@ -8,6 +8,7 @@ import com.dwell.app.data.billing.EntitlementRepository
 import com.dwell.app.data.widget.WidgetColor
 import com.dwell.app.data.widget.WidgetPreset
 import com.dwell.app.data.widget.WidgetSize
+import com.dwell.app.data.widget.WallpaperMatchStore
 import com.dwell.app.data.widget.WallpaperPaletteExtractor
 import com.dwell.app.data.widget.WallpaperSample
 import com.dwell.app.data.widget.SampleWallpaper
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WidgetConfigViewModel @Inject constructor(
     private val store: WidgetStyleStore,
+    private val matchStore: WallpaperMatchStore,
     private val billing: BillingRepository,
     entitlements: EntitlementRepository,
 ) : ViewModel() {
@@ -63,9 +65,22 @@ class WidgetConfigViewModel @Inject constructor(
     fun selectPreset(preset: WidgetPreset) = _draft.update { preset.style }
 
     /**
-     * The moat, demonstrated: sample a wallpaper we own, extract its palette, and recolour the
-     * widget text to match. (POC uses a generated stand-in wallpaper; the real path samples the
-     * bitmap the user applied from Dwell.)
+     * The colour extracted from the wallpaper the user last applied through Dwell, or null if
+     * none yet. Drives the real "Match my wallpaper" action; null renders the ghost/hint state.
+     */
+    val wallpaperMatch: StateFlow<Int?> = matchStore.observe()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** The moat: recolour the widget text to the user's actual applied wallpaper. */
+    fun matchCurrentWallpaper() {
+        viewModelScope.launch {
+            matchStore.get()?.let { argb -> _draft.update { it.copy(matchedArgb = argb) } }
+        }
+    }
+
+    /**
+     * Preview the wallpaper-match effect against a built-in sample look — the tease for users
+     * who haven't applied a Dwell wallpaper yet. The real path is [matchCurrentWallpaper].
      */
     fun matchWallpaper(sample: WallpaperSample) {
         viewModelScope.launch {

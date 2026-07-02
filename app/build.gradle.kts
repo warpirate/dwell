@@ -44,6 +44,10 @@ android {
     buildFeatures {
         compose = true
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -112,4 +116,6 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
+    // Robolectric — real android.graphics.Bitmap/Canvas in JVM unit tests (PosterRenderer smoke test).
+    testImplementation(libs.robolectric)
 }

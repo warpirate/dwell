@@ -68,6 +68,7 @@
     <!-- Widgets tab -->
     <string name="widgets_clock_title">Clock</string>
     <string name="widgets_clock_subtitle">A calm clock for your home screen.</string>
+    <string name="widgets_date_subtitle">Today\'s date, editorial.</string>
     <string name="widgets_add">Add to home screen</string>
     <string name="widgets_customize">Customize</string>
     <string name="widgets_more_soon">Calendar, notes, and battery are coming next.</string>

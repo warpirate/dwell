@@ -4,11 +4,19 @@ import android.app.Activity
 import com.dwell.app.data.billing.BillingRepository
 import com.dwell.app.data.billing.EntitlementRepository
 import com.dwell.app.data.billing.PurchaseResult
+import com.dwell.app.data.widget.WallpaperMatchStore
 import com.dwell.app.data.widget.WidgetStyle
 import com.dwell.app.data.widget.WidgetStyleStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+
+class FakeWallpaperMatchStore(matched: Int? = null) : WallpaperMatchStore {
+    val matched = MutableStateFlow(matched)
+    override fun observe(): Flow<Int?> = matched
+    override suspend fun get(): Int? = matched.value
+    override suspend fun save(argb: Int) { matched.value = argb }
+}
 
 class FakeWidgetStyleStore : WidgetStyleStore {
     val styles = MutableStateFlow<Map<Int, WidgetStyle>>(emptyMap())

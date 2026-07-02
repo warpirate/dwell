@@ -50,14 +50,17 @@ class WidgetConfigActivity : ComponentActivity() {
                 val draft by viewModel.draft.collectAsStateWithLifecycle()
                 val selected by viewModel.selected.collectAsStateWithLifecycle()
                 val needsUnlock by viewModel.needsUnlock.collectAsStateWithLifecycle()
+                val wallpaperMatch by viewModel.wallpaperMatch.collectAsStateWithLifecycle()
                 WidgetConfigScreen(
                     style = draft,
                     selected = selected,
                     isPremium = isPremium,
                     needsUnlock = needsUnlock,
+                    wallpaperMatch = wallpaperMatch,
                     onSelectPreset = viewModel::selectPreset,
                     onColor = viewModel::setColor,
                     onSize = viewModel::setSize,
+                    onMatchCurrent = viewModel::matchCurrentWallpaper,
                     onMatchWallpaper = viewModel::matchWallpaper,
                     onOpenPaywall = { startActivity(Intent(this, PaywallActivity::class.java)) },
                     onAdd = ::commit,

@@ -7,6 +7,8 @@ import coil3.request.ImageRequest
 import coil3.request.SuccessResult
 import coil3.request.allowHardware
 import coil3.toBitmap
+import com.dwell.app.data.widget.WallpaperMatchStore
+import com.dwell.app.data.widget.WallpaperPaletteExtractor
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,6 +18,7 @@ import javax.inject.Singleton
 @Singleton
 class WallpaperApplierImpl @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val matchStore: WallpaperMatchStore,
 ) : WallpaperApplier {
 
     override suspend fun apply(url: String, target: WallpaperTarget): Result<Unit> =
@@ -38,6 +41,10 @@ class WallpaperApplierImpl @Inject constructor(
                     /* allowBackup = */ true,
                     target.toFlags(),
                 )
+
+                // The moat: we own this bitmap, so extract its matched widget colour now and
+                // persist it. A palette failure must not fail the apply — the wallpaper is set.
+                runCatching { matchStore.save(WallpaperPaletteExtractor.match(bitmap)) }
                 Unit
             }
         }

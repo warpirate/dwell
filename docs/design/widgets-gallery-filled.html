@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dwell — Widgets gallery, full catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12100E; --bg-canvas:#0B0A08; --surface:#221F1A; --surface-2:#2A2620;
+    --cream:#ECE7DD; --muted:#A89F8E; --green:#6E9576; --green-deep:#3A5A40;
+    --sand:#E8D9BC; --hairline:rgba(236,231,221,.10);
+    --card-hi:#322D26; --card-lo:#15110C;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:radial-gradient(1100px 700px at 25% -5%,#1a1712 0%,transparent 55%),var(--bg-canvas);
+    font-family:var(--sans); color:var(--cream);
+    padding:52px 40px 70px; display:flex; flex-direction:column; align-items:center; gap:16px;
+  }
+  .head{text-align:center; margin-bottom:14px}
+  .head h1{font-family:var(--serif); font-weight:500; font-size:30px; letter-spacing:-.01em}
+  .head p{color:var(--muted); font-size:14px; margin-top:6px}
+  .cap{color:var(--muted); font-size:12px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px}
+  .cap b{color:var(--sand); font-weight:600}
+
+  .phone{width:392px; border-radius:44px; background:var(--bg); border:1px solid rgba(236,231,221,.08);
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.85); overflow:hidden}
+  .status{height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; font-size:13px}
+  .status .r{font-size:11px; opacity:.9}
+  .body{padding:4px 20px 26px}
+
+  h2.title{font-family:var(--serif); font-weight:500; font-size:26px; letter-spacing:-.01em}
+  .sub{color:var(--muted); font-size:13px; margin-top:3px}
+
+  /* filter chips */
+  .chips{display:flex; gap:8px; margin:16px 0 4px; flex-wrap:wrap}
+  .chip{font-size:12.5px; padding:8px 15px; border-radius:999px; color:var(--muted); border:1px solid var(--hairline); background:transparent}
+  .chip.on{color:var(--green); border-color:rgba(110,149,118,.5)}
+
+  .sect{color:var(--muted); font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:600; margin:22px 2px 11px}
+
+  /* masonry */
+  .grid{columns:2; column-gap:12px}
+  .card{break-inside:avoid; margin-bottom:12px; border-radius:20px; border:1px solid var(--hairline);
+    background:linear-gradient(160deg,var(--card-hi),var(--card-lo)); position:relative; overflow:hidden}
+  .card.wide{column-span:all}
+  .pad{padding:16px}
+  .tag{position:absolute; top:11px; left:13px; font-size:9px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); z-index:2}
+  .lock{position:absolute; top:9px; right:9px; width:20px;height:20px;border-radius:50%; background:rgba(18,16,14,.72);
+    display:flex;align-items:center;justify-content:center; z-index:2}
+  .lock svg{width:10px;height:10px;stroke:var(--sand)}
+  .serif{font-family:var(--serif); letter-spacing:-.02em; line-height:.95}
+  .rule{height:1px;background:rgba(236,231,221,.16)}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--green); display:inline-block}
+  .mut{color:var(--muted)} .grn{color:var(--green)} .snd{color:var(--sand)}
+
+  /* clock */
+  .c-time{font-size:52px; color:var(--cream)}
+  /* weather */
+  .wx-t{font-size:44px; color:var(--cream)}
+  .wx-sun{position:absolute; top:16px; right:16px; width:26px;height:26px; border-radius:50%;
+    background:radial-gradient(circle,#E8D9BC,#C9A15E)}
+  /* ring */
+  .ring{width:78px;height:78px;border-radius:50%; margin:6px auto 0;
+    background:conic-gradient(var(--green) 0 82%, rgba(236,231,221,.12) 82% 100%);
+    display:flex;align-items:center;justify-content:center; position:relative}
+  .ring::after{content:''; position:absolute; inset:9px; border-radius:50%; background:#1b1712}
+  .ring span{position:relative; font-family:var(--serif); font-size:19px; color:var(--cream)}
+  .ring.sand{background:conic-gradient(var(--sand) 0 61%, rgba(236,231,221,.12) 61% 100%)}
+  /* date */
+  .d-num{font-size:62px; color:var(--cream)}
+  /* agenda rows */
+  .ev{display:flex; align-items:center; gap:11px; padding:7px 0}
+  .ev .t{font-size:12px; color:var(--muted); width:44px; font-variant-numeric:tabular-nums}
+  .ev .n{font-size:14px; color:var(--cream)}
+  /* photo */
+  .photo{height:150px; background:
+    linear-gradient(160deg,#6D8A6F,#3F5F4A 60%,#20302A);
+    position:relative}
+  .photo .frame{position:absolute; inset:10px; border:1px solid rgba(236,231,221,.35); border-radius:12px}
+  /* quote */
+  .q{font-family:var(--serif); font-style:italic; font-size:18px; line-height:1.35; color:var(--cream)}
+  .q-a{font-size:11px; color:var(--muted); letter-spacing:.06em; margin-top:10px}
+  /* countdown */
+  .cd-n{font-size:52px; color:var(--sand)}
+  /* moon */
+  .moon{width:64px;height:64px;border-radius:50%; margin:4px auto 0;
+    background:linear-gradient(90deg,#2a2620 0 42%, #E8D9BC 42% 100%);
+    box-shadow:inset -6px 0 12px rgba(0,0,0,.35)}
+  /* world clock */
+  .wc{display:flex; align-items:baseline; justify-content:space-between; padding:6px 0}
+  .wc .tm{font-family:var(--serif); font-size:24px; color:var(--cream)}
+  .wc .z{font-size:11px; color:var(--muted); letter-spacing:.14em}
+  /* music */
+  .mus{display:flex; gap:13px; align-items:center}
+  .mus .alb{width:52px;height:52px;border-radius:9px; background:linear-gradient(150deg,#8A5A6E,#3D3550); flex:0 0 auto}
+  .bar{height:3px;border-radius:2px;background:rgba(236,231,221,.16); margin-top:9px; position:relative}
+  .bar::after{content:'';position:absolute;left:0;top:0;height:3px;width:38%;border-radius:2px;background:var(--green)}
+  .play{width:0;height:0;border-left:12px solid var(--cream); border-top:8px solid transparent; border-bottom:8px solid transparent}
+  /* month grid */
+  .mg{display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-top:8px}
+  .mg i{aspect-ratio:1; border-radius:5px; background:rgba(236,231,221,.06); display:flex;align-items:center;justify-content:center;
+    font-size:9px; color:var(--muted); font-style:normal}
+  .mg i.on{background:var(--green-deep); color:#F3EEE4}
+  .mg i.h{color:var(--sand); background:transparent; font-size:8px; letter-spacing:.04em}
+
+  /* bottom nav */
+  .nav{display:flex; justify-content:space-around; padding:14px 0 24px; border-top:1px solid var(--hairline); margin-top:8px}
+  .nav div{display:flex;flex-direction:column;align-items:center;gap:5px; font-size:11px; color:var(--muted)}
+  .nav div.on{color:var(--green)}
+  .nav svg{width:20px;height:20px}
+  .note{max-width:840px; text-align:center; color:var(--muted); font-size:13px; line-height:1.6; margin-top:16px}
+  .note b{color:var(--sand)}
+</style>
+</head>
+<body>
+  <div class="head">
+    <h1>The full widget catalog</h1>
+    <p>What the Widgets tab becomes once the suite ships — browsable, live, premium.</p>
+  </div>
+
+  <div class="phone">
+    <div class="status"><span>1:40</span><span class="r">✦ ▲ ▮</span></div>
+    <div class="body">
+      <h2 class="title">Widgets</h2>
+      <div class="sub">Twelve looks and counting — pick, tune, place.</div>
+
+      <div class="chips">
+        <span class="chip on">All</span>
+        <span class="chip">Time</span>
+        <span class="chip">Weather</span>
+        <span class="chip">Life</span>
+        <span class="chip">Photos</span>
+        <span class="chip">Fun</span>
+      </div>
+
+      <div class="sect">Featured</div>
+      <div class="grid">
+
+        <!-- CLOCK — wide feature -->
+        <div class="card wide"><div class="pad">
+          <span class="tag">Clock</span>
+          <div style="height:12px"></div>
+          <div class="serif c-time">9:41</div>
+          <div class="rule" style="width:46px;margin:11px 0"></div>
+          <div style="display:flex;align-items:center;gap:9px"><span class="dot"></span><span class="mut" style="font-size:11px;letter-spacing:.18em">TUE, JUN 30</span></div>
+        </div></div>
+
+        <!-- WEATHER -->
+        <div class="card"><div class="pad" style="min-height:150px">
+          <span class="tag">Weather</span>
+          <div class="wx-sun"></div>
+          <div style="height:26px"></div>
+          <div class="serif wx-t">24°</div>
+          <div class="mut" style="font-size:12px;margin-top:4px">Bengaluru</div>
+          <div class="snd" style="font-size:11px;margin-top:8px;letter-spacing:.04em">H:27°&nbsp;&nbsp;L:19°</div>
+        </div></div>
+
+        <!-- BATTERY ring -->
+        <div class="card"><div class="pad" style="min-height:150px;text-align:center">
+          <span class="tag" style="left:0;right:0;text-align:center">Battery</span>
+          <div style="height:20px"></div>
+          <div class="ring"><span>82%</span></div>
+          <div class="mut" style="font-size:11px;margin-top:12px;letter-spacing:.12em">PHONE</div>
+        </div></div>
+
+        <!-- DATE -->
+        <div class="card"><div class="pad" style="min-height:150px">
+          <span class="tag">Date</span>
+          <div style="height:14px"></div>
+          <div class="serif d-num">30</div>
+          <div class="grn" style="font-size:13px;letter-spacing:.16em;margin-top:2px">TUESDAY</div>
+          <div class="mut" style="font-size:12px;letter-spacing:.14em;margin-top:3px">JUNE 2026</div>
+        </div></div>
+
+        <!-- STEPS ring -->
+        <div class="card"><div class="pad" style="min-height:150px;text-align:center">
+          <span class="tag" style="left:0;right:0;text-align:center">Steps</span>
+          <div style="height:20px"></div>
+          <div class="ring sand"><span style="font-size:15px">7,204</span></div>
+          <div class="mut" style="font-size:11px;margin-top:12px;letter-spacing:.12em">STEPS TODAY</div>
+        </div></div>
+
+        <!-- AGENDA — wide, premium -->
+        <div class="card wide"><div class="pad">
+          <span class="tag">Agenda · up next</span>
+          <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+          <div style="height:18px"></div>
+          <div class="ev"><span class="t">09:30</span><span class="dot"></span><span class="n">Standup</span></div>
+          <div class="ev"><span class="t">11:00</span><span class="dot" style="background:var(--sand)"></span><span class="n">Design review</span></div>
+          <div class="ev"><span class="t">18:30</span><span class="dot" style="background:#8A5A6E"></span><span class="n">Gym</span></div>
+        </div></div>
+
+        <!-- PHOTO -->
+        <div class="card"><div class="photo"><div class="frame"></div></div>
+          <div class="pad" style="padding:11px 14px"><span class="mut" style="font-size:11px;letter-spacing:.1em">PHOTO · framed</span></div>
+        </div>
+
+        <!-- COUNTDOWN premium -->
+        <div class="card"><div class="pad" style="min-height:150px">
+          <span class="tag">Countdown</span>
+          <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+          <div style="height:22px"></div>
+          <div class="serif cd-n">12</div>
+          <div class="mut" style="font-size:12px;margin-top:2px">days until</div>
+          <div class="cream" style="font-size:14px;margin-top:4px;color:var(--cream)">Goa trip</div>
+        </div></div>
+
+        <!-- QUOTE — wide -->
+        <div class="card wide"><div class="pad">
+          <span class="tag">Quote · daily</span>
+          <div style="height:20px"></div>
+          <div class="q">"Almost everything will work again if you unplug it for a few minutes."</div>
+          <div class="q-a">— ANNE LAMOTT</div>
+        </div></div>
+
+        <!-- MOON premium -->
+        <div class="card"><div class="pad" style="min-height:150px;text-align:center">
+          <span class="tag" style="left:0;right:0;text-align:center">Moon</span>
+          <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+          <div style="height:20px"></div>
+          <div class="moon"></div>
+          <div class="mut" style="font-size:11px;margin-top:14px;letter-spacing:.1em">WAXING GIBBOUS</div>
+        </div></div>
+
+        <!-- WORLD CLOCK -->
+        <div class="card"><div class="pad" style="min-height:150px">
+          <span class="tag">World clock</span>
+          <div style="height:22px"></div>
+          <div class="wc"><span class="serif tm">9:41</span><span class="z">SF</span></div>
+          <div class="rule" style="margin:2px 0"></div>
+          <div class="wc"><span class="serif tm">22:11</span><span class="z">TOKYO</span></div>
+        </div></div>
+
+        <!-- MUSIC — wide, premium -->
+        <div class="card wide"><div class="pad">
+          <span class="tag">Now playing</span>
+          <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+          <div style="height:18px"></div>
+          <div class="mus">
+            <div class="alb"></div>
+            <div style="flex:1">
+              <div style="font-size:15px;color:var(--cream);font-weight:500">Weightless</div>
+              <div class="mut" style="font-size:12px">Marconi Union</div>
+              <div class="bar"></div>
+            </div>
+            <div class="play"></div>
+          </div>
+        </div></div>
+
+        <!-- MONTH GRID — wide, premium -->
+        <div class="card wide"><div class="pad">
+          <span class="tag">Month · calendar</span>
+          <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+          <div style="height:20px"></div>
+          <div class="mg">
+            <i class="h">M</i><i class="h">T</i><i class="h">W</i><i class="h">T</i><i class="h">F</i><i class="h">S</i><i class="h">S</i>
+            <i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i>
+            <i>8</i><i>9</i><i>10</i><i>11</i><i>12</i><i>13</i><i>14</i>
+            <i>15</i><i>16</i><i>17</i><i>18</i><i>19</i><i>20</i><i>21</i>
+            <i>22</i><i>23</i><i>24</i><i>25</i><i>26</i><i>27</i><i>28</i>
+            <i>29</i><i class="on">30</i><i>&nbsp;</i><i>&nbsp;</i><i>&nbsp;</i><i>&nbsp;</i><i>&nbsp;</i>
+          </div>
+        </div></div>
+
+      </div>
+    </div>
+
+    <div class="nav">
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 14l5-4 4 3 5-4 4 3"/></svg>Wallpapers</div>
+      <div class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Widgets</div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>More</div>
+    </div>
+  </div>
+
+  <div class="note">
+    A <b>two-column masonry</b> of live widget previews — squares and wides mixed — grouped by filter chips (All · Time · Weather · Life · Photos · Fun). Every card is the real look at real proportions: <b>Clock, Weather, Battery, Date, Steps, Agenda, Photo, Countdown, Quote, Moon, World clock, Now-playing, Month grid.</b> Lock badges mark premium; tap any card to preview & tune. Faithful to RemoteViews (flat gradients, static radius, bitmap rings) so what you browse is what lands on the home screen.
+  </div>
+</body>
+</html>

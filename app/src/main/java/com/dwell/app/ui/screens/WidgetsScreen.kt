@@ -1,51 +1,40 @@
 package com.dwell.app.ui.screens
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import com.dwell.app.R
-import com.dwell.app.ui.components.DwellPrimaryButton
+import com.dwell.app.data.widget.CatalogWidget
 import com.dwell.app.ui.components.DwellScaffold
-import com.dwell.app.ui.theme.DwellSpacing
-import com.dwell.app.ui.widgetconfig.WidgetConfigActivity
+import com.dwell.app.ui.screens.widgets.WidgetGallery
+import com.dwell.app.ui.widgetconfig.PosterWeatherConfigActivity
+import com.dwell.app.widget.date.DateWidgetProvider
 
 @Composable
 fun WidgetsScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     DwellScaffold(modifier = modifier) {
-        Column(Modifier.fillMaxSize().padding(DwellSpacing.screenGutter)) {
-            Text(
-                text = stringResource(R.string.widgets_clock_title),
-                style = MaterialTheme.typography.titleLarge,
-            )
-            Text(
-                text = stringResource(R.string.widgets_clock_subtitle),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(Modifier.height(DwellSpacing.lg))
-            DwellPrimaryButton(
-                text = stringResource(R.string.widgets_add),
-                onClick = {
-                    // Open the gallery (tease) — pick a style, then it pins the widget.
-                    context.startActivity(Intent(context, WidgetConfigActivity::class.java))
-                },
-            )
-            Spacer(Modifier.height(DwellSpacing.xl))
-            Text(
-                text = stringResource(R.string.widgets_more_soon),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+        WidgetGallery(
+            onSelect = { widget ->
+                when (widget) {
+                    // Clock is the poster: opens the weather picker, which pins on "Add widget".
+                    CatalogWidget.CLOCK -> context.startActivity(Intent(context, PosterWeatherConfigActivity::class.java))
+                    // Date has no styling yet — pin it straight to the home screen.
+                    CatalogWidget.DATE -> pinWidget(context, DateWidgetProvider::class.java)
+                    else -> Unit // Soon cards aren't tappable.
+                }
+            },
+        )
+    }
+}
+
+/** Ask the launcher to pin a widget for [provider]; no-op on launchers that don't support it. */
+private fun pinWidget(context: Context, provider: Class<*>) {
+    val manager = context.getSystemService(AppWidgetManager::class.java) ?: return
+    if (manager.isRequestPinAppWidgetSupported) {
+        manager.requestPinAppWidget(ComponentName(context, provider), null, null)
     }
 }

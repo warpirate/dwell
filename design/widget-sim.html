@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<!--
+  DWELL widget simulator — pixel-faithful phone canvas for fast widget iteration.
+  Replaces the build→deploy→pin→screenshot loop. Design here, port the winner to
+  app/src/main/res/layout/*.xml + res/drawable/widget_bg*.xml.
+
+  HARD RULE — every widget here must be RemoteViews-safe on minSdk 26, or it's a lie:
+    • background = gradient/solid on a rounded rect  (≡ <shape> / layer-list drawable)
+    • depth      = gradient only. NO box-shadow      (RemoteViews has no elevation on the card)
+    • hairline   = 1px block                          (≡ ImageView, never a bare <View>)
+    • dot        = round block                        (≡ ImageView oval)
+    • NO blur / backdrop-filter                       (not on the RemoteViews whitelist)
+    • font       = Fraunces (bundled TTF) + system sans caption
+    • radius     = static
+  If a look needs anything else, it does not ship. Keep this file honest.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DWELL · widget simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* DWELL locked tokens */
+    --cream:#ECE7DD; --muted:#A89F8E; --green:#6E9576; --green-deep:#3A5A40;
+    --ink:#221F1A; --bg:#12100E;
+    /* card gradient stops (mirror widget_bg.xml) */
+    --card-top:#322D26; --card-mid:#221E18; --card-bot:#15110C;
+    --hairline:rgba(236,231,221,.13);
+    --stroke:rgba(236,231,221,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#0b0a09; color:var(--cream); min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex; flex-direction:column; align-items:center; gap:22px;
+    padding:28px 16px 60px;
+  }
+  .fraunces{font-family:"Fraunces",Georgia,serif;font-optical-sizing:auto}
+
+  /* ---- control bar ---- */
+  .bar{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
+    background:#161513; border:1px solid #26241f; border-radius:999px;
+    padding:8px 12px;
+  }
+  .bar span{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-right:4px}
+  .bar button{
+    font:inherit; font-size:12.5px; color:var(--cream); cursor:pointer;
+    background:#221F1A; border:1px solid #34302a; border-radius:999px;
+    padding:6px 13px; transition:.15s ease;
+  }
+  .bar button:hover{border-color:var(--green)}
+  .bar button.on{background:var(--green-deep); border-color:var(--green); color:#F2EFE8}
+  .hint{font-size:12px;color:#6f675c;max-width:410px;text-align:center;line-height:1.5}
+
+  /* ---- phone ---- */
+  .phone{
+    position:relative; width:393px; height:820px; border-radius:44px;
+    overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.6);
+    border:9px solid #050505; background:#000;
+  }
+  .wall{position:absolute; inset:0; z-index:0; transition:background .5s ease}
+  /* three swatch "wallpapers" — proves match + legibility on different palettes */
+  .wall.foliage{background:
+     radial-gradient(120% 90% at 20% 8%, #2f4a3a 0%, #1c2c22 42%, #0e1712 100%),
+     radial-gradient(80% 60% at 85% 80%, #35533f 0%, rgba(0,0,0,0) 60%)}
+  .wall.sand{background:
+     radial-gradient(120% 90% at 25% 10%, #b89b74 0%, #8a6f4e 45%, #4a3826 100%),
+     radial-gradient(70% 60% at 85% 85%, #c8ab82 0%, rgba(0,0,0,0) 60%)}
+  .wall.night{background:
+     radial-gradient(120% 100% at 30% 5%, #2a3550 0%, #161d31 45%, #080b14 100%),
+     radial-gradient(60% 50% at 80% 80%, #3a4560 0%, rgba(0,0,0,0) 60%)}
+
+  .status{position:absolute;z-index:3;top:14px;left:22px;right:22px;display:flex;justify-content:space-between;
+     font-size:13px;color:#f3efe8;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .grid{position:absolute;z-index:2;inset:0;padding:78px 20px 0;display:flex;flex-direction:column;gap:22px}
+  .row{display:flex;gap:18px}
+
+  /* ============ WIDGET BASE (RemoteViews-faithful) ============ */
+  .w{
+    border-radius:26px; border:1px solid var(--stroke); overflow:hidden;
+    display:flex; flex-direction:column; position:relative;
+    padding:16px 18px;
+  }
+  .w.sq{width:162px; height:162px}
+  .w.wide{flex:1; height:150px}
+  /* the ONLY depth: the gradient. no box-shadow (RemoteViews). */
+  .w.dark{background:linear-gradient(180deg,var(--card-top) 0%, var(--card-mid) 22%, var(--card-bot) 100%)}
+  .w.cream{background:linear-gradient(180deg,#F3EFE7 0%, #E9E2D5 60%, #DED5C4 100%); border-color:rgba(34,31,26,.10)}
+  .w.matched{background:linear-gradient(180deg,#28382c 0%, #1c2a20 24%, #101a13 100%); border-color:rgba(150,190,160,.22)}
+
+  .hero{font-weight:400;line-height:.92;letter-spacing:-.02em;color:var(--cream)}
+  .cream .hero{color:#242019}
+  .spacer{flex:1}
+  .cap{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--muted)}
+  .cap.green{color:var(--green)}
+  .cream .cap{color:#8a7d68}
+  .cream .cap.green{color:var(--green-deep)}
+  .rule{height:1px;width:46px;background:var(--hairline);margin:0 0 11px}
+  .cream .rule{background:rgba(34,31,26,.16)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:9px;vertical-align:middle}
+  .footer{display:flex;align-items:center}
+
+  /* year-progress bar — real content, still just two blocks (ImageViews) */
+  .track{height:3px;width:100%;border-radius:2px;background:rgba(236,231,221,.12);overflow:hidden;margin-top:4px}
+  .cream .track{background:rgba(34,31,26,.12)}
+  .fill{height:100%;background:var(--green);border-radius:2px}
+
+  .label{position:absolute;top:-11px;left:8px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+     color:#8f8778;background:#0b0a09;padding:2px 8px;border-radius:6px;border:1px solid #26241f}
+  .tier{position:absolute;top:-11px;right:8px;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+     padding:2px 8px;border-radius:6px}
+  .tier.free{color:#bcd0bf;background:#1a241c;border:1px solid #2f4536}
+  .tier.prem{color:#e7cf9a;background:#241f16;border:1px solid #4a3d26}
+
+  .section{width:393px;max-width:393px}
+  .section h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+     font-weight:500;margin:6px 2px 2px}
+</style>
+</head>
+<body>
+
+  <div class="bar">
+    <span>Wallpaper</span>
+    <button class="wall-btn on" data-w="foliage">Foliage</button>
+    <button class="wall-btn" data-w="sand">Sand</button>
+    <button class="wall-btn" data-w="night">Night</button>
+  </div>
+  <p class="hint">Same tokens, RemoteViews-safe. Swap wallpaper to test legibility + the wallpaper-match preset (premium). Widgets read the real clock.</p>
+
+  <div class="phone">
+    <div class="wall foliage" id="wall"></div>
+    <div class="status"><span id="clk">3:22</span><span>▽ ⤢ ▮</span></div>
+
+    <div class="grid">
+      <!-- ROW 1: refined DARK date (more content) + CREAM clock (free hero, distinct) -->
+      <div class="row">
+        <!-- Date · dark · now carries weekday + year-progress = actual information -->
+        <div class="w sq dark">
+          <div class="label">Date · dark</div><div class="tier free">Free</div>
+          <div class="hero fraunces" style="font-size:66px" id="d-day">1</div>
+          <div class="spacer"></div>
+          <div class="cap green" id="d-wd">WEDNESDAY</div>
+          <div class="track"><div class="fill" id="d-fill" style="width:50%"></div></div>
+        </div>
+        <!-- Clock · cream · reads like paper, pops on any wallpaper, green as mark -->
+        <div class="w sq cream">
+          <div class="label">Clock · cream</div><div class="tier free">Free</div>
+          <div class="hero fraunces" style="font-size:46px" id="c-t1">3:22</div>
+          <div class="spacer"></div>
+          <div class="rule"></div>
+          <div class="footer"><span class="dot"></span><span class="cap green" id="c-d1">WED · JUL 1</span></div>
+        </div>
+      </div>
+
+      <!-- ROW 2: WIDE clock poster (dark, editorial) — the flagship free look, refined -->
+      <div class="row">
+        <div class="w wide dark">
+          <div class="label">Clock · poster (wide)</div><div class="tier free">Free</div>
+          <div style="display:flex;align-items:baseline;gap:14px">
+            <div class="hero fraunces" style="font-size:58px" id="c-t2">3:22</div>
+            <div class="cap" style="color:var(--muted);letter-spacing:.2em" id="c-ampm">PM</div>
+          </div>
+          <div class="spacer"></div>
+          <div class="rule" style="width:54px"></div>
+          <div class="footer"><span class="dot"></span><span class="cap" style="color:var(--muted)" id="c-d2">WEDNESDAY · JULY 1</span></div>
+        </div>
+      </div>
+
+      <!-- ROW 3: WALLPAPER-MATCHED pair (premium moat) — card tint sampled from wallpaper -->
+      <div class="row">
+        <div class="w sq matched">
+          <div class="label">Date · matched</div><div class="tier prem">Premium</div>
+          <div class="hero fraunces" style="font-size:66px;color:#EAF1E9" id="m-day">1</div>
+          <div class="spacer"></div>
+          <div class="cap" style="color:#9db9a2" id="m-wd">WEDNESDAY</div>
+          <div class="cap" style="color:#7d9683;font-size:11px;letter-spacing:.14em;margin-top:3px">JULY 2026</div>
+        </div>
+        <div class="w sq matched">
+          <div class="label">Clock · matched</div><div class="tier prem">Premium</div>
+          <div class="hero fraunces" style="font-size:46px;color:#EAF1E9" id="m-t">3:22</div>
+          <div class="spacer"></div>
+          <div class="rule" style="background:rgba(180,210,185,.25)"></div>
+          <div class="footer"><span class="dot" style="background:#9db9a2"></span><span class="cap" style="color:#9db9a2" id="m-d">WED · JUL 1</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // live clock — same fields TextClock would drive
+  function pad(n){return n<10?'0'+n:''+n}
+  var WD=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+  var WD3=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  var MO=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  var MO3=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  function tick(){
+    var n=new Date();
+    var h=n.getHours(), m=pad(n.getMinutes()), ap=h<12?'AM':'PM';
+    var h12=h%12; if(h12===0)h12=12;
+    var t=h12+':'+m, day=n.getDate(), wd=n.getDay(), mo=n.getMonth(), yr=n.getFullYear();
+    // year progress
+    var start=new Date(yr,0,1), end=new Date(yr+1,0,1);
+    var pct=Math.round((n-start)/(end-start)*100);
+    set('clk',t);
+    set('d-day',day); set('d-wd',WD[wd]); byId('d-fill').style.width=pct+'%';
+    set('c-t1',t); set('c-d1',WD3[wd]+' · '+MO3[mo]+' '+day);
+    set('c-t2',t); set('c-ampm',ap); set('c-d2',WD[wd]+' · '+MO[mo]+' '+day);
+    set('m-day',day); set('m-wd',WD[wd]);
+    set('m-t',t); set('m-d',WD3[wd]+' · '+MO3[mo]+' '+day);
+  }
+  function byId(i){return document.getElementById(i)}
+  function set(i,v){var e=byId(i); if(e)e.textContent=v}
+  tick(); setInterval(tick,1000);
+
+  // wallpaper swap
+  document.querySelectorAll('.wall-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.wall-btn').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      byId('wall').className='wall '+b.dataset.w;
+    };
+  });
+</script>
+</body>
+</html>

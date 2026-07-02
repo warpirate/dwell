@@ -66,9 +66,11 @@ fun WidgetConfigScreen(
     selected: WidgetPreset?,
     isPremium: Boolean,
     needsUnlock: Boolean,
+    wallpaperMatch: Int?,
     onSelectPreset: (WidgetPreset) -> Unit,
     onColor: (WidgetColor) -> Unit,
     onSize: (WidgetSize) -> Unit,
+    onMatchCurrent: () -> Unit,
     onMatchWallpaper: (WallpaperSample) -> Unit,
     onOpenPaywall: () -> Unit,
     onAdd: () -> Unit,
@@ -107,7 +109,7 @@ fun WidgetConfigScreen(
             }
 
             Spacer(Modifier.height(DwellSpacing.xl))
-            MatchSection(onMatchWallpaper)
+            MatchSection(wallpaperMatch, onMatchCurrent, onMatchWallpaper)
 
             Spacer(Modifier.height(DwellSpacing.xl))
             if (isPremium) {
@@ -294,16 +296,62 @@ private fun LockedEngineRow(onOpenPaywall: () -> Unit) {
     }
 }
 
-/** POC: prove the wallpaper-match pipeline — tap a wallpaper, the widget text recolours to match. */
+/**
+ * The moat: recolour the widget text to the user's actual wallpaper. When they've applied a
+ * wallpaper through Dwell, [wallpaperMatch] is that extracted colour and the primary chip is
+ * live. Before then it's a ghost hint, and the sample chips let them preview the effect.
+ */
 @Composable
-private fun MatchSection(onMatchWallpaper: (WallpaperSample) -> Unit) {
+private fun MatchSection(
+    wallpaperMatch: Int?,
+    onMatchCurrent: () -> Unit,
+    onMatchWallpaper: (WallpaperSample) -> Unit,
+) {
     SectionLabel("Match your wallpaper")
+    Spacer(Modifier.height(DwellSpacing.sm))
+    MatchCurrentChip(wallpaperMatch, onMatchCurrent)
+    Spacer(Modifier.height(DwellSpacing.md))
+    SectionLabel("Or preview a sample")
     Spacer(Modifier.height(DwellSpacing.sm))
     Row(horizontalArrangement = Arrangement.spacedBy(DwellSpacing.sm)) {
         WallpaperChip("Dusk", listOf(Color(0xFFC98A6A), Color(0xFF8A5A6E), Color(0xFF3D3550)),
             Modifier.weight(1f)) { onMatchWallpaper(WallpaperSample.DUSK) }
         WallpaperChip("Forest", listOf(Color(0xFF6D8A6F), Color(0xFF3F5F4A), Color(0xFF20302A)),
             Modifier.weight(1f)) { onMatchWallpaper(WallpaperSample.FOREST) }
+    }
+}
+
+/** Live when a Dwell wallpaper has been applied; a ghost hint otherwise. */
+@Composable
+private fun MatchCurrentChip(matched: Int?, onClick: () -> Unit) {
+    val enabled = matched != null
+    val swatch = matched?.let { Color(it) } ?: DateMuted
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(Brush.horizontalGradient(listOf(Color(0xFF2E2A23), Color(0xFF15110C))))
+            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier)
+            .border(1.dp, Color(0x14ECE7DD), RoundedCornerShape(14.dp))
+            .padding(horizontal = 16.dp, vertical = 15.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(Modifier.size(28.dp).clip(CircleShape).background(swatch))
+        Spacer(Modifier.width(14.dp))
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = "Match my wallpaper",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = if (enabled) MaterialTheme.colorScheme.onBackground else DateMuted,
+            )
+            Text(
+                text = if (enabled) "From your current wallpaper" else "Apply a wallpaper from Dwell first",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        if (enabled) Text(text = "›", color = DateMuted, fontSize = 22.sp)
     }
 }
 
