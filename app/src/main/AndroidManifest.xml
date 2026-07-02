@@ -57,6 +57,10 @@
         </receiver>
 
         <receiver
+            android:name=".widget.poster.PosterPinReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".widget.date.DateWidgetProvider"
             android:exported="true">
             <intent-filter>
