@@ -81,6 +81,11 @@
         </activity>
 
         <activity
+            android:name=".ui.widgetconfig.PosterWeatherConfigActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Dwell" />
+
+        <activity
             android:name=".ui.paywall.PaywallActivity"
             android:exported="false"
             android:theme="@style/Theme.Dwell" />
